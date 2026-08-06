@@ -72,11 +72,16 @@ nav.stuck { border-bottom-color: var(--rule); }
    first line underneath it. */
 #buzz-section, #populace-section, #global, #company, #contact, #top { scroll-margin-top: 56px; }
 nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
-.brand { display: flex; align-items: center; text-decoration: none; }
+/* Tap targets fill the nav's full height rather than just wrapping their text.
+   The labels are small by design; the things you can hit should not be. */
+.brand { display: flex; align-items: center; text-decoration: none; height: 100%; padding-right: 8px; }
 .brand svg { height: 15px; width: auto; }
 .brand svg path { fill: var(--ink); }
-.navlinks { display: flex; gap: 26px; }
-.navlinks a { font-size: 12.5px; color: var(--body); text-decoration: none; }
+.navlinks { display: flex; gap: 22px; height: 100%; }
+.navlinks a {
+  font-size: 12.5px; color: var(--body); text-decoration: none;
+  display: flex; align-items: center; height: 100%; padding: 0 2px;
+}
 .navlinks a:hover { color: var(--ink); }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 3px; }
 
@@ -242,6 +247,11 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 footer { background: var(--paper-2); border-top: 1px solid var(--rule); padding: 60px 0 68px; }
 footer .row { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
 footer .fine { font-size: 12.5px; color: var(--muted); line-height: 1.75; max-width: 44ch; }
+/* Email links are the one thing on the page someone actually needs to hit. */
+footer .fine a, #contact a[href^="mailto:"] {
+  display: inline-block; min-height: 44px; line-height: 44px; text-decoration: none;
+}
+#contact a[href^="mailto:"] { padding: 0 6px; }
 footer .brand svg { height: 19px; }
 
 /* ── device + app screen renderings ──────────────────────────────────────
@@ -535,18 +545,18 @@ footer .brand svg { height: 19px; }
       <p class="eyebrow rv" style="margin-top:60px">Directors</p>
       <div class="people">
         <div class="person rv">
+          <span class="initials">SD</span>
+          <span class="nm">Snehasis Despande</span>
+          <span class="rl">Founder &amp; Director, Business</span>
+          <p class="remit">Owns the commercial side — partnerships, market strategy, and how our
+          products reach the people who need them.</p>
+        </div>
+        <div class="person rv">
           <span class="initials">SK</span>
           <span class="nm">Sankur Kundu</span>
           <span class="rl">Co-founder &amp; Director, Technology</span>
           <p class="remit">Owns the products end to end — the apps, the infrastructure they run
           on, and the tooling we built to test them.</p>
-        </div>
-        <div class="person rv">
-          <span class="initials">SD</span>
-          <span class="nm">Snehasis Despande</span>
-          <span class="rl">Co-founder &amp; Director, Business</span>
-          <p class="remit">Owns the commercial side — partnerships, market strategy, and how our
-          products reach the people who need them.</p>
         </div>
       </div>
 
