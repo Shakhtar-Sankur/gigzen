@@ -181,6 +181,42 @@
   }
   .person .nm { font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: -.035em; color: var(--ink); }
   .person .rl { font-size: 13.5px; color: var(--muted); }
+  .person .remit { margin-top: 12px; font-size: 14.5px; line-height: 1.5; color: var(--body); }
+
+  /* ── specification sheet ─────────────────────────────── */
+  .spec { margin-top: 56px; border-top: 1px solid var(--rule); }
+  .spec h3 { padding-top: 30px; text-transform: none; letter-spacing: -.03em; }
+  .spectable { width: 100%; border-collapse: collapse; margin-top: 22px; }
+  .spectable th, .spectable td {
+    text-align: left; padding: 15px 0; border-bottom: 1px solid var(--rule);
+    vertical-align: top; font-size: 15px;
+  }
+  .spectable th {
+    width: 210px; font-weight: 600; color: var(--ink); font-size: 13px;
+    letter-spacing: .01em; padding-right: 26px;
+  }
+  .spectable td { color: var(--body); }
+  .spectable tr:last-child th, .spectable tr:last-child td { border-bottom: 0; }
+  /* A 210px label column leaves ~117px for the value on a phone, which wraps to
+     shreds. Stack them instead. */
+  @media (max-width: 620px) {
+    .spectable th, .spectable td { display: block; width: auto; padding-right: 0; }
+    .spectable th { border-bottom: 0; padding-bottom: 4px; color: var(--muted);
+      font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
+    .spectable td { padding-top: 0; padding-bottom: 16px; }
+  }
+
+  /* ── long capability blocks ──────────────────────────── */
+  .caps { margin-top: 56px; display: flex; flex-direction: column; gap: 54px; }
+  .cap { display: grid; grid-template-columns: 54px 1fr; gap: 24px; align-items: start; }
+  .cap .n {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    letter-spacing: .1em; padding-top: 7px;
+  }
+  .cap h3 { font-size: clamp(21px, 2.7vw, 27px); text-transform: none; letter-spacing: -.03em; }
+  .cap .lead { margin-top: 13px; font-size: 17px; line-height: 1.55; color: var(--body); }
+  .cap .detail { margin-top: 13px; font-size: 15px; line-height: 1.62; color: var(--muted); }
+  @media (max-width: 620px) { .cap { grid-template-columns: 1fr; gap: 10px; } .cap .n { padding-top: 0; } }
 
   .stats { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 62px; }
   .stat .v {
@@ -336,12 +372,16 @@
         <div class="person rv">
           <span class="initials">SK</span>
           <span class="nm">Sankur Kundu</span>
-          <span class="rl">Director — Engineering</span>
+          <span class="rl">Co-founder &amp; Director, Technology</span>
+          <p class="remit">Owns the products end to end — the apps, the infrastructure they
+          run on, and the tooling we built to test them.</p>
         </div>
         <div class="person rv">
           <span class="initials">SD</span>
           <span class="nm">Snehasis Despande</span>
-          <span class="rl">Director — Business</span>
+          <span class="rl">Co-founder &amp; Director, Business</span>
+          <p class="remit">Owns the commercial side — partnerships, market strategy, and how
+          our products reach the people who need them.</p>
         </div>
       </div>
 
@@ -379,50 +419,125 @@
 
   <section class="tint" style="padding-top:70px">
     <div class="wrap">
-      <h2>built from how drivers really work.</h2>
-      <div class="fgrid">
-        <div class="feature">
-          <span class="num">01</span>
-          <h3>Paid by distance, not by time</h3>
-          <p>Earnings accrue from kilometres actually travelled. Sitting in traffic doesn't
-          inflate the number — a filter throws away GPS drift under 15 metres.</p>
+      <h2>built around the shift.</h2>
+      <p class="lede" style="margin-top:26px;max-width:46ch">
+        A gig driver's day is measured in kilometres, fuel and hours away from home. Buzz Buzz
+        is built to answer the question that actually matters at the end of it: was today
+        worth it?
+      </p>
+
+      <div class="caps">
+
+        <div class="cap">
+          <span class="n">01</span>
+          <div>
+            <h3>Earnings that follow the road, not the clock</h3>
+            <p class="lead">Money accrues from distance genuinely travelled. Sitting in
+            traffic doesn't quietly inflate your total, because a stationary phone earns
+            nothing.</p>
+            <p class="detail">GPS is noisy at rest — a phone on a dashboard can drift tens of
+            metres while parked. Movement under 15 metres is discarded as drift, and any jump
+            implying more than 200 km/h is rejected as a bad fix. What remains is distance you
+            actually covered. Your rate per kilometre is yours to set, totals roll over at
+            local midnight, and a scheduled job resets them server-side so yesterday's numbers
+            never linger on someone else's screen.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">02</span>
-          <h3>A map with people on it</h3>
-          <p>See friends moving in real time and search any city or shop worldwide. Sharing
-          your position is opt-in, and stops the moment you turn it off.</p>
+
+        <div class="cap">
+          <span class="n">02</span>
+          <div>
+            <h3>A map with people on it</h3>
+            <p class="lead">See the drivers you know moving in real time, and search any city,
+            neighbourhood or shop on earth.</p>
+            <p class="detail">Friends' positions refresh every ten seconds — a driver who joins
+            mid-shift appears without anyone restarting the app. Search runs two queries at
+            once, one biased to where you are and one worldwide, then ranks settlements above
+            side-streets, so "Jakarta" returns the city and "7-Eleven" returns the branch down
+            the road rather than one in another country. Street and satellite layers included.
+            Sharing your position is off until you turn it on, and switching it off deletes
+            your location rather than merely hiding it.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">03</span>
-          <h3>Speaks your language</h3>
-          <p>Sixteen languages including right-to-left Arabic, with the currency set
-          automatically from where you are.</p>
+
+        <div class="cap">
+          <span class="n">03</span>
+          <div>
+            <h3>Fluent wherever the work is</h3>
+            <p class="lead">Sixteen languages and twenty-three currencies, chosen for you from
+            where you actually are.</p>
+            <p class="detail">English, Filipino, Spanish, Hindi, Bengali, Indonesian, Malay,
+            Thai, Vietnamese, Portuguese, French, German, Chinese, Japanese, Korean and Arabic
+            — with the entire interface mirrored right-to-left for Arabic, not merely
+            translated. The app reverse-geocodes your first GPS fix to a country and selects
+            the currency and language from a map of forty of them. Both remain yours to
+            override at any time.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">04</span>
-          <h3>Messaging that behaves</h3>
-          <p>Direct messages with delivery and read receipts, presence and last-seen.
-          Messages send instantly rather than waiting on a poll.</p>
+
+        <div class="cap">
+          <span class="n">04</span>
+          <div>
+            <h3>Messaging that behaves like messaging</h3>
+            <p class="lead">Direct and group conversations with delivery and read receipts,
+            presence, and last-seen.</p>
+            <p class="detail">Messages appear the instant you send them rather than waiting on
+            the next poll, and a single tick becomes a double tick when the recipient's device
+            fetches it, then turns blue when they open the conversation. Photos attach from the
+            camera or the gallery. Conversations open at the newest message, the way you expect
+            them to.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">05</span>
-          <h3>Your data stays yours</h3>
-          <p>Location is collected only while tracking is on — never in the background,
-          never with the app closed. Delete your account and everything goes with it.</p>
+
+        <div class="cap">
+          <span class="n">05</span>
+          <div>
+            <h3>The people working your streets</h3>
+            <p class="lead">A community of drivers who share what's actually happening out
+            there — flooding, surges, closures, queues.</p>
+            <p class="detail">Posts with photos, likes, comments and friend requests. Groups
+            carry real membership counts rather than invented ones. Weekly distance and earnings
+            challenges run against a leaderboard of drivers you know, resetting on a genuine
+            schedule instead of a decorative one.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">06</span>
-          <h3>Goals worth chasing</h3>
-          <p>Daily income targets, weekly distance challenges and a leaderboard among the
-          drivers you know, resetting on a real schedule.</p>
+
+        <div class="cap">
+          <span class="n">06</span>
+          <div>
+            <h3>Privacy that is structural, not promised</h3>
+            <p class="lead">Location is collected only while tracking is on. Never in the
+            background. Never with the app closed.</p>
+            <p class="detail">Every table enforces access per-account at the database itself,
+            so one driver cannot read another's data even if the app asked it to. Phone numbers
+            are never exposed to other users. Deleting your account removes your profile,
+            settings, posts, messages and location history — through the same path we test
+            automatically before every release.</p>
+          </div>
         </div>
+
+      </div>
+
+      <div class="spec">
+        <h3>Technical specifications</h3>
+        <table class="spectable">
+          <tr><th>Platform</th><td>Android 7.0 (API 24) and later</td></tr>
+          <tr><th>Target API level</th><td>36</td></tr>
+          <tr><th>Download size</th><td>6.8 MB</td></tr>
+          <tr><th>Languages</th><td>16, including full right-to-left support for Arabic</td></tr>
+          <tr><th>Currencies</th><td>23, selected automatically across 40 countries</td></tr>
+          <tr><th>Gig platforms</th><td>20+ services across South and Southeast Asia</td></tr>
+          <tr><th>Architecture</th><td>React and TypeScript, packaged natively with Capacitor</td></tr>
+          <tr><th>Data</th><td>PostgreSQL with row-level security on every table</td></tr>
+          <tr><th>Mapping</th><td>OpenStreetMap and CARTO tiles, Nominatim place search</td></tr>
+          <tr><th>Notifications</th><td>Firebase Cloud Messaging</td></tr>
+        </table>
       </div>
 
       <div class="status">
-        <span class="eyebrow">Status</span>
+        <span class="eyebrow">Availability</span>
         <p><strong>In internal testing on Google Play.</strong> The signed release is live on
-        the internal track. Closed testing comes next, then production. Not yet publicly
+        the internal track. Closed testing follows, then production review. Not yet publicly
         downloadable.</p>
       </div>
     </div>
@@ -447,31 +562,95 @@
         account.
       </p>
 
-      <div class="fgrid">
-        <div class="feature">
-          <span class="num">01</span>
-          <h3>One adapter to integrate</h3>
-          <p>Thirteen small methods, two required. Each answers one question: how does this
-          happen in my app? Anything you skip is reported as untested, never as passing.</p>
+      <div class="caps">
+
+        <div class="cap">
+          <span class="n">01</span>
+          <div>
+            <h3>One adapter is the entire integration</h3>
+            <p class="lead">Thirteen small methods, two of them required. Each answers a single
+            question: how does this happen in my app?</p>
+            <p class="detail">The engine knows how to be a person — where they go, how chatty
+            they are, when they take a break. It knows nothing about your product, and that
+            separation is enforced rather than aspirational. Implement <span class="mono">createUser</span>
+            and <span class="mono">deleteUser</span> and you have a working run; add the others
+            as you want them covered. A read-only service can implement three methods and still
+            get something useful. Anything you leave out is reported as untested — never quietly
+            counted as passing.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">02</span>
-          <h3>Through the front door</h3>
-          <p>Every action uses the same API your users hit — no admin keys, no direct
-          database writes. Your permission rules get tested by genuinely separate identities.</p>
+
+        <div class="cap">
+          <span class="n">02</span>
+          <div>
+            <h3>Through the front door, always</h3>
+            <p class="lead">Every action goes through the same API your customers hit, as a
+            genuinely separate authenticated identity.</p>
+            <p class="detail">No admin keys. No service-role credentials. No direct database
+            writes. A simulation that bypasses your permission rules proves nothing about
+            whether those rules work — and permission bugs are precisely what a multi-user
+            simulation is best at finding, because they only appear when one identity reaches
+            for another's data. Account deletion runs through your own delete path, so the
+            route almost nobody tests gets exercised on every run.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">03</span>
-          <h3>Evidence, not vibes</h3>
-          <p>Latency percentiles per endpoint under concurrent load, failures grouped by
-          shape, and a non-zero exit code so CI catches what you'd miss.</p>
+
+        <div class="cap">
+          <span class="n">03</span>
+          <div>
+            <h3>People, not a load generator</h3>
+            <p class="lead">Each simulated person carries their own habits, and everyone acts
+            at once.</p>
+            <p class="detail">Postiness, chattiness, break frequency and travel speed vary
+            between individuals, because identical agents find identical bugs. They move along
+            real looping routes through five cities and talk in language that suits each one.
+            Crucially they act concurrently — sequential agents never surface a race condition,
+            which is half the reason to run a simulation at all.</p>
+          </div>
         </div>
-        <div class="feature">
-          <span class="num">04</span>
-          <h3>It refuses production</h3>
-          <p>Three independent refusals. Your production hosts are denied however deeply
-          nested in the config. No flag overrides them.</p>
+
+        <div class="cap">
+          <span class="n">04</span>
+          <div>
+            <h3>Evidence, not vibes</h3>
+            <p class="lead">Every run ends with a report you can hand to someone who wasn't
+            watching.</p>
+            <p class="detail">Latency percentiles for every endpoint under concurrent load.
+            Failures grouped by shape rather than exact text, so one bug is one line instead of
+            fifty. An honest account of what was never exercised. Written as JSON for your
+            pipeline and as a self-contained page for everyone else, with a non-zero exit code
+            when problems are found. There is deliberately no tolerance threshold — a single
+            failure among thousands is still reported as a failure.</p>
+          </div>
         </div>
+
+        <div class="cap">
+          <span class="n">05</span>
+          <div>
+            <h3>It refuses to touch production</h3>
+            <p class="lead">Three independent refusals, any one of which stops a run.</p>
+            <p class="detail">The environment must declare itself non-production — opted into,
+            never assumed. Your production hosts are matched against every string in the
+            configuration however deeply nested, and no flag overrides that. An empty denylist
+            warns loudly, because forgetting to fill it in is the likeliest version of this
+            mistake. Simulated people appearing to real customers is deception, not testing.</p>
+          </div>
+        </div>
+
+        <div class="cap">
+          <span class="n">06</span>
+          <div>
+            <h3>It reports its own failures too</h3>
+            <p class="lead">If the simulation breaks, the report says so instead of blaming
+            your API.</p>
+            <p class="detail">Failures originating in your app and failures originating in
+            Populace are tracked separately. When something breaks inside the tool itself, the
+            report states plainly that the run did not test what it claims to have tested.
+            A testing tool that can fail silently and still print a clean result is worse than
+            no tool at all.</p>
+          </div>
+        </div>
+
       </div>
 
       <div class="term">
@@ -494,6 +673,21 @@
         Nobody told that run where to look. It found a permission rule rejecting one write in
         four, and a feed query running eight times slower than everything else.
       </p>
+
+      <div class="spec">
+        <h3>Technical specifications</h3>
+        <table class="spectable">
+          <tr><th>Runtime</th><td>Node.js 18 or later</td></tr>
+          <tr><th>Runtime dependencies</th><td>None. Adapters bring their own.</td></tr>
+          <tr><th>Integration surface</th><td>13 methods, 2 required</td></tr>
+          <tr><th>Verified scale</th><td>200 concurrent agents in 8 MB of heap</td></tr>
+          <tr><th>Cities</th><td>Manila, Mumbai, Delhi, Jakarta, Bangkok</td></tr>
+          <tr><th>Output</th><td>JSON report plus a self-contained HTML page</td></tr>
+          <tr><th>CI behaviour</th><td>Exits non-zero when problems are found</td></tr>
+          <tr><th>Test suite</th><td>20 checks, runnable with no backend at all</td></tr>
+          <tr><th>Safety</th><td>3 independent production refusals, all exiting non-zero</td></tr>
+        </table>
+      </div>
 
       <div class="status">
         <span class="eyebrow">Status</span>
