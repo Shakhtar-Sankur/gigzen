@@ -13,401 +13,567 @@
 </head>
 <body>
 <style>
-  :root {
-    --ink:      #0A0A0A;
-    --paper:    #FFFFFF;
-    --paper-2:  #F5F5F7;
-    --body:     #4C4C50;
-    --muted:    #86868B;
-    --rule:     #E4E4E7;
-    --lime:     #D3FF00;
-    --lime-dk:  #6F8600;
-    --orange:   #FF4A0D;
-    --orange-2: #E23100;
+:root {
+  --ink:      #08090A;
+  --paper:    #FFFFFF;
+  --paper-2:  #F5F5F7;
+  --body:     #46474B;
+  --muted:    #86868B;
+  --rule:     #E3E3E6;
+  --orange:   #FF4D17;
+  --orange-2: #F03700;
+  --lime:     #D3FF00;
+  --display: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI",
+             "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper:#000; --paper-2:#0A0A0B; --ink:#F5F5F7; --body:#A8A8AD; --muted:#86868B; --rule:#1D1D20; }
+}
+:root[data-theme="dark"] { --paper:#000; --paper-2:#0A0A0B; --ink:#F5F5F7; --body:#A8A8AD; --muted:#86868B; --rule:#1D1D20; }
+:root[data-theme="light"] { --paper:#FFF; --paper-2:#F5F5F7; --ink:#08090A; --body:#46474B; --muted:#86868B; --rule:#E3E3E6; }
 
-    --display: "Helvetica Now Display", "Inter Tight", -apple-system, BlinkMacSystemFont,
-               "Segoe UI Variable Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --paper:#000; --paper-2:#0B0B0C; --ink:#F5F5F7; --body:#A6A6AB;
-            --muted:#86868B; --rule:#1E1E21; --lime-dk:#D3FF00; }
-  }
-  :root[data-theme="dark"] { --paper:#000; --paper-2:#0B0B0C; --ink:#F5F5F7; --body:#A6A6AB;
-            --muted:#86868B; --rule:#1E1E21; --lime-dk:#D3FF00; }
-  :root[data-theme="light"] { --paper:#FFF; --paper-2:#F5F5F7; --ink:#0A0A0A; --body:#4C4C50;
-            --muted:#86868B; --rule:#E4E4E7; --lime-dk:#6F8600; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--body);
+  font-family: var(--sans); font-size: 17px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 26px; }
+.mid { max-width: 640px; margin-inline: auto; }
+p { margin: 0; }
+strong { color: var(--ink); font-weight: 600; }
+a { color: inherit; }
+img, svg, canvas { display: block; max-width: 100%; }
 
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--paper); color: var(--body);
-    font-family: var(--sans); font-size: 17px; line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
-  .mid  { max-width: 660px; margin-left: auto; margin-right: auto; }
-  p { margin: 0; }
-  strong { color: var(--ink); font-weight: 600; }
-  a { color: inherit; }
+h1, h2, h3 {
+  margin: 0; color: var(--ink); font-family: var(--display);
+  font-weight: 800; letter-spacing: -0.05em; line-height: 0.98;
+  text-transform: lowercase; text-wrap: balance;
+}
+h1 { font-size: clamp(48px, 11vw, 132px); }
+h2 { font-size: clamp(36px, 7.4vw, 88px); }
+h3 { font-size: clamp(21px, 2.7vw, 28px); letter-spacing: -0.035em; }
 
-  h1, h2, h3 {
-    margin: 0; color: var(--ink); font-family: var(--display);
-    font-weight: 800; letter-spacing: -0.045em; line-height: 1.0;
-    text-transform: lowercase; text-wrap: balance;
-  }
-  h1 { font-size: clamp(46px, 10vw, 122px); }
-  h2 { font-size: clamp(34px, 6.4vw, 76px); }
-  h3 { font-size: clamp(20px, 2.6vw, 27px); letter-spacing: -0.034em; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: clamp(19px, 2.3vw, 27px); line-height: 1.34; letter-spacing: -.018em; }
 
-  .eyebrow {
-    font-size: 11px; font-weight: 700; letter-spacing: .2em;
-    text-transform: uppercase; color: var(--muted);
-  }
-  .lede { font-size: clamp(19px, 2.4vw, 26px); line-height: 1.38; color: var(--body); letter-spacing: -.014em; }
+/* ── nav ─────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 90; height: 46px;
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid transparent; transition: border-color .3s;
+}
+nav.stuck { border-bottom-color: var(--rule); }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
+.brand { display: flex; align-items: center; text-decoration: none; }
+.brand svg { height: 15px; width: auto; }
+.brand svg path { fill: var(--ink); }
+.navlinks { display: flex; gap: 26px; }
+.navlinks a { font-size: 12.5px; color: var(--body); text-decoration: none; }
+.navlinks a:hover { color: var(--ink); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 3px; }
 
-  /* ── nav ─────────────────────────────────────────────── */
-  nav {
-    position: sticky; top: 0; z-index: 60; height: 48px;
-    background: color-mix(in srgb, var(--paper) 78%, transparent);
-    backdrop-filter: saturate(180%) blur(22px);
-    -webkit-backdrop-filter: saturate(180%) blur(22px);
-    border-bottom: 1px solid transparent; transition: border-color .35s ease;
-  }
-  nav.stuck { border-bottom-color: var(--rule); }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 48px; gap: 18px; }
-  .brand {
-    font-family: var(--display); font-weight: 800; font-size: 18px;
-    letter-spacing: -.05em; color: var(--ink); text-decoration: none; text-transform: lowercase;
-  }
-  .navlinks { display: flex; gap: 26px; }
-  .navlinks a { font-size: 12.5px; color: var(--body); text-decoration: none; transition: color .2s; }
-  .navlinks a:hover { color: var(--ink); }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--lime-dk); outline-offset: 4px; border-radius: 4px; }
+/* ── reveal ──────────────────────────────────────────────── */
+.js .rv { opacity: 0; transform: translateY(34px); transition: opacity 1.05s cubic-bezier(.22,.61,.36,1), transform 1.05s cubic-bezier(.22,.61,.36,1); }
+.js .rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .rv { opacity: 1; transform: none; transition: none; }
+}
 
-  /* ── reveal — scoped to .js so content never depends on it ── */
-  .js .rv { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(.22,.61,.36,1), transform 1s cubic-bezier(.22,.61,.36,1); }
-  .js .rv.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    .js .rv { opacity: 1; transform: none; transition: none; }
-  }
+/* ── full-bleed sections ─────────────────────────────────── */
+.bleed { width: 100%; }
+.bleed.dark { background: var(--ink); color: #A8A8AD; }
+.bleed.dark h1, .bleed.dark h2, .bleed.dark h3 { color: #F5F5F7; }
+.bleed.night { background: #050708; color: #93A1A8; }
+.bleed.night h2, .bleed.night h3 { color: #F2F7F9; }
+.bleed.flame { background: linear-gradient(168deg, #FF6A2C 0%, #FF4D17 46%, #E23100 100%); color: #FFE7DC; }
+.bleed.flame h2, .bleed.flame h3 { color: #fff; }
+section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 
-  /* ── hero ────────────────────────────────────────────── */
-  .hero { padding: clamp(96px, 19vh, 210px) 0 clamp(80px, 13vh, 150px); text-align: center; }
-  .hero h1 { max-width: 12ch; margin: 0 auto; }
-  .hero h1 span { color: var(--muted); }
-  .hero .lede { margin: 32px auto 0; max-width: 40ch; }
-  .place {
-    margin-top: 40px; display: inline-flex; align-items: center; gap: 9px;
-    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--muted);
-  }
-  .place .pin { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px color-mix(in srgb, var(--lime) 20%, transparent); }
+/* ── hero ────────────────────────────────────────────────── */
+.hero { padding: clamp(104px, 20vh, 220px) 0 clamp(88px, 14vh, 170px); text-align: center; }
+.hero h1 { max-width: 13ch; margin-inline: auto; }
+.hero h1 span { color: var(--muted); }
+.hero .lede { margin: 34px auto 0; max-width: 38ch; color: var(--body); }
+.place { margin-top: 42px; display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+.place s { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 18%, transparent); }
 
-  section { padding: clamp(90px, 15vh, 180px) 0; }
-  section.tint { background: var(--paper-2); }
-  section.dark { background: var(--ink); }
-  section.dark h2, section.dark h3 { color: #F5F5F7; }
-  section.dark p:not(.eyebrow) { color: #A6A6AB; }
-  .center { text-align: center; }
+/* ── scroll sequence ─────────────────────────────────────── */
+.seq-track { position: relative; }
+.seq-stage {
+  position: sticky; top: 0; height: 100vh; min-height: 620px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(26px, 4vh, 48px); overflow: hidden; padding: 40px 20px;
+}
+.seq-caps { position: relative; height: 118px; width: min(560px, 92vw); text-align: center; flex: none; }
+.seq-cap {
+  position: absolute; inset: 0; opacity: 0; transform: translateY(16px);
+  transition: opacity .55s ease, transform .55s ease;
+  display: flex; flex-direction: column; gap: 12px; align-items: center;
+}
+.seq-cap.on { opacity: 1; transform: none; }
+.seq-cap h3 { color: #fff; }
+.seq-cap p { font-size: 15.5px; line-height: 1.5; max-width: 46ch; color: rgba(255,255,255,.82); }
+.seq-phones { display: flex; gap: clamp(14px, 3vw, 38px); align-items: center; justify-content: center; }
+.seq-phones .device {
+  transition: transform .7s cubic-bezier(.22,.61,.36,1), opacity .7s ease, filter .7s ease;
+  opacity: .42; transform: scale(.86) translateY(14px); filter: saturate(.75);
+}
+.seq-phones .device.active { opacity: 1; transform: scale(1) translateY(-6px); filter: none; }
+.seq-dots { display: flex; gap: 7px; flex: none; }
+.seq-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.32); transition: background .4s, width .4s; }
+.seq-dots i.on { background: #fff; width: 20px; border-radius: 3px; }
+@media (max-width: 780px) {
+  .seq-phones .device { --w: 190px; }
+  .seq-phones { gap: 10px; }
+}
+@media (max-width: 560px) {
+  .seq-phones .device { display: none; }
+  .seq-phones .device.active { display: block; --w: 232px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seq-track { height: auto !important; }
+  .seq-stage { position: static; height: auto; min-height: 0; }
+  .seq-caps { height: auto; }
+  .seq-cap { position: static; opacity: 1; transform: none; margin-bottom: 26px; }
+  .seq-phones .device { opacity: 1; transform: none; filter: none; }
+}
 
-  /* ── product tiles ───────────────────────────────────── */
-  .tiles { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 62px; }
-  /* Flex column, not absolute positioning: the artwork takes whatever space is
-     left after the text, so it can never ride up over the copy no matter how
-     the type wraps at a given width. */
-  .tile {
-    position: relative; border-radius: 26px; overflow: hidden; cursor: pointer;
-    border: 0; padding: 0; text-align: center; font: inherit; color: inherit;
-    display: flex; flex-direction: column; width: 100%; min-height: 540px;
-    transition: transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease;
-  }
-  .tile:hover { transform: translateY(-8px); box-shadow: 0 30px 70px rgba(0,0,0,.16); }
-  .tile .top { padding: 52px 32px 34px; }
-  .tile .kind { font-size: 10.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; opacity: .7; }
-  .tile .name {
-    font-family: var(--display); font-weight: 800; letter-spacing: -.05em;
-    font-size: clamp(34px, 5vw, 50px); line-height: .98; margin-top: 12px; text-transform: lowercase;
-  }
-  .tile .line { margin: 14px auto 0; font-size: 16px; line-height: 1.42; max-width: 26ch; opacity: .88; }
-  .tile .more { margin-top: 20px; font-size: 14px; font-weight: 600; display: inline-flex; gap: 7px; align-items: center; }
-  .tile .arrow { transition: transform .35s ease; }
-  .tile:hover .arrow { transform: translateX(6px); }
-  .tile .art { margin-top: auto; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
+/* ── swarm ───────────────────────────────────────────────── */
+.swarm-wrap { position: relative; min-height: clamp(520px, 82vh, 760px); display: flex; align-items: center; }
+#swarm { position: absolute; inset: 0; width: 100%; height: 100%; }
+.swarm-veil { position: absolute; inset: 0; background: radial-gradient(112% 78% at 22% 50%, rgba(5,7,8,.95) 30%, rgba(5,7,8,.6) 60%, rgba(5,7,8,.12) 100%); pointer-events: none; }
+.swarm-wrap .wrap { position: relative; }
 
-  .t-buzz { background: linear-gradient(165deg, #FF6A2C 0%, #E23100 100%); color: #fff; }
-  .t-buzz .name, .t-buzz .more { color: #fff; }
-  .t-pop { background: #0A0A0A; color: #B9B9BE; }
-  .t-pop .name, .t-pop .more { color: var(--lime); }
+/* ── tiles / cards ───────────────────────────────────────── */
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(252px, 1fr)); margin-top: 34px; }
+.card { background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 24px; display: flex; flex-direction: column; gap: 11px; }
+.tag { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--orange); font-weight: 700; }
+.tag.off { color: var(--muted); }
 
-  /* phone mock — the product, not a stock photo */
-  .phone {
-    width: 210px; height: 260px; border-radius: 30px 30px 0 0;
-    background: #0A0A0A; padding: 9px 9px 0; box-shadow: 0 -8px 40px rgba(0,0,0,.3);
-  }
-  .screen {
-    height: 100%; border-radius: 23px 23px 0 0; background: #FBFAF8;
-    padding: 16px 14px; display: flex; flex-direction: column; gap: 9px; overflow: hidden;
-  }
-  .notch { width: 58px; height: 5px; border-radius: 3px; background: #0A0A0A; margin: 0 auto 6px; opacity: .85; }
-  .s-row { display: flex; justify-content: space-between; align-items: baseline; }
-  .s-big { font-family: var(--display); font-weight: 800; font-size: 27px; color: #E23100; letter-spacing: -.04em; }
-  .s-sub { font-size: 8px; color: #9A948E; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
-  .s-bar { height: 5px; border-radius: 3px; background: #EDE9E4; overflow: hidden; }
-  .s-bar i { display: block; height: 100%; width: 62%; background: linear-gradient(90deg,#FF6A2C,#E23100); }
-  .s-cards { display: flex; gap: 6px; margin-top: 2px; }
-  .s-card { flex: 1; background: #F3F1EE; border-radius: 7px; padding: 7px 6px; }
-  .s-card b { display: block; font-size: 11px; color: #1A1613; font-family: var(--display); letter-spacing: -.03em; }
-  .s-card span { font-size: 7px; color: #9A948E; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
-  .s-map { flex: 1; border-radius: 9px; background: linear-gradient(150deg,#E8EDE6,#DCE5DE); position: relative; overflow: hidden; }
-  .s-map i { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #E23100; box-shadow: 0 0 0 3px rgba(226,49,0,.2); }
+.btn {
+  display: inline-block; font-family: var(--mono); font-size: 13px; font-weight: 700;
+  padding: 14px 26px; border-radius: 3px; text-decoration: none; border: 1px solid;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.btn.solid { background: #fff; color: #101112; border-color: #fff; }
+.btn.solid:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.25); }
+.btn.ghost { background: transparent; color: inherit; border-color: currentColor; opacity: .78; }
+.btn.ghost:hover { opacity: 1; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.center .cta { justify-content: center; }
 
-  /* node art for populace */
-  .nodes { width: 240px; height: 240px; }
+/* ── people ──────────────────────────────────────────────── */
+.people { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: 22px; }
+.person { background: var(--paper); border: 1px solid var(--rule); border-radius: 20px; padding: 32px 28px; display: flex; flex-direction: column; gap: 6px; }
+.person .initials { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: -.03em;
+  background: var(--ink); color: var(--paper); margin-bottom: 14px; }
+.person .nm { font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: -.035em; color: var(--ink); }
+.person .rl { font-size: 13.5px; color: var(--muted); }
+.person .remit { margin-top: 12px; font-size: 14.5px; line-height: 1.5; color: var(--body); }
 
-  /* ── founders ────────────────────────────────────────── */
-  .people { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 56px; }
-  .person {
-    background: var(--paper); border: 1px solid var(--rule); border-radius: 20px;
-    padding: 32px 28px; display: flex; flex-direction: column; gap: 6px;
-  }
-  section.tint .person { background: var(--paper); }
-  .person .initials {
-    width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
-    font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: -.03em;
-    background: var(--ink); color: var(--paper); margin-bottom: 14px;
-  }
-  .person .nm { font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: -.035em; color: var(--ink); }
-  .person .rl { font-size: 13.5px; color: var(--muted); }
-  .person .remit { margin-top: 12px; font-size: 14.5px; line-height: 1.5; color: var(--body); }
+.stats { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 60px; }
+.stat .v { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(36px, 5.4vw, 60px); letter-spacing: -.055em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
+.stat .l { display: block; margin-top: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; color: var(--muted); }
+.bleed.dark .stat .v { color: #F5F5F7; }
 
-  /* ── specification sheet ─────────────────────────────── */
-  .spec { margin-top: 56px; border-top: 1px solid var(--rule); }
-  .spec h3 { padding-top: 30px; text-transform: none; letter-spacing: -.03em; }
-  .spectable { width: 100%; border-collapse: collapse; margin-top: 22px; }
-  .spectable th, .spectable td {
-    text-align: left; padding: 15px 0; border-bottom: 1px solid var(--rule);
-    vertical-align: top; font-size: 15px;
-  }
-  .spectable th {
-    width: 210px; font-weight: 600; color: var(--ink); font-size: 13px;
-    letter-spacing: .01em; padding-right: 26px;
-  }
-  .spectable td { color: var(--body); }
-  .spectable tr:last-child th, .spectable tr:last-child td { border-bottom: 0; }
-  /* A 210px label column leaves ~117px for the value on a phone, which wraps to
-     shreds. Stack them instead. */
-  @media (max-width: 620px) {
-    .spectable th, .spectable td { display: block; width: auto; padding-right: 0; }
-    .spectable th { border-bottom: 0; padding-bottom: 4px; color: var(--muted);
-      font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
-    .spectable td { padding-top: 0; padding-bottom: 16px; }
-  }
+/* ── detail views ────────────────────────────────────────── */
+.view[hidden] { display: none; }
+.back { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; font: inherit; font-size: 13.5px; color: var(--muted); cursor: pointer; padding: 0; margin-bottom: 40px; }
+.back:hover { color: var(--ink); }
+.dhero { padding: clamp(56px, 9vh, 100px) 0 clamp(44px, 7vh, 84px); }
+.dhero .eyebrow { display: block; margin-bottom: 20px; }
+.dhero .lede { margin-top: 26px; max-width: 38ch; color: var(--body); }
 
-  /* ── long capability blocks ──────────────────────────── */
-  .caps { margin-top: 56px; display: flex; flex-direction: column; gap: 54px; }
-  .cap { display: grid; grid-template-columns: 54px 1fr; gap: 24px; align-items: start; }
-  .cap .n {
-    font-family: var(--mono); font-size: 12px; color: var(--muted);
-    letter-spacing: .1em; padding-top: 7px;
-  }
-  .cap h3 { font-size: clamp(21px, 2.7vw, 27px); text-transform: none; letter-spacing: -.03em; }
-  .cap .lead { margin-top: 13px; font-size: 17px; line-height: 1.55; color: var(--body); }
-  .cap .detail { margin-top: 13px; font-size: 15px; line-height: 1.62; color: var(--muted); }
-  @media (max-width: 620px) { .cap { grid-template-columns: 1fr; gap: 10px; } .cap .n { padding-top: 0; } }
+.caps { margin-top: 56px; display: flex; flex-direction: column; gap: 54px; }
+.cap { display: grid; grid-template-columns: 54px 1fr; gap: 24px; align-items: start; }
+.cap .n { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .1em; padding-top: 7px; }
+.cap h3 { text-transform: none; }
+.cap .lead { margin-top: 13px; font-size: 17px; line-height: 1.55; color: var(--body); }
+.cap .detail { margin-top: 13px; font-size: 15px; line-height: 1.62; color: var(--muted); }
+@media (max-width: 620px) { .cap { grid-template-columns: 1fr; gap: 10px; } .cap .n { padding-top: 0; } }
 
-  .stats { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 62px; }
-  .stat .v {
-    display: block; font-family: var(--display); font-weight: 800;
-    font-size: clamp(36px, 5.4vw, 58px); letter-spacing: -.05em; color: var(--ink);
-    font-variant-numeric: tabular-nums; line-height: 1;
-  }
-  .stat .l { display: block; margin-top: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; color: var(--muted); }
-  section.dark .stat .v { color: #F5F5F7; }
+.spec { margin-top: 56px; border-top: 1px solid var(--rule); }
+.spec h3 { padding-top: 30px; text-transform: none; }
+.spectable { width: 100%; border-collapse: collapse; margin-top: 22px; }
+.spectable th, .spectable td { text-align: left; padding: 15px 0; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: 15px; }
+.spectable th { width: 210px; font-weight: 600; color: var(--ink); font-size: 13px; padding-right: 26px; }
+.spectable td { color: var(--body); }
+.spectable tr:last-child th, .spectable tr:last-child td { border-bottom: 0; }
+@media (max-width: 620px) {
+  .spectable th, .spectable td { display: block; width: auto; padding-right: 0; }
+  .spectable th { border-bottom: 0; padding-bottom: 4px; color: var(--muted); font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
+  .spectable td { padding-top: 0; padding-bottom: 16px; }
+}
 
-  /* ── detail views ────────────────────────────────────── */
-  .view[hidden] { display: none; }
-  .back {
-    display: inline-flex; align-items: center; gap: 8px; background: none; border: 0;
-    font: inherit; font-size: 13.5px; color: var(--muted); cursor: pointer; padding: 0; margin-bottom: 40px;
-  }
-  .back:hover { color: var(--ink); }
-  .dhero { padding: clamp(56px, 9vh, 96px) 0 clamp(44px, 7vh, 82px); }
-  .dhero .eyebrow { display: block; margin-bottom: 20px; }
-  .dhero .lede { margin-top: 26px; max-width: 38ch; }
+.status { margin-top: 60px; border-top: 1px solid var(--rule); padding-top: 26px; display: flex; flex-direction: column; gap: 10px; }
+.status .eyebrow { color: var(--orange); }
+.term { background: #050708; border-radius: 16px; padding: 24px; overflow-x: auto; margin-top: 52px; }
+.term pre { margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: #9FB0B8; white-space: pre; font-variant-numeric: tabular-nums; }
+.term .bad { color: #FF7C6A; } .term .ok { color: #9BE86B; } .term .dim { color: #56676F; }
 
-  .fgrid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); margin-top: 56px; }
-  .feature { display: flex; flex-direction: column; gap: 11px; }
-  .feature h3 { font-size: 19px; text-transform: none; letter-spacing: -.024em; }
-  .feature p { font-size: 15.5px; line-height: 1.5; }
-  .feature .num { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+footer { background: var(--paper-2); border-top: 1px solid var(--rule); padding: 60px 0 68px; }
+footer .row { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+footer .fine { font-size: 12.5px; color: var(--muted); line-height: 1.75; max-width: 44ch; }
+footer .brand svg { height: 19px; }
 
-  .status { margin-top: 62px; border-top: 1px solid var(--rule); padding-top: 26px; display: flex; flex-direction: column; gap: 10px; }
-  .status .eyebrow { color: var(--lime-dk); }
+/* ── device + app screen renderings ──────────────────────────────────────
+   Built from the app's own tokens (--primary #ff4d17, --radius 22px, the
+   accent gradient) so these read as the product rather than as an
+   illustration of it. Real screenshots replace the .scr-* contents without
+   touching the frame. */
 
-  .term { background: #0A0A0A; border-radius: 18px; padding: 26px; overflow-x: auto; margin-top: 56px; }
-  .term pre { margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: #A6B7BF; white-space: pre; font-variant-numeric: tabular-nums; }
-  .term .bad { color: #FF7C6A; } .term .ok { color: #9BE86B; } .term .dim { color: #5A6C74; }
+.device {
+  --w: 258px;
+  width: var(--w);
+  aspect-ratio: 258 / 540;
+  border-radius: 38px;
+  background: #0A0A0C;
+  padding: 9px;
+  box-shadow:
+    0 2px 3px rgba(0,0,0,.4),
+    0 30px 60px -12px rgba(0,0,0,.42),
+    inset 0 0 0 1px rgba(255,255,255,.09);
+  flex: none;
+}
+.device .glass {
+  height: 100%;
+  border-radius: 30px;
+  background: #f5f6f8;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.island {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+  width: 66px; height: 18px; border-radius: 10px; background: #0A0A0C; z-index: 5;
+}
 
-  footer { background: var(--paper-2); border-top: 1px solid var(--rule); padding: 60px 0 68px; }
-  footer .grid { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
-  footer .fine { font-size: 12.5px; color: var(--muted); line-height: 1.7; max-width: 44ch; }
-  footer .brand { font-size: 21px; }
+/* header bar — the app's accent gradient */
+.scr-head {
+  background: linear-gradient(135deg, #ff5a1f 0%, #ff7a2e 55%, #ff9d3d 100%);
+  padding: 30px 15px 13px; display: flex; align-items: center;
+  justify-content: space-between; color: #fff; flex: none;
+}
+.scr-head .t { font-size: 13px; font-weight: 700; letter-spacing: -.02em; }
+.scr-head .r { display: flex; gap: 8px; opacity: .95; }
+.scr-head .r i { width: 13px; height: 13px; border-radius: 4px; background: rgba(255,255,255,.34); display: block; }
 
-  @media (max-width: 640px) { .tile { min-height: 470px; } }
+.scr-body { flex: 1; padding: 13px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.scr-hi { font-size: 11px; color: #565d6b; }
+.scr-hi b { display: block; font-size: 15px; color: #171a21; letter-spacing: -.03em; margin-top: 1px; }
+
+.card-w {
+  background: #fff; border-radius: 16px; padding: 13px;
+  box-shadow: 0 1px 2px rgba(16,20,30,.05), 0 6px 18px -6px rgba(16,20,30,.10);
+}
+.lbl { font-size: 7.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #565d6b; }
+.big-money {
+  font-size: 30px; font-weight: 800; letter-spacing: -.045em; line-height: 1.05; margin-top: 4px;
+  background: linear-gradient(135deg,#ff5a1f,#ff9d3d);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.livepill {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 7px;
+  background: #fff1ea; color: #c2410c; border-radius: 20px;
+  padding: 3px 8px; font-size: 7.5px; font-weight: 800; letter-spacing: .1em;
+}
+.livepill s { width: 4px; height: 4px; border-radius: 50%; background: #ff4d17; }
+
+.tiles3 { display: flex; gap: 7px; margin-top: 11px; }
+.tile3 { flex: 1; background: #eef0f4; border-radius: 11px; padding: 8px 7px; text-align: center; }
+.tile3 b { display: block; font-size: 12px; font-weight: 800; color: #171a21; letter-spacing: -.03em; }
+.tile3 span { font-size: 6.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #565d6b; }
+
+.goalrow { display: flex; align-items: center; gap: 13px; }
+.goalrow .txt b { display: block; font-size: 15px; color: #171a21; letter-spacing: -.03em; }
+.goalrow .txt span { font-size: 8px; color: #565d6b; }
+
+/* map screen */
+.scr-map { flex: 1; position: relative; background: linear-gradient(155deg,#e9efe8 0%,#dfe8e2 55%,#d6e2dc 100%); overflow: hidden; }
+.scr-map .road { position: absolute; background: #fff; opacity: .82; }
+.scr-map .trace { position: absolute; border: 2px solid #ff4d17; border-radius: 40%; opacity: .55; }
+.pin { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ff4d17; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
+.pin.me { background: #1d7ef0; width: 13px; height: 13px; }
+.searchpill {
+  position: absolute; top: 34px; left: 12px; right: 12px; height: 30px;
+  background: #fff; border-radius: 16px; box-shadow: 0 3px 12px rgba(0,0,0,.13);
+  display: flex; align-items: center; padding: 0 11px; font-size: 8.5px; color: #565d6b; gap: 7px;
+}
+.searchpill s { width: 9px; height: 9px; border-radius: 50%; border: 1.6px solid #9aa3af; }
+.sheet {
+  position: absolute; left: 9px; right: 9px; bottom: 9px; background: #fff;
+  border-radius: 17px; padding: 12px; box-shadow: 0 -2px 22px rgba(0,0,0,.14);
+}
+.sheet .row { display: flex; justify-content: space-between; text-align: center; }
+.sheet .row div b { display: block; font-size: 13px; font-weight: 800; color: #171a21; letter-spacing: -.03em; }
+.sheet .row div span { font-size: 6.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #565d6b; }
+.recbtn { margin-top: 10px; height: 28px; border-radius: 14px; background: linear-gradient(135deg,#ff5a1f,#ff9d3d); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .04em; display: grid; place-items: center; }
+
+/* community screen */
+.fbbar { background: #fff; padding: 30px 13px 10px; display: flex; align-items: center; justify-content: space-between; flex: none; border-bottom: 1px solid #e6e8ee; }
+.fbbar .w { font-size: 15px; font-weight: 800; color: #ff4d17; letter-spacing: -.04em; }
+.stories { display: flex; gap: 7px; padding: 10px 13px 0; flex: none; }
+.story { width: 38px; height: 54px; border-radius: 10px; background: linear-gradient(160deg,#ffd9c7,#ffb694); flex: none; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.story:nth-child(2) { background: linear-gradient(160deg,#cfe0ff,#a9c6ff); }
+.story:nth-child(3) { background: linear-gradient(160deg,#d5f0dc,#a8ddb9); }
+.story:nth-child(4) { background: linear-gradient(160deg,#eee1ff,#cdb4ff); }
+.post { background: #fff; border-radius: 14px; padding: 11px; margin: 10px 13px 0; box-shadow: 0 1px 2px rgba(16,20,30,.05); }
+.post .who { display: flex; gap: 7px; align-items: center; }
+.post .av { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg,#ff7a2e,#ff9d3d); flex: none; }
+.post .who b { font-size: 9.5px; color: #171a21; letter-spacing: -.02em; }
+.post .who span { font-size: 7px; color: #565d6b; display: block; }
+.post p { margin: 8px 0 0; font-size: 9px; line-height: 1.45; color: #2c313c; }
+.post .acts { display: flex; gap: 14px; margin-top: 9px; padding-top: 8px; border-top: 1px solid #eef0f4; }
+.post .acts span { font-size: 7.5px; font-weight: 700; color: #565d6b; }
+
+/* bottom nav */
+.scr-nav {
+  flex: none; background: rgba(255,255,255,.94); border-top: 1px solid #e6e8ee;
+  display: flex; justify-content: space-around; padding: 8px 0 13px;
+}
+.scr-nav i { width: 15px; height: 15px; border-radius: 5px; background: #c3c8d2; display: block; }
+.scr-nav i.on { background: #ff4d17; box-shadow: 0 0 0 5px #fff1ea; }
+
+.wordmark { font-family: var(--display); font-weight: 800; letter-spacing: -.055em; color: var(--ink); text-transform: lowercase; }
 </style>
 
 <nav id="nav">
   <div class="wrap">
-    <a class="brand" href="#top" data-home>gigzen</a>
+    <a class="brand" href="#top" data-home><span class="wordmark" style="font-size:19px">gigzen</span></a>
     <div class="navlinks">
-      <a href="#products" data-home>products</a>
+      <a href="#buzz-section" data-home>buzz buzz</a>
+      <a href="#populace-section" data-home>populace</a>
       <a href="#company" data-home>company</a>
       <a href="#contact" data-home>contact</a>
     </div>
   </div>
 </nav>
 
-<!-- ══ HOME ═══════════════════════════════════════════════ -->
+<!-- ══════════ HOME ══════════ -->
 <main class="view" id="view-home">
   <div id="top"></div>
 
   <div class="hero wrap">
     <h1 class="rv">software for people <span>who work.</span></h1>
-    <p class="lede rv">Two products. One for drivers. One for the engineers building for them.</p>
-    <div class="place rv"><span class="pin"></span>Bhubaneswar, Odisha</div>
+    <p class="lede rv">Two products. One for drivers on the road. One for the engineers
+    building for them.</p>
+    <div class="place rv"><s></s>Bhubaneswar, Odisha</div>
   </div>
 
-  <section class="tint" id="products" style="padding-top:0">
-    <div class="wrap">
-      <div class="tiles">
+  <!-- ── Buzz Buzz: full-bleed flame + scroll sequence ── -->
+  <div class="bleed flame" id="buzz-section">
+    <div class="wrap" style="padding-top:clamp(80px,12vh,150px);text-align:center">
+      <span class="eyebrow rv" style="color:rgba(255,255,255,.72)">Android app</span>
+      <h2 class="rv" style="margin-top:16px">buzz buzz</h2>
+      <p class="lede rv" style="margin:26px auto 0;max-width:30ch;color:rgba(255,255,255,.9)">
+        Every kilometre counts. So count them.</p>
+    </div>
 
-        <button class="tile t-buzz rv" data-open="buzz">
-          <div class="top">
-            <span class="kind">Android app</span>
-            <div class="name">buzz buzz</div>
-            <p class="line">Track every kilometre. See what you actually earned.</p>
-            <span class="more">Learn more <span class="arrow">→</span></span>
-          </div>
-          <div class="art">
-            <div class="phone">
-              <div class="screen">
-                <div class="notch"></div>
-                <div class="s-row">
-                  <span class="s-big">₹1,240</span>
-                  <span class="s-sub">today</span>
+    <div class="seq-track" data-seq style="height:300vh">
+      <div class="seq-stage">
+        <div class="seq-phones">
+
+          <!-- Home -->
+          <div class="device" data-i="0">
+            <div class="glass">
+              <div class="island"></div>
+              <div class="scr-head"><span class="t">Buzz Buzz</span><span class="r"><i></i><i></i></span></div>
+              <div class="scr-body">
+                <div class="scr-hi">Good evening<b>Sankur</b></div>
+                <div class="card-w">
+                  <span class="lbl">Today's income</span>
+                  <div class="big-money">₹1,240</div>
+                  <span class="livepill"><s></s>LIVE</span>
+                  <div class="tiles3">
+                    <div class="tile3"><b>₹240</b><span>per hour</span></div>
+                    <div class="tile3"><b>62.4</b><span>km</span></div>
+                    <div class="tile3"><b>₹20</b><span>per km</span></div>
+                  </div>
                 </div>
-                <div class="s-bar"><i></i></div>
-                <div class="s-cards">
-                  <div class="s-card"><b>62.4</b><span>km</span></div>
-                  <div class="s-card"><b>5h 10m</b><span>time</span></div>
-                  <div class="s-card"><b>₹20</b><span>per km</span></div>
-                </div>
-                <div class="s-map">
-                  <i style="left:24%;top:30%"></i>
-                  <i style="left:58%;top:52%"></i>
-                  <i style="left:38%;top:72%"></i>
+                <div class="card-w goalrow">
+                  <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+                    <circle cx="26" cy="26" r="21" fill="none" stroke="#eef0f4" stroke-width="7"/>
+                    <circle cx="26" cy="26" r="21" fill="none" stroke="#ff4d17" stroke-width="7"
+                      stroke-linecap="round" stroke-dasharray="132" stroke-dashoffset="46"
+                      transform="rotate(-90 26 26)"/>
+                  </svg>
+                  <div class="txt"><b>65%</b><span>of ₹1,900 daily goal</span></div>
                 </div>
               </div>
+              <div class="scr-nav"><i class="on"></i><i></i><i></i><i></i><i></i></div>
             </div>
           </div>
-        </button>
 
-        <button class="tile t-pop rv" data-open="pop">
-          <div class="top">
-            <span class="kind">Developer tool</span>
-            <div class="name">populace</div>
-            <p class="line">A simulated population that finds what one tester can't.</p>
-            <span class="more">Learn more <span class="arrow">→</span></span>
+          <!-- Map -->
+          <div class="device" data-i="1">
+            <div class="glass">
+              <div class="island"></div>
+              <div class="scr-map">
+                <div class="road" style="left:0;right:0;top:38%;height:7px"></div>
+                <div class="road" style="left:0;right:0;top:66%;height:5px"></div>
+                <div class="road" style="top:0;bottom:0;left:30%;width:6px"></div>
+                <div class="road" style="top:0;bottom:0;left:70%;width:4px"></div>
+                <div class="trace" style="left:18%;top:30%;width:62%;height:38%"></div>
+                <div class="searchpill"><s></s>Search a city or place</div>
+                <div class="pin me" style="left:44%;top:47%"></div>
+                <div class="pin" style="left:24%;top:32%"></div>
+                <div class="pin" style="left:64%;top:40%"></div>
+                <div class="pin" style="left:36%;top:70%"></div>
+                <div class="pin" style="left:74%;top:63%"></div>
+                <div class="sheet">
+                  <div class="row">
+                    <div><b>62.4</b><span>km</span></div>
+                    <div><b>5h 10m</b><span>time</span></div>
+                    <div><b>12.1</b><span>km/h</span></div>
+                  </div>
+                  <div class="recbtn">STOP TRACKING</div>
+                </div>
+              </div>
+              <div class="scr-nav"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+            </div>
           </div>
-          <div class="art">
-            <svg class="nodes" viewBox="0 0 240 240" aria-hidden="true">
-              <g stroke="#D3FF00" stroke-width="1" opacity=".28" fill="none">
-                <path d="M40,70 L96,44 L154,74 M56,124 L120,110 L186,140 M36,180 L104,172 L172,196 M96,44 L120,110 L104,172"/>
-              </g>
-              <g fill="#D3FF00">
-                <circle cx="40" cy="70" r="5"/><circle cx="96" cy="44" r="5"/><circle cx="154" cy="74" r="5"/>
-                <circle cx="56" cy="124" r="5"/><circle cx="120" cy="110" r="7"/><circle cx="186" cy="140" r="5"/>
-                <circle cx="36" cy="180" r="5"/><circle cx="104" cy="172" r="5"/><circle cx="172" cy="196" r="5"/>
-              </g>
-              <circle cx="120" cy="110" r="17" fill="none" stroke="#D3FF00" stroke-width="1" opacity=".45"/>
-            </svg>
-          </div>
-        </button>
 
+          <!-- Community -->
+          <div class="device" data-i="2">
+            <div class="glass">
+              <div class="island"></div>
+              <div class="fbbar"><span class="w">Buzz Buzz</span><span class="r"></span></div>
+              <div class="stories"><div class="story"></div><div class="story"></div><div class="story"></div><div class="story"></div></div>
+              <div class="post">
+                <div class="who"><div class="av"></div><div><b>Ramesh Kadam</b><span>Mumbai · 12m</span></div></div>
+                <p>Andheri me bahut traffic hai, Link Road se jao. 25 min bach jayenge.</p>
+                <div class="acts"><span>👍 14</span><span>💬 5</span><span>↗ Share</span></div>
+              </div>
+              <div class="post">
+                <div class="who"><div class="av" style="background:linear-gradient(135deg,#5aa9ff,#2f7ae0)"></div><div><b>Priya Sharma</b><span>Mumbai · 40m</span></div></div>
+                <p>Bandra side surge chal raha hai abhi 🔥</p>
+                <div class="acts"><span>👍 31</span><span>💬 9</span><span>↗ Share</span></div>
+              </div>
+              <div class="scr-nav"><i></i><i class="on"></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="seq-caps">
+          <div class="seq-cap" data-i="0">
+            <h3>Earnings that follow the road</h3>
+            <p>Money accrues from distance genuinely travelled. Sitting in traffic doesn't
+            inflate the number, because a stationary phone earns nothing.</p>
+          </div>
+          <div class="seq-cap" data-i="1">
+            <h3>A map with people on it</h3>
+            <p>Watch the drivers you know move in real time, and search any city, neighbourhood
+            or shop on earth. Sharing your position is off until you turn it on.</p>
+          </div>
+          <div class="seq-cap" data-i="2">
+            <h3>The people working your streets</h3>
+            <p>Flooding, surges, closures, queues — told by the drivers who just came through
+            them. In sixteen languages, with the currency set from where you are.</p>
+          </div>
+        </div>
+
+        <div class="seq-dots"><i class="on"></i><i></i><i></i></div>
       </div>
     </div>
-  </section>
 
-  <section id="company">
+    <div class="wrap center" style="text-align:center;padding-bottom:clamp(80px,12vh,140px)">
+      <div class="cta"><button class="btn solid" data-open="buzz">Explore Buzz Buzz</button></div>
+    </div>
+  </div>
+
+  <!-- ── Populace: full-bleed night + live swarm ── -->
+  <div class="bleed night" id="populace-section">
+    <div class="swarm-wrap">
+      <canvas id="swarm" aria-hidden="true"></canvas>
+      <div class="swarm-veil"></div>
+      <div class="wrap">
+        <span class="eyebrow rv" style="color:var(--lime)">Developer tool</span>
+        <h2 class="rv" style="margin-top:16px">populace</h2>
+        <p class="lede rv" style="margin-top:26px;max-width:26ch;color:#B9C6CC">
+          Fill your app with people before it has any.</p>
+        <p class="rv" style="margin-top:22px;max-width:48ch;font-size:16px;line-height:1.6">
+          A simulated population signs up, moves through real cities, posts and messages —
+          through your API, as real authenticated users. Then it reports everything that broke.
+        </p>
+        <div class="cta"><button class="btn solid" data-open="pop">Explore Populace</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── company ── -->
+  <section class="pad" id="company">
     <div class="wrap center mid">
       <span class="eyebrow rv">Company</span>
       <h2 class="rv" style="margin-top:18px">small, and deliberate about it.</h2>
-      <p class="lede rv" style="margin-top:28px">
-        Gigzen Private Limited is a software company in Bhubaneswar. We ship few things and
-        try to get them genuinely right.
+      <p class="lede rv" style="margin-top:28px;color:var(--body)">
+        Gigzen Private Limited is a software company in Bhubaneswar. We ship few things and try
+        to get them genuinely right.
       </p>
     </div>
 
-    <div class="wrap mid rv" style="margin-top:40px;display:flex;flex-direction:column;gap:20px">
-      <p>
-        Our first product came from watching how gig drivers actually work — long shifts,
-        thin margins, and apps that treat them as supply rather than people.
-      </p>
-      <p>
-        Our second came from a problem we hit building the first: you cannot test an app made
-        of many people while being one person.
-      </p>
-      <p>
-        We write our own tools, run our own infrastructure, and say plainly what our software
-        does and does not do yet.
-      </p>
+    <div class="wrap mid rv" style="margin-top:42px;display:flex;flex-direction:column;gap:20px">
+      <p>Our first product came from watching how gig drivers actually work — long shifts, thin
+      margins, and apps that treat them as supply rather than people.</p>
+      <p>Our second came from a problem we hit building the first: you cannot test an app made
+      of many people while being one person.</p>
+      <p>We write our own tools, run our own infrastructure, and say plainly what our software
+      does and does not do yet.</p>
     </div>
 
     <div class="wrap">
-      <p class="eyebrow rv" style="margin-top:56px">Directors</p>
-      <div class="people" style="margin-top:22px">
+      <p class="eyebrow rv" style="margin-top:60px">Directors</p>
+      <div class="people">
         <div class="person rv">
           <span class="initials">SK</span>
           <span class="nm">Sankur Kundu</span>
           <span class="rl">Co-founder &amp; Director, Technology</span>
-          <p class="remit">Owns the products end to end — the apps, the infrastructure they
-          run on, and the tooling we built to test them.</p>
+          <p class="remit">Owns the products end to end — the apps, the infrastructure they run
+          on, and the tooling we built to test them.</p>
         </div>
         <div class="person rv">
           <span class="initials">SD</span>
           <span class="nm">Snehasis Despande</span>
           <span class="rl">Co-founder &amp; Director, Business</span>
-          <p class="remit">Owns the commercial side — partnerships, market strategy, and how
-          our products reach the people who need them.</p>
+          <p class="remit">Owns the commercial side — partnerships, market strategy, and how our
+          products reach the people who need them.</p>
         </div>
       </div>
 
       <div class="stats">
         <div class="stat rv"><span class="v">2</span><span class="l">products</span></div>
         <div class="stat rv"><span class="v">16</span><span class="l">languages</span></div>
-        <div class="stat rv"><span class="v">17</span><span class="l">database tables</span></div>
-        <div class="stat rv"><span class="v">48</span><span class="l">security policies</span></div>
+        <div class="stat rv"><span class="v">23</span><span class="l">currencies</span></div>
+        <div class="stat rv"><span class="v">40</span><span class="l">countries</span></div>
       </div>
     </div>
   </section>
 
-  <section class="dark center" id="contact">
-    <div class="wrap mid">
-      <h2 class="rv">work with us.</h2>
-      <p class="lede rv" style="margin-top:26px">
-        Building something that needs testing at scale, or want early access to Populace?
-      </p>
-      <p class="rv" style="margin-top:34px">
-        <a href="mailto:sankur.kundu.tw@gmail.com" style="color:var(--lime);font-size:21px;font-weight:600;text-decoration:none;letter-spacing:-.02em">sankur.kundu.tw@gmail.com</a>
-      </p>
-    </div>
-  </section>
+  <!-- ── contact ── -->
+  <div class="bleed dark">
+    <section class="pad center">
+      <div class="wrap mid">
+        <h2 class="rv">work with us.</h2>
+        <p class="lede rv" style="margin-top:26px;color:#A8A8AD">
+          Building something that needs testing at scale, or want early access to Populace?</p>
+        <p class="rv" style="margin-top:34px">
+          <a href="mailto:sankur.kundu.tw@gmail.com" style="color:var(--lime);font-size:21px;font-weight:600;text-decoration:none;letter-spacing:-.02em">sankur.kundu.tw@gmail.com</a>
+        </p>
+      </div>
+    </section>
+  </div>
 </main>
 
-<!-- ══ BUZZ BUZZ ══════════════════════════════════════════ -->
+<!-- ══════════ BUZZ BUZZ ══════════ -->
 <main class="view" id="view-buzz" hidden>
   <div class="wrap dhero">
     <button class="back" data-back>← Products</button>
@@ -417,105 +583,127 @@
     and find the other drivers working your city.</p>
   </div>
 
-  <section class="tint" style="padding-top:70px">
+  <div class="bleed flame">
+    <div class="wrap" style="padding:clamp(56px,8vh,90px) 26px;display:flex;justify-content:center;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
+      <div class="device" style="--w:236px">
+        <div class="glass">
+          <div class="island"></div>
+          <div class="scr-head"><span class="t">Buzz Buzz</span><span class="r"><i></i><i></i></span></div>
+          <div class="scr-body">
+            <div class="scr-hi">Good evening<b>Sankur</b></div>
+            <div class="card-w">
+              <span class="lbl">Today's income</span>
+              <div class="big-money">₹1,240</div>
+              <span class="livepill"><s></s>LIVE</span>
+              <div class="tiles3">
+                <div class="tile3"><b>₹240</b><span>per hour</span></div>
+                <div class="tile3"><b>62.4</b><span>km</span></div>
+                <div class="tile3"><b>₹20</b><span>per km</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scr-nav"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <div class="device" style="--w:236px">
+        <div class="glass">
+          <div class="island"></div>
+          <div class="scr-map">
+            <div class="road" style="left:0;right:0;top:38%;height:7px"></div>
+            <div class="road" style="top:0;bottom:0;left:30%;width:6px"></div>
+            <div class="trace" style="left:18%;top:30%;width:62%;height:38%"></div>
+            <div class="searchpill"><s></s>Search a city or place</div>
+            <div class="pin me" style="left:44%;top:47%"></div>
+            <div class="pin" style="left:24%;top:32%"></div>
+            <div class="pin" style="left:66%;top:58%"></div>
+            <div class="sheet">
+              <div class="row">
+                <div><b>62.4</b><span>km</span></div>
+                <div><b>5h 10m</b><span>time</span></div>
+                <div><b>12.1</b><span>km/h</span></div>
+              </div>
+              <div class="recbtn">STOP TRACKING</div>
+            </div>
+          </div>
+          <div class="scr-nav"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="pad" style="background:var(--paper-2)">
     <div class="wrap">
       <h2>built around the shift.</h2>
-      <p class="lede" style="margin-top:26px;max-width:46ch">
+      <p class="lede" style="margin-top:26px;max-width:46ch;color:var(--body)">
         A gig driver's day is measured in kilometres, fuel and hours away from home. Buzz Buzz
-        is built to answer the question that actually matters at the end of it: was today
-        worth it?
+        answers the question that actually matters at the end of it: was today worth it?
       </p>
 
       <div class="caps">
+        <div class="cap"><span class="n">01</span><div>
+          <h3>Earnings that follow the road, not the clock</h3>
+          <p class="lead">Money accrues from distance genuinely travelled. Sitting in traffic
+          doesn't quietly inflate your total, because a stationary phone earns nothing.</p>
+          <p class="detail">GPS is noisy at rest — a phone on a dashboard drifts tens of metres
+          while parked. Movement under 15 metres is discarded as drift, and any jump implying
+          more than 200 km/h is rejected as a bad fix. What remains is distance you actually
+          covered. Your rate per kilometre is yours to set, and totals reset at local midnight
+          server-side, so yesterday's numbers never linger on someone else's screen.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">01</span>
-          <div>
-            <h3>Earnings that follow the road, not the clock</h3>
-            <p class="lead">Money accrues from distance genuinely travelled. Sitting in
-            traffic doesn't quietly inflate your total, because a stationary phone earns
-            nothing.</p>
-            <p class="detail">GPS is noisy at rest — a phone on a dashboard can drift tens of
-            metres while parked. Movement under 15 metres is discarded as drift, and any jump
-            implying more than 200 km/h is rejected as a bad fix. What remains is distance you
-            actually covered. Your rate per kilometre is yours to set, totals roll over at
-            local midnight, and a scheduled job resets them server-side so yesterday's numbers
-            never linger on someone else's screen.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">02</span><div>
+          <h3>A map with people on it</h3>
+          <p class="lead">See the drivers you know moving in real time, and search any city,
+          neighbourhood or shop on earth.</p>
+          <p class="detail">Friends' positions refresh every ten seconds — a driver who joins
+          mid-shift appears without anyone restarting the app. Search runs two queries at once,
+          one biased to where you are and one worldwide, then ranks settlements above
+          side-streets, so "Jakarta" returns the city and "7-Eleven" returns the branch down the
+          road. Sharing your position is off until you turn it on, and switching it off deletes
+          your location rather than merely hiding it.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">02</span>
-          <div>
-            <h3>A map with people on it</h3>
-            <p class="lead">See the drivers you know moving in real time, and search any city,
-            neighbourhood or shop on earth.</p>
-            <p class="detail">Friends' positions refresh every ten seconds — a driver who joins
-            mid-shift appears without anyone restarting the app. Search runs two queries at
-            once, one biased to where you are and one worldwide, then ranks settlements above
-            side-streets, so "Jakarta" returns the city and "7-Eleven" returns the branch down
-            the road rather than one in another country. Street and satellite layers included.
-            Sharing your position is off until you turn it on, and switching it off deletes
-            your location rather than merely hiding it.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">03</span><div>
+          <h3>Fluent wherever the work is</h3>
+          <p class="lead">Sixteen languages and twenty-three currencies, chosen for you from
+          where you actually are.</p>
+          <p class="detail">English, Filipino, Spanish, Hindi, Bengali, Indonesian, Malay, Thai,
+          Vietnamese, Portuguese, French, German, Chinese, Japanese, Korean and Arabic — with
+          the entire interface mirrored right-to-left for Arabic, not merely translated. The app
+          reverse-geocodes your first GPS fix to a country and selects currency and language
+          from a map of forty of them. Both remain yours to override.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">03</span>
-          <div>
-            <h3>Fluent wherever the work is</h3>
-            <p class="lead">Sixteen languages and twenty-three currencies, chosen for you from
-            where you actually are.</p>
-            <p class="detail">English, Filipino, Spanish, Hindi, Bengali, Indonesian, Malay,
-            Thai, Vietnamese, Portuguese, French, German, Chinese, Japanese, Korean and Arabic
-            — with the entire interface mirrored right-to-left for Arabic, not merely
-            translated. The app reverse-geocodes your first GPS fix to a country and selects
-            the currency and language from a map of forty of them. Both remain yours to
-            override at any time.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">04</span><div>
+          <h3>Messaging that behaves like messaging</h3>
+          <p class="lead">Direct and group conversations with delivery and read receipts,
+          presence, and last-seen.</p>
+          <p class="detail">Messages appear the instant you send them rather than waiting on the
+          next poll. A single tick becomes a double tick when the recipient's device fetches it,
+          then turns blue when they open the conversation. Photos attach from the camera or the
+          gallery, and conversations open at the newest message.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">04</span>
-          <div>
-            <h3>Messaging that behaves like messaging</h3>
-            <p class="lead">Direct and group conversations with delivery and read receipts,
-            presence, and last-seen.</p>
-            <p class="detail">Messages appear the instant you send them rather than waiting on
-            the next poll, and a single tick becomes a double tick when the recipient's device
-            fetches it, then turns blue when they open the conversation. Photos attach from the
-            camera or the gallery. Conversations open at the newest message, the way you expect
-            them to.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">05</span><div>
+          <h3>The people working your streets</h3>
+          <p class="lead">A community of drivers sharing what's actually happening out there —
+          flooding, surges, closures, queues.</p>
+          <p class="detail">Posts with photos, likes, comments and friend requests. Groups carry
+          real membership counts rather than invented ones. Weekly distance and earnings
+          challenges run against a leaderboard of drivers you know, resetting on a genuine
+          schedule instead of a decorative one.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">05</span>
-          <div>
-            <h3>The people working your streets</h3>
-            <p class="lead">A community of drivers who share what's actually happening out
-            there — flooding, surges, closures, queues.</p>
-            <p class="detail">Posts with photos, likes, comments and friend requests. Groups
-            carry real membership counts rather than invented ones. Weekly distance and earnings
-            challenges run against a leaderboard of drivers you know, resetting on a genuine
-            schedule instead of a decorative one.</p>
-          </div>
-        </div>
-
-        <div class="cap">
-          <span class="n">06</span>
-          <div>
-            <h3>Privacy that is structural, not promised</h3>
-            <p class="lead">Location is collected only while tracking is on. Never in the
-            background. Never with the app closed.</p>
-            <p class="detail">Every table enforces access per-account at the database itself,
-            so one driver cannot read another's data even if the app asked it to. Phone numbers
-            are never exposed to other users. Deleting your account removes your profile,
-            settings, posts, messages and location history — through the same path we test
-            automatically before every release.</p>
-          </div>
-        </div>
-
+        <div class="cap"><span class="n">06</span><div>
+          <h3>Privacy that is structural, not promised</h3>
+          <p class="lead">Location is collected only while tracking is on. Never in the
+          background. Never with the app closed.</p>
+          <p class="detail">Every table enforces access per-account at the database itself, so
+          one driver cannot read another's data even if the app asked it to. Phone numbers are
+          never exposed to other users. Deleting your account removes your profile, settings,
+          posts, messages and location history — through the same path we test automatically
+          before every release.</p>
+        </div></div>
       </div>
 
       <div class="spec">
@@ -536,15 +724,15 @@
 
       <div class="status">
         <span class="eyebrow">Availability</span>
-        <p><strong>In internal testing on Google Play.</strong> The signed release is live on
-        the internal track. Closed testing follows, then production review. Not yet publicly
+        <p><strong>In internal testing on Google Play.</strong> The signed release is live on the
+        internal track. Closed testing follows, then production review. Not yet publicly
         downloadable.</p>
       </div>
     </div>
   </section>
 </main>
 
-<!-- ══ POPULACE ═══════════════════════════════════════════ -->
+<!-- ══════════ POPULACE ══════════ -->
 <main class="view" id="view-pop" hidden>
   <div class="wrap dhero">
     <button class="back" data-back>← Products</button>
@@ -554,103 +742,89 @@
     your real API as real authenticated users — then reports everything that broke.</p>
   </div>
 
-  <section class="tint" style="padding-top:70px">
+  <div class="bleed night">
+    <div class="swarm-wrap" style="min-height:clamp(340px,46vh,460px)">
+      <canvas id="swarm2" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+      <div class="swarm-veil" style="background:radial-gradient(120% 90% at 50% 50%, rgba(5,7,8,.72) 20%, rgba(5,7,8,.28) 70%, rgba(5,7,8,.05) 100%)"></div>
+    </div>
+  </div>
+
+  <section class="pad" style="background:var(--paper-2)">
     <div class="wrap">
       <h2>some bugs need more than one person.</h2>
-      <p class="lede" style="margin-top:26px;max-width:44ch">
+      <p class="lede" style="margin-top:26px;max-width:44ch;color:var(--body)">
         You cannot test presence, read receipts or live sync while being one human with one
         account.
       </p>
 
       <div class="caps">
+        <div class="cap"><span class="n">01</span><div>
+          <h3>One adapter is the entire integration</h3>
+          <p class="lead">Thirteen small methods, two of them required. Each answers a single
+          question: how does this happen in my app?</p>
+          <p class="detail">The engine knows how to be a person — where they go, how chatty they
+          are, when they take a break. It knows nothing about your product, and that separation
+          is enforced rather than aspirational. Implement createUser and deleteUser and you have
+          a working run. A read-only service can implement three methods and still get something
+          useful. Anything you leave out is reported as untested — never quietly counted as
+          passing.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">01</span>
-          <div>
-            <h3>One adapter is the entire integration</h3>
-            <p class="lead">Thirteen small methods, two of them required. Each answers a single
-            question: how does this happen in my app?</p>
-            <p class="detail">The engine knows how to be a person — where they go, how chatty
-            they are, when they take a break. It knows nothing about your product, and that
-            separation is enforced rather than aspirational. Implement <span class="mono">createUser</span>
-            and <span class="mono">deleteUser</span> and you have a working run; add the others
-            as you want them covered. A read-only service can implement three methods and still
-            get something useful. Anything you leave out is reported as untested — never quietly
-            counted as passing.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">02</span><div>
+          <h3>Through the front door, always</h3>
+          <p class="lead">Every action goes through the same API your customers hit, as a
+          genuinely separate authenticated identity.</p>
+          <p class="detail">No admin keys. No service-role credentials. No direct database
+          writes. A simulation that bypasses your permission rules proves nothing about whether
+          those rules work — and permission bugs are precisely what a multi-user simulation is
+          best at finding, because they only appear when one identity reaches for another's
+          data. Account deletion runs through your own delete path, so the route almost nobody
+          tests gets exercised on every run.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">02</span>
-          <div>
-            <h3>Through the front door, always</h3>
-            <p class="lead">Every action goes through the same API your customers hit, as a
-            genuinely separate authenticated identity.</p>
-            <p class="detail">No admin keys. No service-role credentials. No direct database
-            writes. A simulation that bypasses your permission rules proves nothing about
-            whether those rules work — and permission bugs are precisely what a multi-user
-            simulation is best at finding, because they only appear when one identity reaches
-            for another's data. Account deletion runs through your own delete path, so the
-            route almost nobody tests gets exercised on every run.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">03</span><div>
+          <h3>People, not a load generator</h3>
+          <p class="lead">Each simulated person carries their own habits, and everyone acts at
+          once.</p>
+          <p class="detail">Postiness, chattiness, break frequency and travel speed vary between
+          individuals, because identical agents find identical bugs. They move along real
+          looping routes through five cities and talk in language that suits each one. Crucially
+          they act concurrently — sequential agents never surface a race condition, which is
+          half the reason to run a simulation at all.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">03</span>
-          <div>
-            <h3>People, not a load generator</h3>
-            <p class="lead">Each simulated person carries their own habits, and everyone acts
-            at once.</p>
-            <p class="detail">Postiness, chattiness, break frequency and travel speed vary
-            between individuals, because identical agents find identical bugs. They move along
-            real looping routes through five cities and talk in language that suits each one.
-            Crucially they act concurrently — sequential agents never surface a race condition,
-            which is half the reason to run a simulation at all.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">04</span><div>
+          <h3>Evidence, not vibes</h3>
+          <p class="lead">Every run ends with a report you can hand to someone who wasn't
+          watching.</p>
+          <p class="detail">Latency percentiles for every endpoint under concurrent load.
+          Failures grouped by shape rather than exact text, so one bug is one line instead of
+          fifty. An honest account of what was never exercised. Written as JSON for your
+          pipeline and as a self-contained page for everyone else, with a non-zero exit code
+          when problems are found. There is deliberately no tolerance threshold — a single
+          failure among thousands is still a failure.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">04</span>
-          <div>
-            <h3>Evidence, not vibes</h3>
-            <p class="lead">Every run ends with a report you can hand to someone who wasn't
-            watching.</p>
-            <p class="detail">Latency percentiles for every endpoint under concurrent load.
-            Failures grouped by shape rather than exact text, so one bug is one line instead of
-            fifty. An honest account of what was never exercised. Written as JSON for your
-            pipeline and as a self-contained page for everyone else, with a non-zero exit code
-            when problems are found. There is deliberately no tolerance threshold — a single
-            failure among thousands is still reported as a failure.</p>
-          </div>
-        </div>
+        <div class="cap"><span class="n">05</span><div>
+          <h3>It refuses to touch production</h3>
+          <p class="lead">Three independent refusals, any one of which stops a run.</p>
+          <p class="detail">The environment must declare itself non-production — opted into,
+          never assumed. Your production hosts are matched against every string in the
+          configuration however deeply nested, and no flag overrides that. An empty denylist
+          warns loudly, because forgetting to fill it in is the likeliest version of this
+          mistake. Simulated people appearing to real customers is deception, not testing.</p>
+        </div></div>
 
-        <div class="cap">
-          <span class="n">05</span>
-          <div>
-            <h3>It refuses to touch production</h3>
-            <p class="lead">Three independent refusals, any one of which stops a run.</p>
-            <p class="detail">The environment must declare itself non-production — opted into,
-            never assumed. Your production hosts are matched against every string in the
-            configuration however deeply nested, and no flag overrides that. An empty denylist
-            warns loudly, because forgetting to fill it in is the likeliest version of this
-            mistake. Simulated people appearing to real customers is deception, not testing.</p>
-          </div>
-        </div>
-
-        <div class="cap">
-          <span class="n">06</span>
-          <div>
-            <h3>It reports its own failures too</h3>
-            <p class="lead">If the simulation breaks, the report says so instead of blaming
-            your API.</p>
-            <p class="detail">Failures originating in your app and failures originating in
-            Populace are tracked separately. When something breaks inside the tool itself, the
-            report states plainly that the run did not test what it claims to have tested.
-            A testing tool that can fail silently and still print a clean result is worse than
-            no tool at all.</p>
-          </div>
-        </div>
-
+        <div class="cap"><span class="n">06</span><div>
+          <h3>It reports its own failures too</h3>
+          <p class="lead">If the simulation breaks, the report says so instead of blaming your
+          API.</p>
+          <p class="detail">Failures originating in your app and failures originating in
+          Populace are tracked separately. When something breaks inside the tool itself, the
+          report states plainly that the run did not test what it claims to have tested. A
+          testing tool that can fail silently and still print a clean result is worse than no
+          tool at all.</p>
+        </div></div>
       </div>
 
       <div class="term">
@@ -693,25 +867,21 @@
         <span class="eyebrow">Status</span>
         <p><strong>Pre-release.</strong> The engine, safety guards and reporting are built and
         tested. It has not yet run against a production-grade backend — so every number here
-        comes from a demo app, not a customer's. We'd rather say that than imply a case study
-        we haven't earned.</p>
-        <p style="margin-top:6px">
-          It proves your app <strong>works</strong>. It will never tell you whether anyone
-          wants it — for that, use real people.
-        </p>
+        comes from a demo app, not a customer's. We'd rather say that than imply a case study we
+        haven't earned.</p>
+        <p style="margin-top:6px">It proves your app <strong>works</strong>. It will never tell
+        you whether anyone wants it — for that, use real people.</p>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap grid">
+  <div class="wrap row">
     <div>
-      <span class="brand">gigzen</span>
-      <p class="fine" style="margin-top:14px">
-        <strong>Gigzen Private Limited</strong><br>
-        Bhubaneswar, Odisha, India
-      </p>
+      <span class="wordmark" style="font-size:21px">gigzen</span>
+      <p class="fine" style="margin-top:14px"><strong>Gigzen Private Limited</strong><br>
+      Bhubaneswar, Odisha, India</p>
     </div>
     <div>
       <p class="fine">
@@ -726,19 +896,18 @@
 <script>
 (() => {
   document.documentElement.classList.add("js");
-
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const views = { home: "view-home", buzz: "view-buzz", pop: "view-pop" };
   const nav = document.getElementById("nav");
   const items = () => [...document.querySelectorAll(".rv")];
-  let revealSafety = null;
+  let safety = null;
   let io = null;
 
+  // ── reveal ─────────────────────────────────────────────────────────────
   if ("IntersectionObserver" in window) {
     io = new IntersectionObserver(
-      (entries) => entries.forEach((en) => {
-        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
-      }),
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.06 },
+      (es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }),
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
     );
   } else {
     items().forEach((el) => el.classList.add("in"));
@@ -747,40 +916,170 @@
   function reveal() {
     if (!io) return;
     items().forEach((el) => {
-      const view = el.closest(".view");
-      if (view && view.hidden) return;
+      const v = el.closest(".view");
+      if (v && v.hidden) return;
       if (!el.classList.contains("in")) io.observe(el);
     });
-    // setTimeout, not rAF: rAF never runs while a tab is unpainted, which would
-    // leave the page blank until someone happened to look at it.
+    // setTimeout rather than rAF: rAF never fires while a tab is unpainted,
+    // which would leave the page blank until someone happened to look at it.
     setTimeout(() => {
       items().forEach((el) => {
-        const box = el.getBoundingClientRect();
-        if (box.top < window.innerHeight * 0.94 && box.bottom > 0) el.classList.add("in");
+        const b = el.getBoundingClientRect();
+        if (b.top < innerHeight * 0.94 && b.bottom > 0) el.classList.add("in");
       });
     }, 0);
-    // Last resort: the words arrive even if the observer never fires.
-    clearTimeout(revealSafety);
-    revealSafety = setTimeout(() => items().forEach((el) => el.classList.add("in")), 1400);
+    clearTimeout(safety);
+    safety = setTimeout(() => items().forEach((el) => el.classList.add("in")), 1500);
   }
 
+  // ── scroll sequence ────────────────────────────────────────────────────
+  // A sticky stage held for 3 screens' worth of scroll. Progress across the
+  // track picks the active phone; nothing depends on scroll for the content
+  // to be readable, so a failure here degrades to "all three visible".
+  const track = document.querySelector("[data-seq]");
+  const stage = track && track.querySelector(".seq-stage");
+  const phones = track ? [...track.querySelectorAll(".device")] : [];
+  const caps = track ? [...track.querySelectorAll(".seq-cap")] : [];
+  const dots = track ? [...track.querySelectorAll(".seq-dots i")] : [];
+  let activeIdx = -1;
+
+  function setActive(i) {
+    if (i === activeIdx) return;
+    activeIdx = i;
+    phones.forEach((p, n) => p.classList.toggle("active", n === i));
+    caps.forEach((c, n) => c.classList.toggle("on", n === i));
+    dots.forEach((d, n) => d.classList.toggle("on", n === i));
+  }
+
+  function onScroll() {
+    nav.classList.toggle("stuck", scrollY > 8);
+    if (!track || !stage || reduced) return;
+    const r = track.getBoundingClientRect();
+    const total = r.height - stage.offsetHeight;
+    if (total <= 0) return;
+    const p = Math.min(1, Math.max(0, -r.top / total));
+    setActive(Math.min(phones.length - 1, Math.floor(p * phones.length)));
+  }
+
+  if (reduced && track) {
+    phones.forEach((p) => p.classList.add("active"));
+    caps.forEach((c) => c.classList.add("on"));
+  } else {
+    setActive(0);
+  }
+
+  // ── swarm ──────────────────────────────────────────────────────────────
+  // Not decoration: these agents run the product's own movement model — a
+  // closed loop of waypoints per person, walked at their own speed, with the
+  // same break behaviour.
+  function swarm(canvas, count) {
+    if (!canvas) return;
+    // The Populace canvas lives in a view that gets shown repeatedly. Without
+    // this guard each visit would start another animation loop drawing to the
+    // same canvas — they stack, and the page gets slower every time.
+    if (canvas.dataset.live === "1") return;
+    canvas.dataset.live = "1";
+    const ctx = canvas.getContext("2d");
+    let W = 0, H = 0, agents = [];
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    function route(cx, cy, radius, legs) {
+      const pts = [];
+      for (let i = 0; i < legs; i++) {
+        const a = (i / legs) * Math.PI * 2 + rand(-0.5, 0.5);
+        const r = radius * rand(0.55, 1.3);
+        pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
+      }
+      return pts;
+    }
+    function make() {
+      const radius = rand(26, 92) * (W / 1100 + 0.55);
+      return {
+        route: route(rand(0.04, 0.96) * W, rand(0.06, 0.94) * H, radius, 5 + Math.floor(rand(0, 3))),
+        leg: 0, t: 0, speed: rand(0.1, 0.42), breakiness: rand(0.0004, 0.0028),
+        onBreak: false, trail: [], ping: 0, lime: Math.random() < 0.22,
+      };
+    }
+    function resize() {
+      const dpr = Math.min(2, devicePixelRatio || 1);
+      const b = canvas.getBoundingClientRect();
+      W = b.width; H = Math.max(b.height, 1);
+      canvas.width = Math.floor(W * dpr); canvas.height = Math.floor(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      agents = Array.from({ length: count }, make);
+    }
+    function step(a) {
+      if (a.onBreak) { if (Math.random() < 0.006) a.onBreak = false; return; }
+      if (Math.random() < a.breakiness) { a.onBreak = true; return; }
+      const f = a.route[a.leg % a.route.length];
+      const t = a.route[(a.leg + 1) % a.route.length];
+      const dx = t.x - f.x, dy = t.y - f.y;
+      const len = Math.hypot(dx, dy) || 1;
+      a.t += a.speed / len;
+      if (a.t >= 1) { a.t = 0; a.leg = (a.leg + 1) % a.route.length; }
+      a.x = f.x + dx * a.t; a.y = f.y + dy * a.t;
+      a.trail.push({ x: a.x, y: a.y });
+      if (a.trail.length > 24) a.trail.shift();
+      if (Math.random() < 0.0016) a.ping = 1;
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (const a of agents) {
+        const base = a.lime ? "211,255,0" : "120,214,206";
+        for (let i = 1; i < a.trail.length; i++) {
+          const p = a.trail[i - 1], q = a.trail[i];
+          ctx.strokeStyle = "rgba(" + base + "," + (i / a.trail.length) * 0.26 + ")";
+          ctx.lineWidth = 1.1;
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+        }
+        if (a.x === undefined) continue;
+        if (a.ping > 0) {
+          ctx.strokeStyle = "rgba(" + base + "," + a.ping * 0.45 + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.arc(a.x, a.y, (1 - a.ping) * 24 + 3, 0, Math.PI * 2); ctx.stroke();
+          a.ping = Math.max(0, a.ping - 0.022);
+        }
+        ctx.fillStyle = "rgba(" + base + "," + (a.onBreak ? 0.3 : 0.92) + ")";
+        ctx.beginPath(); ctx.arc(a.x, a.y, a.lime ? 2.3 : 1.9, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    function frame() {
+      // If the canvas was measured while its container had no width — a hidden
+      // view, a pane that hadn't laid out yet — every agent sits at zero and
+      // the section renders empty forever. Re-measure once real width appears.
+      if (W < 2 && canvas.getBoundingClientRect().width > 2) resize();
+      for (const a of agents) step(a);
+      draw();
+      requestAnimationFrame(frame);
+    }
+    resize();
+    addEventListener("resize", () => { clearTimeout(canvas.__r); canvas.__r = setTimeout(resize, 180); });
+    if (reduced) { for (let i = 0; i < 200; i++) for (const a of agents) step(a); draw(); }
+    else frame();
+  }
+
+  // ── views ──────────────────────────────────────────────────────────────
   function show(key, push) {
     const target = views[key] ? key : "home";
     for (const [k, id] of Object.entries(views)) document.getElementById(id).hidden = k !== target;
     if (push) history.pushState({ v: target }, "", target === "home" ? "#top" : "#" + target);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    scrollTo({ top: 0, behavior: "auto" });
     reveal();
+    if (target === "pop") swarm(document.getElementById("swarm2"), 34);
+    onScroll();
   }
 
   document.querySelectorAll("[data-open]").forEach((el) => el.addEventListener("click", () => show(el.dataset.open, true)));
   document.querySelectorAll("[data-back]").forEach((el) => el.addEventListener("click", () => show("home", true)));
   document.querySelectorAll("[data-home]").forEach((el) => el.addEventListener("click", () => show("home", false)));
-  window.addEventListener("popstate", (e) => show((e.state && e.state.v) || "home", false));
-  addEventListener("scroll", () => nav.classList.toggle("stuck", window.scrollY > 8), { passive: true });
+  addEventListener("popstate", (e) => show((e.state && e.state.v) || "home", false));
+  addEventListener("scroll", onScroll, { passive: true });
 
+  swarm(document.getElementById("swarm"), 46);
   const initial = location.hash.replace("#", "");
   show(views[initial] ? initial : "home", false);
 })();
+
 </script>
 
 </body>
