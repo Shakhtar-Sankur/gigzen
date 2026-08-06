@@ -68,6 +68,9 @@ nav {
   border-bottom: 1px solid transparent; transition: border-color .3s;
 }
 nav.stuck { border-bottom-color: var(--rule); }
+/* The nav is sticky and 46px tall, so an anchor jump would tuck the section's
+   first line underneath it. */
+#buzz-section, #populace-section, #company, #contact, #top { scroll-margin-top: 56px; }
 nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
 .brand { display: flex; align-items: center; text-decoration: none; }
 .brand svg { height: 15px; width: auto; }
@@ -559,7 +562,7 @@ footer .brand svg { height: 19px; }
   </section>
 
   <!-- ── contact ── -->
-  <div class="bleed dark">
+  <div class="bleed dark" id="contact">
     <section class="pad center">
       <div class="wrap mid">
         <h2 class="rv">work with us.</h2>
@@ -1071,7 +1074,30 @@ footer .brand svg { height: 19px; }
 
   document.querySelectorAll("[data-open]").forEach((el) => el.addEventListener("click", () => show(el.dataset.open, true)));
   document.querySelectorAll("[data-back]").forEach((el) => el.addEventListener("click", () => show("home", true)));
-  document.querySelectorAll("[data-home]").forEach((el) => el.addEventListener("click", () => show("home", false)));
+  // Nav links do two jobs: return to the home view if you're on a product page,
+  // and jump to a section. show() scrolls to the top, which silently cancelled
+  // the anchor — so the section jump has to happen after it, not instead of it.
+  document.querySelectorAll("[data-home]").forEach((el) =>
+    el.addEventListener("click", (e) => {
+      const hash = (el.getAttribute("href") || "").slice(1);
+      const onHome = !document.getElementById("view-home").hidden;
+      if (!onHome) show("home", false);
+      if (!hash || hash === "top") return;
+      e.preventDefault();
+      // Deliberately not scrollIntoView: `overflow-x: hidden` on the body makes
+      // it pick the wrong scroll container and silently do nothing. Computing
+      // the offset and scrolling the window works regardless, and lets us clear
+      // the sticky nav explicitly.
+      const NAV = 56;
+      const go = () => {
+        const target = document.getElementById(hash);
+        if (!target) return;
+        const y = target.getBoundingClientRect().top + window.scrollY - NAV;
+        window.scrollTo({ top: Math.max(0, y), behavior: reduced ? "auto" : "smooth" });
+      };
+      onHome ? go() : setTimeout(go, 0);
+    }),
+  );
   addEventListener("popstate", (e) => show((e.state && e.state.v) || "home", false));
   addEventListener("scroll", onScroll, { passive: true });
 
