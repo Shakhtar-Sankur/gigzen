@@ -70,7 +70,7 @@ nav {
 nav.stuck { border-bottom-color: var(--rule); }
 /* The nav is sticky and 46px tall, so an anchor jump would tuck the section's
    first line underneath it. */
-#buzz-section, #populace-section, #company, #contact, #top { scroll-margin-top: 56px; }
+#buzz-section, #populace-section, #global, #company, #contact, #top { scroll-margin-top: 56px; }
 nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
 .brand { display: flex; align-items: center; text-decoration: none; }
 .brand svg { height: 15px; width: auto; }
@@ -181,6 +181,23 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 .person .nm { font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: -.035em; color: var(--ink); }
 .person .rl { font-size: 13.5px; color: var(--muted); }
 .person .remit { margin-top: 12px; font-size: 14.5px; line-height: 1.5; color: var(--body); }
+
+/* Sixteen real language names, each in its own script. Showing the reach beats
+   asserting it — and every one of these actually ships in the app. */
+.langs {
+  margin-top: 56px; display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 14px 30px; max-width: 860px; margin-inline: auto;
+}
+.langs span {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(19px, 2.6vw, 31px); letter-spacing: -.03em;
+  color: var(--ink); opacity: .3; transition: opacity .5s ease, color .5s ease;
+  line-height: 1.25;
+}
+.langs span:hover { opacity: 1; color: var(--orange); }
+.langs span:nth-child(3n+1) { opacity: .5; }
+.langs span:nth-child(4n+2) { opacity: .78; }
+@media (prefers-reduced-motion: reduce) { .langs span { transition: none; } }
 
 .stats { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 60px; }
 .stat .v { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(36px, 5.4vw, 60px); letter-spacing: -.055em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
@@ -346,12 +363,18 @@ footer .brand svg { height: 19px; }
 .scr-nav i { width: 15px; height: 15px; border-radius: 5px; background: #c3c8d2; display: block; }
 .scr-nav i.on { background: #ff4d17; box-shadow: 0 0 0 5px #fff1ea; }
 
-.wordmark { font-family: var(--display); font-weight: 800; letter-spacing: -.055em; color: var(--ink); text-transform: lowercase; }
+/* The company mark is set in caps with open tracking — a name, not a word in a
+   sentence. Product names stay lowercase, so the two never read as the same
+   thing. */
+.wordmark {
+  font-family: var(--display); font-weight: 800; letter-spacing: .17em;
+  color: var(--ink); text-transform: uppercase;
+}
 </style>
 
 <nav id="nav">
   <div class="wrap">
-    <a class="brand" href="#top" data-home><span class="wordmark" style="font-size:19px">gigzen</span></a>
+    <a class="brand" href="#top" data-home><span class="wordmark" style="font-size:15px">GIGZEN</span></a>
     <div class="navlinks">
       <a href="#buzz-section" data-home>buzz buzz</a>
       <a href="#populace-section" data-home>populace</a>
@@ -513,8 +536,38 @@ footer .brand svg { height: 19px; }
     </div>
   </div>
 
+  <!-- ── international ── -->
+  <section class="pad" id="global">
+    <div class="wrap center mid">
+      <span class="eyebrow rv">Everywhere</span>
+      <h2 class="rv" style="margin-top:18px">a driver in delhi shouldn't get a worse app than a driver in london.</h2>
+      <p class="lede rv" style="margin-top:28px;color:var(--body)">
+        Buzz Buzz ships in sixteen languages — right-to-left included — and picks the
+        currency from where you actually are.
+      </p>
+    </div>
+
+    <div class="wrap">
+      <div class="langs rv">
+        <span lang="en">English</span><span lang="fil">Filipino</span><span lang="es">Español</span>
+        <span lang="hi">हिन्दी</span><span lang="bn">বাংলা</span><span lang="id">Bahasa Indonesia</span>
+        <span lang="ms">Bahasa Melayu</span><span lang="th">ไทย</span><span lang="vi">Tiếng Việt</span>
+        <span lang="pt">Português</span><span lang="fr">Français</span><span lang="de">Deutsch</span>
+        <span lang="zh">中文</span><span lang="ja">日本語</span><span lang="ko">한국어</span>
+        <span lang="ar" dir="rtl">العربية</span>
+      </div>
+
+      <div class="stats" style="margin-top:64px">
+        <div class="stat rv"><span class="v">16</span><span class="l">languages</span></div>
+        <div class="stat rv"><span class="v">23</span><span class="l">currencies</span></div>
+        <div class="stat rv"><span class="v">40</span><span class="l">countries</span></div>
+        <div class="stat rv"><span class="v">20+</span><span class="l">gig platforms</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── company ── -->
-  <section class="pad" id="company">
+  <section class="pad" id="company" style="background:var(--paper-2)">
     <div class="wrap center mid">
       <span class="eyebrow rv">Company</span>
       <h2 class="rv" style="margin-top:18px">small, and deliberate about it.</h2>
@@ -552,12 +605,6 @@ footer .brand svg { height: 19px; }
         </div>
       </div>
 
-      <div class="stats">
-        <div class="stat rv"><span class="v">2</span><span class="l">products</span></div>
-        <div class="stat rv"><span class="v">16</span><span class="l">languages</span></div>
-        <div class="stat rv"><span class="v">23</span><span class="l">currencies</span></div>
-        <div class="stat rv"><span class="v">40</span><span class="l">countries</span></div>
-      </div>
     </div>
   </section>
 
@@ -882,7 +929,7 @@ footer .brand svg { height: 19px; }
 <footer>
   <div class="wrap row">
     <div>
-      <span class="wordmark" style="font-size:21px">gigzen</span>
+      <span class="wordmark" style="font-size:17px">GIGZEN</span>
       <p class="fine" style="margin-top:14px"><strong>Gigzen Private Limited</strong><br>
       Bhubaneswar, Odisha, India</p>
     </div>
