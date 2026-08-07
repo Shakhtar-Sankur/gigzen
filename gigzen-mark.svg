@@ -2,15 +2,17 @@
   <title>Gigzen</title>
   <!--
     The hexagonal ring IS the G: a band, a slot cut into its right side to open
-    the letter, and an arm pointing inward beneath the slot.
+    the letter, and an arm folding inward beneath the slot.
 
-    Composed as: (outer hexagon AND NOT inner hexagon AND NOT slot) OR arm.
-    The base path is the outer hexagon, so everything is clipped to it and the
-    mark inherits colour from its container.
+    The arm ends on a diagonal that RISES to the left, at 30° — the hexagon's
+    own facet angle. That fold is what makes the mark read as one continuous
+    ribbon rather than a bar attached to a ring, and it is the detail that took
+    three passes to get right: a square tip loses it, a steeper cut turns the
+    arm into an arrowhead.
 
-    Rasterised at 256 / 32 / 16px at each step. Two things were corrected along
-    the way: the construction was originally inverted (a solid hexagon with a
-    hole), and a chamfered arm tip read as an arrowhead rather than a G.
+    Composed as (outer hex AND NOT inner hex AND NOT slot) OR arm, with the
+    outer hexagon as the base path so everything clips to it and the mark
+    inherits colour from its container.
   -->
   <defs>
     <mask id="gigzen-g">
@@ -19,8 +21,8 @@
       <path d="M32 12.5 L48.89 22.25 V41.75 L32 51.5 L15.11 41.75 V22.25 Z" fill="#000"/>
       <!-- slot: the G's mouth -->
       <rect x="29" y="26" width="35" height="6" fill="#000"/>
-      <!-- arm: what turns a C into a G -->
-      <rect x="32.5" y="32" width="17.5" height="6.5" fill="#fff"/>
+      <!-- arm: square along the top, cut back on the 30° diagonal below -->
+      <path d="M50 32 H32.5 L43.8 38.5 H50 Z" fill="#fff"/>
     </mask>
   </defs>
   <path d="M32 2 L57.98 17 V47 L32 62 L6.02 47 V17 Z"
