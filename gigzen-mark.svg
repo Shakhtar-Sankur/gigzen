@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Gigzen">
+  <title>Gigzen</title>
+  <!--
+    Pointy-top hexagon with the G knocked out, so the mark works on any
+    background and inherits colour from its container.
+
+    Geometry verified by rasterising at 256, 32 and 16px before it was written
+    here — a first pass used a 6-wide stroke in a 14-tall box and the counters
+    closed up into a solid blob at small sizes.
+  -->
+  <defs>
+    <mask id="gigzen-g-cut">
+      <rect width="64" height="64" fill="#fff"/>
+      <path d="M41 21 H23 V43 H41 V32 H33"
+            fill="none" stroke="#000" stroke-width="4.8"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <path d="M32 2 L57.98 17 V47 L32 62 L6.02 47 V17 Z"
+        fill="currentColor" mask="url(#gigzen-g-cut)"/>
+</svg>
