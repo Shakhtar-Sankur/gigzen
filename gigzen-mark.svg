@@ -1,21 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Gigzen">
   <title>Gigzen</title>
   <!--
-    Pointy-top hexagon with the G knocked out, so the mark works on any
-    background and inherits colour from its container.
+    The hexagonal ring IS the G: a thick band, a slot cut into its right side to
+    open the letter, and a tongue pointing inward beneath the slot.
 
-    Geometry verified by rasterising at 256, 32 and 16px before it was written
-    here — a first pass used a 6-wide stroke in a 14-tall box and the counters
-    closed up into a solid blob at small sizes.
+    Composed as: (outer hexagon AND NOT inner hexagon AND NOT slot) OR tongue.
+    The base path is the outer hexagon, so everything is clipped to it and the
+    mark inherits colour from its container.
+
+    Geometry rasterised at 256 / 32 / 16px before being written here.
   -->
   <defs>
-    <mask id="gigzen-g-cut">
+    <mask id="gigzen-g">
       <rect width="64" height="64" fill="#fff"/>
-      <path d="M41 21 H23 V43 H41 V32 H33"
-            fill="none" stroke="#000" stroke-width="4.8"
-            stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- inner hexagon: hollows the band -->
+      <path d="M32 15 L46.72 23.5 V40.5 L32 49 L17.28 40.5 V23.5 Z" fill="#000"/>
+      <!-- slot: the G's mouth, cut through the right of the band -->
+      <rect x="30" y="25.5" width="34" height="7.5" fill="#000"/>
+      <!-- tongue: the bar that turns a C into a G -->
+      <rect x="33.5" y="33" width="13.5" height="7" fill="#fff"/>
     </mask>
   </defs>
   <path d="M32 2 L57.98 17 V47 L32 62 L6.02 47 V17 Z"
-        fill="currentColor" mask="url(#gigzen-g-cut)"/>
+        fill="currentColor" mask="url(#gigzen-g)"/>
 </svg>
