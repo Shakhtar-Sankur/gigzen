@@ -10,7 +10,6 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0A0A0A">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20role%3D%22img%22%20aria-label%3D%22Gigzen%22%3E%20%3Ctitle%3EGigzen%3C%2Ftitle%3E%20%3Cdefs%3E%20%3Cmask%20id%3D%22gigzen-g-cut%22%3E%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23fff%22%2F%3E%20%3Cpath%20d%3D%22M41%2021%20H23%20V43%20H41%20V32%20H33%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%224.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3C%2Fmask%3E%20%3C%2Fdefs%3E%20%3Cpath%20d%3D%22M32%202%20L57.98%2017%20V47%20L32%2062%20L6.02%2047%20V17%20Z%22%20fill%3D%22%230A0A0C%22%20mask%3D%22url(%23gigzen-g-cut)%22%2F%3E%20%3C%2Fsvg%3E">
 </head>
 <body>
 <style>
@@ -75,10 +74,9 @@ nav.stuck { border-bottom-color: var(--rule); }
 nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
 /* Tap targets fill the nav's full height rather than just wrapping their text.
    The labels are small by design; the things you can hit should not be. */
-.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; height: 100%; padding-right: 8px; }
-/* The mark takes its colour from the container, so it inverts with the theme
-   and on dark sections without a second copy of the file. */
-.mark { height: 17px; width: auto; color: var(--ink); display: block; }
+.brand { display: flex; align-items: center; text-decoration: none; height: 100%; padding-right: 8px; }
+.brand svg { height: 15px; width: auto; }
+.brand svg path { fill: var(--ink); }
 .navlinks { display: flex; gap: 22px; height: 100%; }
 .navlinks a {
   font-size: 12.5px; color: var(--body); text-decoration: none;
@@ -249,7 +247,6 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 footer { background: var(--paper-2); border-top: 1px solid var(--rule); padding: 60px 0 68px; }
 footer .row { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
 footer .fine { font-size: 12.5px; color: var(--muted); line-height: 1.75; max-width: 44ch; }
-footer .mark { color: var(--ink); }
 /* Email links are the one thing on the page someone actually needs to hit. */
 footer .fine a, #contact a[href^="mailto:"] {
   display: inline-block; min-height: 44px; line-height: 44px; text-decoration: none;
@@ -391,13 +388,7 @@ footer .brand svg { height: 19px; }
 
 <nav id="nav">
   <div class="wrap">
-    <a class="brand" href="#top" data-home aria-label="Gigzen — home">
-      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
-        <mask id="gz-nav"><rect width="64" height="64" fill="#fff"/><path d="M41 21 H23 V43 H41 V32 H33" fill="none" stroke="#000" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/></mask>
-        <path d="M32 2 L57.98 17 V47 L32 62 L6.02 47 V17 Z" fill="currentColor" mask="url(#gz-nav)"/>
-      </svg>
-      <span class="wordmark" style="font-size:15px">GIGZEN</span>
-    </a>
+    <a class="brand" href="#top" data-home><span class="wordmark" style="font-size:15px">GIGZEN</span></a>
     <div class="navlinks">
       <a href="#buzz-section" data-home>buzz buzz</a>
       <a href="#populace-section" data-home>populace</a>
@@ -860,17 +851,9 @@ footer .brand svg { height: 19px; }
 <footer>
   <div class="wrap row">
     <div>
-      <span class="brand" style="gap:9px">
-        <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" style="height:20px">
-          <mask id="gz-foot"><rect width="64" height="64" fill="#fff"/><path d="M41 21 H23 V43 H41 V32 H33" fill="none" stroke="#000" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/></mask>
-          <path d="M32 2 L57.98 17 V47 L32 62 L6.02 47 V17 Z" fill="currentColor" mask="url(#gz-foot)"/>
-        </svg>
-        <span class="wordmark" style="font-size:17px">GIGZEN</span>
-      </span>
+      <span class="wordmark" style="font-size:17px">GIGZEN</span>
       <p class="fine" style="margin-top:14px"><strong>Gigzen Private Limited</strong><br>
       Bhubaneswar, Odisha, India</p>
-      <p class="fine" style="margin-top:10px;font-style:italic">Building the intelligent
-      infrastructure for the future.</p>
     </div>
     <div>
       <p class="fine">
