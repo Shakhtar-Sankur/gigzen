@@ -4,11 +4,10 @@
     The hexagonal ring IS the G: a band, a slot cut into its right side to open
     the letter, and an arm folding inward beneath the slot.
 
-    The arm ends on a diagonal that RISES to the left, at 30° — the hexagon's
-    own facet angle. That fold is what makes the mark read as one continuous
-    ribbon rather than a bar attached to a ring, and it is the detail that took
-    three passes to get right: a square tip loses it, a steeper cut turns the
-    arm into an arrowhead.
+    The arm's tip is at the BOTTOM-left, with its top edge cut back on the 30°
+    diagonal — the hexagon's own facet angle — so that edge rises to the right.
+    Mirroring it puts the tip at the top and the mark stops reading as a folded
+    ribbon. That mirror was shipped twice before side-by-side renders settled it.
 
     Composed as (outer hex AND NOT inner hex AND NOT slot) OR arm, with the
     outer hexagon as the base path so everything clips to it and the mark
@@ -21,8 +20,8 @@
       <path d="M32 12.5 L48.89 22.25 V41.75 L32 51.5 L15.11 41.75 V22.25 Z" fill="#000"/>
       <!-- slot: the G's mouth -->
       <rect x="29" y="26" width="35" height="6" fill="#000"/>
-      <!-- arm: square along the top, cut back on the 30° diagonal below -->
-      <path d="M50 32 H32.5 L43.8 38.5 H50 Z" fill="#fff"/>
+      <!-- arm: tip at bottom-left, top edge rising to the right -->
+      <path d="M50 32 H43.8 L32.5 38.5 H50 Z" fill="#fff"/>
     </mask>
   </defs>
   <path d="M32 2 L57.98 17 V47 L32 62 L6.02 47 V17 Z"
