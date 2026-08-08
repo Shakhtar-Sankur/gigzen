@@ -75,10 +75,14 @@ nav.stuck { border-bottom-color: var(--rule); }
 nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
 /* Tap targets fill the nav's full height rather than just wrapping their text.
    The labels are small by design; the things you can hit should not be. */
-.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; height: 100%; padding-right: 8px; }
+.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+/* Full height only in the nav, where it exists to make a 46px tap target.
+   Applied everywhere it made the footer brand fill its column and overlap the
+   address below it. */
+nav .brand { height: 100%; padding-right: 8px; }
 /* The mark takes its colour from the container, so it inverts with the theme
    and on dark sections without a second copy of the file. */
-.mark { height: 17px; width: auto; color: var(--ink); display: block; }
+.mark { height: 17px; width: auto; flex: none; color: var(--ink); display: block; }
 .navlinks { display: flex; gap: 22px; height: 100%; }
 .navlinks a {
   font-size: 12.5px; color: var(--body); text-decoration: none;
