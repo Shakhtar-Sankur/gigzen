@@ -160,6 +160,82 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
   font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
 .place s { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 18%, transparent); }
 
+/* ── cinematic hero ─────────────────────────────────── */
+.hero-stage {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+  background: #05070A; color: #fff;
+}
+#cityscape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+
+/* Depth and mood, layered in CSS so the animation loop stays cheap: a warm
+   glow on the horizon, darkness at the edges, and a hard fade into the page
+   colour at the bottom so the section ends rather than stops. */
+.hero-veil {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='150' height='150' filter='url(%23n)' opacity='.09'/></svg>"),
+    radial-gradient(120% 58% at 50% 32%, rgba(255,150,70,.22) 0%, rgba(255,150,70,0) 62%),
+    radial-gradient(72% 54% at 50% 52%, rgba(5,7,10,.90) 0%, rgba(5,7,10,.55) 46%, rgba(5,7,10,0) 100%),
+    radial-gradient(105% 78% at 50% 45%, rgba(5,7,10,0) 52%, rgba(5,7,10,.55) 100%),
+    linear-gradient(180deg, rgba(5,7,10,.72) 0%, rgba(5,7,10,0) 22%,
+                    rgba(5,7,10,0) 62%, var(--paper) 100%);
+}
+/* The hero copy is above the fold, so it must never begin invisible waiting for
+   a reveal to fire. On a slow device, or any renderer that defers transitions,
+   that is a blank hero. It is on screen from the first paint; the motion below
+   the fold is where the reveal earns its keep. */
+.js .hero-stage .hero .rv { opacity: 1; transform: none; }
+
+.hero-stage .hero { position: relative; z-index: 3; padding-block: 0; will-change: transform, opacity; }
+.hero-stage .hero h1 {
+  color: #fff; max-width: 15ch;
+  font-size: clamp(46px, 9.2vw, 132px); line-height: .96; letter-spacing: -.045em;
+  text-shadow: 0 2px 40px rgba(0,0,0,.9), 0 0 120px rgba(0,0,0,.75);
+}
+.hero-stage .hero h1 span { color: rgba(255,255,255,.44); }
+.hero-stage .hero .lede { color: rgba(255,255,255,.80); max-width: 42ch; }
+.hero-stage .place { color: rgba(255,255,255,.58); }
+
+.scrollcue {
+  position: absolute; z-index: 3; left: 50%; bottom: 34px; transform: translateX(-50%);
+  width: 24px; height: 40px; border: 1px solid rgba(255,255,255,.34); border-radius: 14px;
+}
+.scrollcue span {
+  position: absolute; left: 50%; top: 9px; width: 3px; height: 7px; border-radius: 2px;
+  background: var(--lime); transform: translateX(-50%);
+  animation: cue 2.1s cubic-bezier(.7,0,.3,1) infinite;
+}
+@keyframes cue {
+  0% { opacity: 0; transform: translate(-50%, 0) }
+  22% { opacity: 1 }
+  70% { opacity: 0; transform: translate(-50%, 15px) }
+  100% { opacity: 0 }
+}
+
+/* The nav sits over a dark hero at the top of the page, so it starts
+   transparent and only takes its light background once you have scrolled. */
+#nav { transition: background .4s ease, border-color .4s ease, backdrop-filter .4s ease; }
+#nav.over-hero {
+  background: transparent; border-color: transparent; backdrop-filter: none;
+}
+#nav.over-hero .navlinks a,
+#nav.over-hero .brand,
+#nav.over-hero .langpick select { color: rgba(255,255,255,.82); }
+#nav.over-hero .langpick svg { color: rgba(255,255,255,.6); }
+#nav.over-hero .navlinks a:hover,
+#nav.over-hero .langpick select:hover { color: #fff; }
+
+/* ── richer reveals ───────────────────────────────────── */
+/* Stagger reuses the site's own .rv reveal: motion.js tags each child .rv and
+   sets a transition-delay. No second opacity system, so nothing here can
+   override an element that is meant to be translucent. */
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollcue span { animation: none; }
+  .js .stagger > * { opacity: 1; transform: none; }
+}
+
 /* ── scroll sequence ─────────────────────────────────────── */
 .seq-track { position: relative; }
 .seq-stage {
@@ -519,11 +595,18 @@ footer .brand svg { height: 19px; }
 <main class="view" id="view-home">
   <div id="top"></div>
 
-  <div class="hero wrap">
-    <h1 class="rv">software for people <span>who work.</span></h1>
-    <p class="lede rv">Two products. One for drivers on the road. One for the engineers
-    building for them.</p>
-    <div class="place rv"><s></s>Bhubaneswar, Odisha</div>
+  <div class="hero-stage">
+    <canvas id="cityscape" aria-hidden="true"></canvas>
+    <div class="hero-veil" aria-hidden="true"></div>
+
+    <div class="hero wrap">
+      <h1 class="rv">software for people <span>who work.</span></h1>
+      <p class="lede rv">Two products. One for drivers on the road. One for the engineers
+      building for them.</p>
+      <div class="place rv"><s></s>Bhubaneswar, Odisha</div>
+    </div>
+
+    <div class="scrollcue" aria-hidden="true"><span></span></div>
   </div>
 
   <!-- ── mission ── -->
@@ -532,7 +615,7 @@ footer .brand svg { height: 19px; }
       <span class="eyebrow rv">Our mission</span>
       <p class="mission rv">We build software for the people who keep cities moving &mdash;
       and we prove it works <em>before</em> they have to depend on it.</p>
-      <div class="mission-cols rv">
+      <div class="stagger mission-cols rv">
         <div>
           <h3>Who we build for</h3>
           <p>Riders, drivers and couriers, most of them working across several platforms at once
@@ -666,7 +749,7 @@ footer .brand svg { height: 19px; }
         <span lang="ar" dir="rtl">العربية</span>
       </div>
 
-      <div class="stats" style="margin-top:64px">
+      <div class="stagger stats" style="margin-top:64px">
         <div class="stat rv"><span class="v">16</span><span class="l">languages</span></div>
         <div class="stat rv"><span class="v">27</span><span class="l">currencies</span></div>
         <div class="stat rv"><span class="v">49</span><span class="l">countries</span></div>
@@ -697,7 +780,7 @@ footer .brand svg { height: 19px; }
     </div>
 
     <div class="wrap">
-      <div class="pledges">
+      <div class="stagger pledges">
         <div class="pledge rv">
           <span class="pn">01</span>
           <h3>Free for workers, permanently</h3>
@@ -1393,7 +1476,10 @@ footer .brand svg { height: 19px; }
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const views = { home: "view-home", buzz: "view-buzz", pop: "view-pop" };
   const nav = document.getElementById("nav");
-  const items = () => [...document.querySelectorAll(".rv")];
+  // .stagger groups are revealed by the same observer and the same safety net
+  // as .rv. Without this their children keep opacity:0 forever and whole
+  // sections read as blank.
+  const items = () => [...document.querySelectorAll(".rv, .stagger")];
   let safety = null;
   let io = null;
 
@@ -1445,8 +1531,17 @@ footer .brand svg { height: 19px; }
     dots.forEach((d, n) => d.classList.toggle("on", n === i));
   }
 
+  const heroStage = document.querySelector(".hero-stage");
   function onScroll() {
     nav.classList.toggle("stuck", scrollY > 8);
+    // The bar sits on top of a dark hero at the top of the home view, so it
+    // goes transparent there and takes its light background back on scroll.
+    // Only on home: the product views open on pale headers.
+    const onHome = !document.getElementById("view-home").hidden;
+    nav.classList.toggle(
+      "over-hero",
+      !!heroStage && onHome && scrollY < heroStage.offsetHeight - 90,
+    );
     if (!track || !stage || reduced) return;
     const r = track.getBoundingClientRect();
     const total = r.height - stage.offsetHeight;
@@ -1599,6 +1694,7 @@ footer .brand svg { height: 19px; }
 
 </script>
 
+<script src="motion.js" defer></script>
 <script src="i18n/runtime.js" defer></script>
 </body>
 </html>
