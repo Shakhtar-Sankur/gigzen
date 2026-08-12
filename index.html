@@ -84,6 +84,40 @@ nav .brand { height: 100%; padding-right: 8px; }
    and on dark sections without a second copy of the file. */
 .mark { height: 17px; width: auto; flex: none; color: var(--ink); display: block; }
 .navlinks { display: flex; gap: 22px; height: 100%; }
+/* ── language picker ── */
+.langpick { display: flex; align-items: center; gap: 6px; margin-left: 18px; flex: 0 0 auto; }
+.langpick svg { width: 15px; height: 15px; color: var(--muted); flex: 0 0 auto; }
+.langpick select {
+  appearance: none; -webkit-appearance: none;
+  background: transparent; border: 0; padding: 2px 2px 2px 0;
+  font: inherit; font-size: 12.5px; color: var(--body); cursor: pointer;
+  max-width: 128px;
+}
+.langpick select:hover { color: var(--ink); }
+.langpick select:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; border-radius: 3px; }
+/* The picker is inside a dark bar on the product views, so it has to invert. */
+.langpick option { color: #14181B; background: #fff; }
+
+/* ── right-to-left ──
+   Only the things that are directional. The reveal transform, the marquee and
+   the phone mock-ups are all deliberately left alone: they are motion and
+   artwork, not reading order. */
+[dir="rtl"] body { text-align: right; }
+[dir="rtl"] .mission, [dir="rtl"] .sub, [dir="rtl"] .lede,
+[dir="rtl"] .timeline div, [dir="rtl"] .pledge p, [dir="rtl"] .mission-cols p { text-align: right; }
+[dir="rtl"] .foot div:last-child, [dir="rtl"] .proof-top .d,
+[dir="rtl"] .run-head .d { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .langpick { margin-left: 0; margin-right: 18px; }
+[dir="rtl"] .finding { flex-direction: row-reverse; }
+[dir="rtl"] .rule-take { border-left: 0; border-right: 3px solid var(--ink); padding-left: 0; padding-right: 20px; }
+[dir="rtl"] .prod li { padding-left: 0; padding-right: 4mm; }
+[dir="rtl"] .center, [dir="rtl"] .center * { text-align: center; }
+
+/* ── English-only notice on the deep product views ── */
+.i18n-notice {
+  background: var(--paper-2); border-bottom: 1px solid var(--rule);
+  font-size: 13.5px; color: var(--muted); text-align: center; padding: 10px 20px;
+}
 /* Five destinations no longer fit a 375px bar. Tighten below 560px and let the
    row scroll rather than widening the page -- a horizontal scrollbar on the
    whole document is the one thing a sticky nav must never cause. */
@@ -806,6 +840,7 @@ footer .brand svg { height: 19px; }
 
 <!-- ══════════ BUZZ BUZZ ══════════ -->
 <main class="view" id="view-buzz" hidden>
+  <div class="i18n-notice" hidden>The Buzz Buzz and Populace product pages are available in English only for now.</div>
   <div class="wrap dhero">
     <button class="back" data-back>← Products</button>
     <span class="eyebrow">Android app</span>
@@ -955,6 +990,7 @@ footer .brand svg { height: 19px; }
 
 <!-- ══════════ POPULACE ══════════ -->
 <main class="view" id="view-pop" hidden>
+  <div class="i18n-notice" hidden>The Buzz Buzz and Populace product pages are available in English only for now.</div>
   <div class="wrap dhero">
     <button class="back" data-back>← Products</button>
     <span class="eyebrow">Developer tool</span>
@@ -1563,5 +1599,6 @@ footer .brand svg { height: 19px; }
 
 </script>
 
+<script src="i18n/runtime.js" defer></script>
 </body>
 </html>
