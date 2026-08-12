@@ -88,6 +88,75 @@ nav .brand { height: 100%; padding-right: 8px; }
   display: flex; align-items: center; height: 100%; padding: 0 2px;
 }
 .navlinks a:hover { color: var(--ink); }
+
+/* ── mobile navigation ─────────────────────────────────
+   Five links, a brand and a language picker do not fit a phone bar. They used
+   to shrink into the wordmark and then scroll sideways, which hid three of the
+   five destinations behind a swipe nobody makes. Below 820px the links move
+   into a panel; the picker stays in the bar, because on a sixteen-language
+   site changing language should not be buried. */
+.navtoggle { display: none; }
+
+@media (max-width: 820px) {
+  /* Protect the brand: it must never be the thing that gets squashed. */
+  nav .brand { flex: 0 0 auto; }
+  nav .brand .wordmark { white-space: nowrap; }
+
+  .navtoggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; margin-left: auto;
+    background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink);
+    flex: 0 0 auto;
+  }
+  .navtoggle .bars { display: block; width: 24px; height: 24px; }
+  .navtoggle .bars line {
+    transform-origin: center;
+    transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .18s ease;
+  }
+  #nav.menu-open .navtoggle .bars .b1 { transform: translateY(5px) rotate(45deg); }
+  #nav.menu-open .navtoggle .bars .b2 { opacity: 0; }
+  #nav.menu-open .navtoggle .bars .b3 { transform: translateY(-5px) rotate(-45deg); }
+
+  /* The picker sits between brand and button; cap it so a long language name
+     cannot push the button off the edge. */
+  .langpick { margin-left: auto; margin-right: 4px; }
+  .langpick select { max-width: 92px; font-size: 12px; }
+
+  .navlinks {
+    position: fixed; left: 0; right: 0; top: 46px;
+    display: flex; flex-direction: column; gap: 0; height: auto;
+    padding: 6px 26px 22px;
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--rule);
+    transform: translateY(-8px); opacity: 0; pointer-events: none;
+    transition: opacity .22s ease, transform .28s cubic-bezier(.22,.61,.36,1);
+    max-height: calc(100svh - 46px); overflow-y: auto;
+  }
+  #nav.menu-open .navlinks { transform: none; opacity: 1; pointer-events: auto; }
+
+  .navlinks a {
+    height: auto; padding: 15px 0; font-size: 17px; letter-spacing: -.01em;
+    color: var(--ink); border-bottom: 1px solid var(--rule);
+  }
+  .navlinks a:last-child { border-bottom: 0; }
+
+  /* Over the dark hero the bar is transparent, so an open panel would be
+     unreadable. Opening it takes the solid background back. */
+  #nav.menu-open, #nav.over-hero.menu-open {
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+  #nav.over-hero.menu-open .brand,
+  #nav.over-hero.menu-open .navtoggle,
+  #nav.over-hero.menu-open .langpick select { color: var(--ink); }
+  #nav.over-hero.menu-open .langpick svg { color: var(--muted); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navlinks, .navtoggle .bars i { transition: none; }
+}
 a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 3px; }
 
 /* ── reveal ──────────────────────────────────────────────── */
@@ -362,11 +431,7 @@ footer .brand svg { height: 19px; }
 }
 .langpick select:hover { color: var(--ink); }
 .langpick option { color: #14181B; background: #fff; }
-@media (max-width: 560px) {
-  .navlinks { gap: 14px; overflow-x: auto; scrollbar-width: none; }
-  .navlinks::-webkit-scrollbar { display: none; }
-  .navlinks a { font-size: 12px; white-space: nowrap; }
-}
+
 </style>
 
 <nav id="nav">
@@ -558,5 +623,6 @@ footer .brand svg { height: 19px; }
 </footer>
 
 <script src="i18n/runtime.js" defer></script>
+<script src="nav.js" defer></script>
 </body>
 </html>
