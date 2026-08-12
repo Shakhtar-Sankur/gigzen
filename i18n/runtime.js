@@ -20,10 +20,10 @@
   var LANGS = [
     { code: "en", label: "English", ready: true },
     { code: "fil", label: "Filipino", ready: true },
-    { code: "es", label: "Español", ready: false },
-    { code: "hi", label: "हिन्दी", ready: false },
+    { code: "es", label: "Español", ready: true },
+    { code: "hi", label: "हिन्दी", ready: true },
     { code: "bn", label: "বাংলা", ready: false },
-    { code: "id", label: "Bahasa Indonesia", ready: false },
+    { code: "id", label: "Bahasa Indonesia", ready: true },
     { code: "ms", label: "Bahasa Melayu", ready: false },
     { code: "th", label: "ไทย", ready: false },
     { code: "vi", label: "Tiếng Việt", ready: false },
