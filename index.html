@@ -84,6 +84,14 @@ nav .brand { height: 100%; padding-right: 8px; }
    and on dark sections without a second copy of the file. */
 .mark { height: 17px; width: auto; flex: none; color: var(--ink); display: block; }
 .navlinks { display: flex; gap: 22px; height: 100%; }
+/* Five destinations no longer fit a 375px bar. Tighten below 560px and let the
+   row scroll rather than widening the page -- a horizontal scrollbar on the
+   whole document is the one thing a sticky nav must never cause. */
+@media (max-width: 560px) {
+  .navlinks { gap: 14px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .navlinks::-webkit-scrollbar { display: none; }
+  .navlinks a { font-size: 12px; white-space: nowrap; }
+}
 .navlinks a {
   font-size: 12.5px; color: var(--body); text-decoration: none;
   display: flex; align-items: center; height: 100%; padding: 0 2px;
@@ -234,6 +242,44 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 /* The one place on this page that reports a measured result rather than
    describing a capability. Ruled off so it reads as evidence, not as another
    marketing paragraph. */
+/* ── mission ── */
+.mission { margin-top: 24px; font-size: clamp(26px, 3.6vw, 46px); line-height: 1.18;
+           letter-spacing: -.03em; font-weight: 700; color: var(--ink); max-width: 22ch; }
+.mission em { font-style: italic; }
+.mission-cols { display: grid; gap: 34px; margin-top: clamp(40px, 5vw, 64px);
+                grid-template-columns: 1fr; }
+@media (min-width: 820px) { .mission-cols { grid-template-columns: repeat(3, 1fr); gap: 40px; } }
+.mission-cols h3 { font-size: 17px; letter-spacing: -.01em; margin-bottom: 10px;
+                   padding-top: 16px; border-top: 1px solid var(--rule); }
+.mission-cols p { font-size: 15.5px; line-height: 1.68; color: var(--body); }
+
+/* ── principles ── */
+.pledges { display: grid; gap: 26px; margin-top: clamp(40px, 5vw, 60px);
+           grid-template-columns: 1fr; }
+@media (min-width: 900px) { .pledges { grid-template-columns: repeat(3, 1fr); } }
+.pledge { border-top: 2px solid var(--ink); padding-top: 20px; }
+.pledge .pn { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .12em; }
+.pledge h3 { margin-top: 10px; font-size: 21px; letter-spacing: -.02em; line-height: 1.25; }
+.pledge p { margin-top: 12px; font-size: 15.5px; line-height: 1.66; color: var(--body); }
+.pledge .mech { font-size: 14.5px; color: var(--muted); }
+.pledge .mech b { color: var(--ink); }
+
+/* ── milestones ── */
+.timeline { list-style: none; margin: clamp(36px, 4vw, 54px) 0 0; padding: 0; }
+.timeline li { display: grid; gap: 6px 28px; padding: 22px 0;
+               border-top: 1px solid var(--rule); grid-template-columns: 1fr; }
+@media (min-width: 760px) { .timeline li { grid-template-columns: 200px 1fr; } }
+.timeline .when { font-family: var(--mono); font-size: 13px; letter-spacing: .1em;
+                  text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.timeline div { font-size: 16px; line-height: 1.65; color: var(--body); max-width: 70ch; }
+.timeline b { color: var(--ink); }
+.timeline li.hi { border-top-color: var(--ink); }
+.timeline li.hi .when { color: var(--ink); }
+.timeline li.next .when, .timeline li.next div { color: var(--muted); }
+.timeline li.next b { color: var(--body); }
+.sheet-cta { margin-top: 40px; }
+.sheet-cta a { font-size: 16px; font-weight: 600; color: var(--ink);
+               border-bottom: 2px solid var(--lime); padding-bottom: 3px; text-decoration: none; }
 .proof { margin-top: 44px; padding: 26px 0 4px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding-bottom: 26px; }
 .proof-kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .proof-lead { margin-top: 14px; font-size: 19px; line-height: 1.5; color: var(--ink); max-width: 56ch; }
@@ -428,6 +474,7 @@ footer .brand svg { height: 19px; }
     <div class="navlinks">
       <a href="#buzz-section" data-home>buzz buzz</a>
       <a href="#populace-section" data-home>populace</a>
+      <a href="#principles" data-home>principles</a>
       <a href="#company" data-home>company</a>
       <a href="#contact" data-home>contact</a>
     </div>
@@ -444,6 +491,38 @@ footer .brand svg { height: 19px; }
     building for them.</p>
     <div class="place rv"><s></s>Bhubaneswar, Odisha</div>
   </div>
+
+  <!-- ── mission ── -->
+  <section class="pad" id="mission" style="padding-block:clamp(56px,8vw,110px)">
+    <div class="wrap">
+      <span class="eyebrow rv">Our mission</span>
+      <p class="mission rv">We build software for the people who keep cities moving &mdash;
+      and we prove it works <em>before</em> they have to depend on it.</p>
+      <div class="mission-cols rv">
+        <div>
+          <h3>Who we build for</h3>
+          <p>Riders, drivers and couriers, most of them working across several platforms at once
+          on a mid-range phone and a prepaid data plan. That constraint shapes every decision:
+          a 7&nbsp;MB download, sixteen languages at full parity, and an app that keeps accepting
+          work when the signal drops.</p>
+        </div>
+        <div>
+          <h3>How we prove it</h3>
+          <p>We built our own testing platform, because the bugs that matter in a multi-user
+          product cannot be found by one person. It found five in our own finished app in three
+          and a half minutes. We publish that, and the limits of it, rather than the version that
+          flatters us.</p>
+        </div>
+        <div>
+          <h3>Where it runs</h3>
+          <p>Buzz Buzz picks language and currency from where the driver actually is &mdash;
+          <b>27 currencies across 49 countries</b>, right-to-left included. Populace models
+          drivers in Manila, Mumbai, Delhi, Jakarta and Bangkok, because concurrency behaves
+          differently outside one time zone on fibre.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ── Buzz Buzz: full-bleed flame + scroll sequence ── -->
   <div class="bleed flame" id="buzz-section">
@@ -572,6 +651,94 @@ footer .brand svg { height: 19px; }
     </div>
   </section>
 
+  <!-- ── principles ── -->
+  <section class="pad" id="principles">
+    <div class="wrap center mid">
+      <span class="eyebrow rv">What we stand behind</span>
+      <h2 class="rv" style="margin-top:18px">three commitments, each with a mechanism behind it.</h2>
+      <p class="lede rv" style="margin-top:28px;color:var(--body)">
+        A promise nobody can check is marketing. Each of these is held up by something in the code
+        that fails loudly if it stops being true.
+      </p>
+    </div>
+
+    <div class="wrap">
+      <div class="pledges">
+        <div class="pledge rv">
+          <span class="pn">01</span>
+          <h3>Free for workers, permanently</h3>
+          <p>Not a trial and not a freemium tier. Buzz Buzz costs a driver nothing and always will.</p>
+          <p class="mech"><b>The mechanism:</b> the business model does not route through them.
+          Revenue comes from enterprise supply, fleet APIs and workforce analytics &mdash; the shape
+          that funded LinkedIn and Waze &mdash; so there is never a quarter in which charging
+          drivers becomes the obvious fix.</p>
+        </div>
+        <div class="pledge rv">
+          <span class="pn">02</span>
+          <h3>Privacy the database enforces</h3>
+          <p>One driver cannot read another&rsquo;s data even if the app asks it to, and phone
+          numbers are not exposed to other users at all.</p>
+          <p class="mech"><b>The mechanism:</b> <b>48 row-level-security policies</b> across 17
+          tables, applied at the database rather than in the interface, plus a column-level grant
+          that leaves the phone column genuinely unreadable. A migration assertion fails the deploy
+          if that ever stops holding.</p>
+        </div>
+        <div class="pledge rv">
+          <span class="pn">03</span>
+          <h3>We publish the misses</h3>
+          <p>Every number we show says what it measured and, just as plainly, what it did not.</p>
+          <p class="mech"><b>The mechanism:</b> it is built into the tooling. A fresh Populace
+          adapter reports <b>2/13 coverage and refuses to run</b> rather than passing while testing
+          nothing, and any single failure is a finding &mdash; there is no tolerance band a real bug
+          can hide beneath. The report above says <em>correctness run, not a load test</em> for the
+          same reason.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── milestones ── -->
+  <section class="pad" id="milestones" style="background:var(--paper-2)">
+    <div class="wrap">
+      <span class="eyebrow rv">Where we have got to</span>
+      <h2 class="rv" style="margin-top:18px;max-width:20ch">a short history, because it is a short history.</h2>
+      <ol class="timeline rv">
+        <li>
+          <span class="when">April 2026</span>
+          <div><b>Gigzen Private Limited incorporated</b> in Bhubaneswar, Odisha, India.
+          MCA-registered, two directors.</div>
+        </li>
+        <li>
+          <span class="when">July 2026</span>
+          <div><b>Populace separated into its own product.</b> It began as a test harness inside
+          Buzz Buzz. Its engine was rewritten to hold no reference to any real app, which is what
+          turned an internal script into something another company can pick up.</div>
+        </li>
+        <li>
+          <span class="when">August 2026</span>
+          <div><b>Buzz Buzz signed and on Google Play&rsquo;s internal track</b> &mdash; sixteen
+          languages, 27 currencies, offline writes, photos moved to object storage.</div>
+        </li>
+        <li class="hi">
+          <span class="when">9 August 2026</span>
+          <div><b>Populace ran against a live backend for the first time.</b> Six simulated drivers
+          found five bugs in Buzz Buzz in three and a half minutes &mdash; an app that had already
+          passed a full manual test of every screen. After the fixes: no failures across 400 API
+          calls.</div>
+        </li>
+        <li class="next">
+          <span class="when">Next</span>
+          <div><b>Buzz Buzz to closed testing, then production review. Populace pointed at an app
+          that is not ours.</b> If you are building something multiplayer and want to be the first,
+          the address is at the bottom of this page.</div>
+        </li>
+      </ol>
+      <p class="sheet-cta rv">
+        <a href="Gigzen-Product-Sheet.pdf" download>Download the one-page product sheet &mdash; both products, both runs (PDF)</a>
+      </p>
+    </div>
+  </section>
+
   <!-- ── company ── -->
   <section class="pad" id="company" style="background:var(--paper-2)">
     <div class="wrap center mid">
@@ -623,6 +790,14 @@ footer .brand svg { height: 19px; }
           Building something that needs testing at scale, or want early access to Populace?</p>
         <p class="rv" style="margin-top:34px">
           <a href="mailto:sankur.kundu.tw@gmail.com" style="color:var(--lime);font-size:21px;font-weight:600;text-decoration:none;letter-spacing:-.02em">sankur.kundu.tw@gmail.com</a>
+        </p>
+        <p class="rv" style="margin-top:26px">
+          <a href="Gigzen-Product-Sheet.pdf" download style="display:inline-block;border:1px solid rgba(255,255,255,.34);border-radius:999px;padding:13px 26px;color:#fff;text-decoration:none;font-size:15px;font-weight:600">
+            Download the product sheet &nbsp;&middot;&nbsp; PDF, one page
+          </a>
+        </p>
+        <p class="rv" style="margin-top:14px;font-size:13px;color:#7C8B96">
+          Both products, and both Populace runs &mdash; the one that found five bugs and the one that found none.
         </p>
       </div>
     </section>

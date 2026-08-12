@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gigzen — Product Sheet</title>
+<style>
+/* One page, A4. Printed via Chrome --print-to-pdf, so every length is in mm
+   and nothing depends on a viewport. Colours are set explicitly because print
+   defaults strip backgrounds unless print-color-adjust says otherwise. */
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 210mm; height: 297mm; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #FFFFFF; color: #14181B;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  font-size: 8.6pt; line-height: 1.45;
+}
+.mono { font-family: ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Mono', Menlo, Consolas, monospace; }
+.page { padding: 9mm 11mm 7mm; height: 297mm; display: flex; flex-direction: column; }
+
+/* ── masthead ─────────────────────────────────────────── */
+.mast { display: flex; align-items: center; gap: 3mm; padding-bottom: 3.4mm; border-bottom: 0.5mm solid #14181B; }
+.mast svg { width: 8mm; height: 8mm; color: #14181B; flex: 0 0 auto; }
+.wordmark { font-size: 16pt; font-weight: 800; letter-spacing: 0.14em; }
+.mast .tag { margin-left: auto; text-align: right; font-size: 7.4pt; color: #5C6871; line-height: 1.4; }
+
+h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1.06; margin-top: 4.5mm; }
+.sub { margin-top: 2.2mm; font-size: 9pt; color: #3D474E; max-width: 155mm; line-height: 1.5; }
+
+/* ── the two products ─────────────────────────────────── */
+.products { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5mm; margin-top: 5mm; }
+/* Flex column so the spec block and status pill sit on the same line in both
+   columns regardless of how many bullets each product has. */
+.prod { border-top: 0.4mm solid #14181B; padding-top: 3mm; display: flex; flex-direction: column; }
+.prod .specs { margin-top: auto; }
+.prod .kicker { font-size: 6.7pt; letter-spacing: 0.16em; text-transform: uppercase; color: #6B7883; }
+.prod h2 { font-size: 13.5pt; font-weight: 800; letter-spacing: -0.02em; margin-top: 1.4mm; }
+.prod .one { margin-top: 1.8mm; font-size: 8.8pt; line-height: 1.5; color: #242D33; }
+.prod ul { list-style: none; margin-top: 2.8mm; }
+.prod li { position: relative; padding-left: 4mm; margin-bottom: 1.2mm; color: #3D474E; }
+.prod li::before { content: ""; position: absolute; left: 0; top: 1.55mm;
+                   width: 1.5mm; height: 1.5mm; background: #B9D400; border-radius: 50%; }
+.prod li b { color: #14181B; }
+.specs { margin-top: 3mm; padding-top: 2.4mm; border-top: 0.25mm solid #D9DEE2;
+         font-size: 7.2pt; color: #5C6871; line-height: 1.6; }
+.specs b { color: #14181B; }
+.stat-line { margin-top: 2mm; font-size: 7.2pt; }
+.pill { display: inline-block; padding: 0.7mm 2mm; border: 0.25mm solid #14181B;
+        border-radius: 2mm; font-size: 6.8pt; font-weight: 700; letter-spacing: 0.04em; }
+
+/* ── the two runs ─────────────────────────────────────── */
+.runs-intro { margin-top: 4.5mm; font-size: 8.4pt; color: #3D474E; }
+.runs-intro { font-weight: 600; }
+.runs { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 2.6mm; }
+.run { background: #0B1014; color: #E8EFF4; border-radius: 3mm; padding: 4mm 4.4mm 4.4mm;
+       display: flex; flex-direction: column; }
+.run-head { display: flex; align-items: baseline; gap: 2mm; }
+.run-head .k { font-size: 6.4pt; letter-spacing: 0.16em; color: #7C8B96; }
+.run-head .d { margin-left: auto; font-size: 6.4pt; color: #7C8B96; letter-spacing: 0.1em; }
+.verdict { margin-top: 2.8mm; background: #D3FF00; color: #0B1014; border-radius: 1.6mm;
+           padding: 2.2mm 3mm; font-size: 10pt; font-weight: 800; line-height: 1.25; }
+.verdict.bad { background: #FF6B57; color: #240703; }
+.figs { display: grid; gap: 2mm; margin-top: 3.4mm; }
+.figs-3 { grid-template-columns: repeat(3, 1fr); }
+.figs .v { font-size: 13pt; font-weight: 800; letter-spacing: -0.01em; }
+.figs .v.ok { color: #74D19B; }
+.figs .v.warn { color: #FF9B8A; }
+.figs .l { margin-top: 0.5mm; font-size: 5.6pt; letter-spacing: 0.07em; color: #7C8B96; }
+.run-body { margin-top: 3mm; padding-top: 2.4mm; border-top: 0.25mm solid #253039;
+            font-size: 7.6pt; line-height: 1.55; color: #B4C2CC; }
+.run-body b { color: #FFFFFF; }
+.run-note { margin-top: auto; padding-top: 2.6mm; font-size: 7.4pt; line-height: 1.5; color: #9FB0BC; }
+.run-note b { color: #D3FF00; }
+.run-good .run-note b { color: #D3FF00; }
+.run-bad .run-note b { color: #FF9B8A; }
+.runs-caveat { margin-top: 2.8mm; font-size: 6.9pt; line-height: 1.5; color: #5C6871; }
+.runs-caveat b { color: #14181B; }
+
+/* ── footer ───────────────────────────────────────────── */
+.foot { margin-top: auto; padding-top: 3mm; border-top: 0.4mm solid #14181B;
+        display: flex; gap: 6mm; font-size: 7.2pt; color: #5C6871; line-height: 1.55; }
+.foot b { color: #14181B; }
+.foot div:last-child { margin-left: auto; text-align: right; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="mast">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></svg>
+    <span class="wordmark">GIGZEN</span>
+    <span class="tag">Gigzen Private Limited · Bhubaneswar, India<br>shakhtar-sankur.github.io/gigzen</span>
+  </div>
+
+  <h1>Two products.<br>One of them proved the other.</h1>
+  <p class="sub">We build software for people who work — and the tooling to prove it holds up before
+  anyone depends on it. One product serves gig drivers across 49 countries. The other is the
+  testing platform we had to build to test the first, and it found five bugs in it that a full
+  manual pass had missed.</p>
+
+  <div class="products">
+    <div class="prod">
+      <p class="kicker">Product 01 · Android, consumer</p>
+      <h2>Buzz Buzz</h2>
+      <p class="one">A professional and social home for gig workers. A Swiggy rider, an Uber driver
+      and an Amazon Flex courier are often the same person — no platform connects those identities.</p>
+      <ul>
+        <li><b>Earnings that follow the road.</b> Money accrues from distance genuinely travelled, so a stationary phone earns nothing and traffic cannot inflate the number.</li>
+        <li><b>A map with people on it.</b> Live positions, search any street on earth. Sharing is off until the driver turns it on.</li>
+        <li><b>Works underground.</b> Posts and messages written with no signal queue on the device and send on reconnect.</li>
+        <li><b>Privacy enforced by the database.</b> Phone numbers are unreadable to other users — not hidden in the UI — and a migration assertion fails if that stops being true.</li>
+      </ul>
+      <div class="specs">
+        <b>16</b> languages at full parity, right-to-left included · <b>27</b> currencies ·
+        <b>49</b> countries · <b>20+</b> gig platforms<br>
+        React · TypeScript · Capacitor · PostgreSQL — <b>17</b> tables under <b>48</b>
+        row-level-security policies · <b>7.0 MB</b> download · Android 7.0+
+      </div>
+      <p class="stat-line"><span class="pill">Google Play — internal testing</span> &nbsp; Free for workers, permanently.</p>
+    </div>
+
+    <div class="prod">
+      <p class="kicker">Product 02 · Developer tool</p>
+      <h2>Populace</h2>
+      <p class="one">A simulated population that uses your app through its real API, so you can test
+      what needs more than one person — presence, live sync, fan-out, and every permission rule you
+      wrote.</p>
+      <ul>
+        <li><b>One adapter is the whole integration.</b> Thirteen small methods, two of them required. The engine knows how to be a person and nothing about your product.</li>
+        <li><b>Real users, front door only.</b> Real accounts, your API, your permission rules applying. No admin keys, no direct database writes.</li>
+        <li><b>Honest coverage.</b> An empty method does not count, so a fresh scaffold reports 2/13 and refuses to run rather than passing while testing nothing.</li>
+        <li><b>Refuses production three ways.</b> Environment must declare itself, a denylist is matched against every nested string, and an empty denylist warns loudly. All exit non-zero.</li>
+      </ul>
+      <div class="specs">
+        <b>13</b>-method contract · <b>0</b> runtime dependencies · <b>3</b> production guards ·
+        <b>20/20</b> self-tests with no backend at all<br>
+        Node 18+ · per-endpoint p50/p95/p99 · JSON report for CI plus a self-contained HTML page ·
+        exits non-zero when problems are found
+      </div>
+      <p class="stat-line"><span class="pill">Proven — taking pilot users</span> &nbsp; AGPL-3.0, source public.</p>
+    </div>
+  </div>
+
+  <p class="runs-intro">Two runs, three and a half minutes apart. The first is what Populace
+  does for you. The second is what it certifies.</p>
+
+  <div class="runs">
+
+    <div class="run run-bad">
+      <div class="run-head">
+        <span class="k">POPULACE REPORT · RUN 1</span>
+        <span class="d">9 AUG 2026</span>
+      </div>
+      <div class="verdict bad">&#10007; 5 problems found &mdash; run failed</div>
+      <div class="figs figs-3">
+        <div><div class="v warn">5</div><div class="l">DEFECTS FOUND</div></div>
+        <div><div class="v">3m 30s</div><div class="l">TIME TO FIND THEM</div></div>
+        <div><div class="v warn">1</div><div class="l">BLOCKED ALL SIGNUPS</div></div>
+      </div>
+      <p class="run-body"><b>Against a finished, signed app that had just passed a full manual test
+      of every screen.</b> Signup silently created no profile row for any new user &mdash; a privacy
+      fix had made a column unreadable and the write needed to read it. Likes bounced one tap in
+      four. Profile edits failed the same way. Two further faults were in Populace's own reference
+      adapter, one of them an unchecked error.</p>
+      <p class="run-note"><b>What this proves about Populace:</b> it finds real defects in software
+      that is already considered done, names the cause in one line, and <b>exits non-zero</b> &mdash;
+      so the build stays failed until each one is rectified.</p>
+    </div>
+
+    <div class="run run-good">
+      <div class="run-head">
+        <span class="k">POPULACE REPORT · RUN 2</span>
+        <span class="d">AFTER THE FIXES</span>
+      </div>
+      <div class="verdict">&#10003; No failures across 400 API calls</div>
+      <div class="figs figs-3">
+        <div><div class="v ok">0</div><div class="l">FAILURES</div></div>
+        <div><div class="v">400</div><div class="l">API CALLS</div></div>
+        <div><div class="v">13 / 13</div><div class="l">METHODS COVERED</div></div>
+      </div>
+      <p class="run-body"><b>Six simulated drivers across Manila and Mumbai, using the live backend
+      at the same time.</b> 6.2&nbsp;km driven, 22 posts, 59 likes, 22 comments, 21 messages, 2 group
+      joins. Six accounts created through the real signup path and six deleted through the real
+      deletion path &mdash; nothing left behind.</p>
+      <p class="run-note"><b>What this proves about Buzz Buzz:</b> the shipped build holds up under
+      genuine concurrent multi-user traffic with its own permission rules applying &mdash; not under
+      one person tapping through screens.</p>
+    </div>
+
+  </div>
+
+  <p class="runs-caveat">Six users for three minutes is a <b>correctness run, not a load test</b>,
+  and the project was empty at the time; the figures are latencies under six concurrent users and
+  nothing more. Populace has been pointed at one live backend so far and that backend was ours.</p>
+
+  <div class="foot">
+    <div>
+      <b>Sankur Kundu</b> — Co-founder &amp; Director, Technology<br>
+      sankur.kundu.tw@gmail.com
+    </div>
+    <div>
+      <b>Snehasis Despande</b> — Founder &amp; Director, Business<br>
+      Gigzen Private Limited, Bhubaneswar, Odisha, India
+    </div>
+    <div>
+      github.com/Shakhtar-Sankur/buzz-buzz<br>
+      github.com/Shakhtar-Sankur/populace
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
