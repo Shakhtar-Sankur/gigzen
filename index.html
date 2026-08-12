@@ -231,6 +231,14 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 .cap .detail { margin-top: 13px; font-size: 15px; line-height: 1.62; color: var(--muted); }
 @media (max-width: 620px) { .cap { grid-template-columns: 1fr; gap: 10px; } .cap .n { padding-top: 0; } }
 
+/* The one place on this page that reports a measured result rather than
+   describing a capability. Ruled off so it reads as evidence, not as another
+   marketing paragraph. */
+.proof { margin-top: 44px; padding: 26px 0 4px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding-bottom: 26px; }
+.proof-kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.proof-lead { margin-top: 14px; font-size: 19px; line-height: 1.5; color: var(--ink); max-width: 56ch; }
+.proof-detail { margin-top: 14px; font-size: 15px; line-height: 1.62; color: var(--muted); max-width: 64ch; }
+
 .spec { margin-top: 56px; border-top: 1px solid var(--rule); }
 .spec h3 { padding-top: 30px; text-transform: none; }
 .spectable { width: 100%; border-collapse: collapse; margin-top: 22px; }
@@ -498,6 +506,11 @@ footer .brand svg { height: 19px; }
           A simulated population signs up, moves through real cities, posts and messages —
           through your API, as real authenticated users. Then it reports everything that broke.
         </p>
+        <p class="rv" style="margin-top:26px;max-width:48ch;font-size:15px;line-height:1.6;color:var(--lime)">
+          Its first run against a shipping app found five bugs in three and a half minutes —
+          including one that stopped account creation, in an app that had just passed a full
+          manual test.
+        </p>
         <div class="cta"><button class="btn solid" data-open="pop">Explore Populace</button></div>
       </div>
     </div>
@@ -724,6 +737,13 @@ footer .brand svg { height: 19px; }
         <p><strong>In internal testing on Google Play.</strong> The signed release is live on the
         internal track. Closed testing follows, then production review. Not yet publicly
         downloadable.</p>
+        <p style="margin-top:6px">Before that build, six simulated drivers used the live backend
+        at the same time — signing up, driving, posting, messaging and deleting their accounts.
+        They found five bugs a person tapping through alone had missed. All five are fixed, and
+        the same run now completes with <strong>no failures across 400 API calls</strong>. The
+        tool that did it is <button type="button" data-open="pop" style="background:none;border:0;
+        padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline">Populace</button>,
+        our second product.</p>
       </div>
     </div>
   </section>
@@ -753,6 +773,22 @@ footer .brand svg { height: 19px; }
         You cannot test presence, read receipts or live sync while being one human with one
         account.
       </p>
+
+      <div class="proof">
+        <p class="proof-kicker">First run against a real app · 9 August 2026</p>
+        <p class="proof-lead">Pointed at Buzz Buzz — which had already passed a full manual
+        test of every screen — six simulated drivers across Manila and Mumbai found
+        <strong>five bugs in three and a half minutes</strong>.</p>
+        <p class="proof-detail">One of them stopped account creation outright: a privacy change
+        had made a column unreadable, and the signup write silently needed to read it. Every
+        account created afterwards had no profile, and every post and group-join then failed on
+        a foreign key pointing back at the row that was never written. No amount of tapping
+        through the app as one person would have surfaced it.</p>
+        <p class="proof-detail">Once the five were fixed: <strong>no failures across 400 API
+        calls</strong>, all thirteen adapter methods exercised, six accounts created and six
+        removed. Six users for three minutes is a correctness run, not a load test — and we
+        would rather say so than round it up.</p>
+      </div>
 
       <div class="caps">
         <div class="cap"><span class="n">01</span><div>
@@ -862,10 +898,11 @@ footer .brand svg { height: 19px; }
 
       <div class="status">
         <span class="eyebrow">Status</span>
-        <p><strong>Pre-release.</strong> The engine, safety guards and reporting are built and
-        tested. It has not yet run against a production-grade backend — so every number here
-        comes from a demo app, not a customer's. We'd rather say that than imply a case study we
-        haven't earned.</p>
+        <p><strong>Proven, and taking pilot users.</strong> The engine, safety guards and
+        reporting are built and tested, and it has now done the job it was built for on a real
+        product — five bugs in a shipping app in under four minutes, in the run described above.
+        That app was our own. The next one should not be, so we are looking for a small number of
+        teams to point it at theirs.</p>
         <p style="margin-top:6px">It proves your app <strong>works</strong>. It will never tell
         you whether anyone wants it — for that, use real people.</p>
       </div>
