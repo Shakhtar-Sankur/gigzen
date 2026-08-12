@@ -298,6 +298,65 @@ footer .brand svg { height: 19px; }
 .contact-card a { color: var(--orange); text-decoration: none; display: inline-block; min-height: 44px; line-height: 44px; }
 .doc-end { margin: clamp(60px, 9vh, 100px) 0 0; padding-top: 26px; border-top: 1px solid var(--rule); }
 .doc-end a { display: inline-block; min-height: 44px; line-height: 44px; }
+
+/* ── document masthead ─────────────────────────────── */
+/* Still, not animated. This is the page a regulator reads. */
+.doc-stage {
+  /* .doc caps the measure at 720px, which is right for body copy and wrong for
+     a masthead. Break out to the full viewport, then pad back in to a 1080
+     container so the type still lines up with the rest of the site. */
+  margin-inline: calc(50% - 50vw);
+  padding-inline: max(26px, calc(50vw - 514px));
+  background:
+    radial-gradient(100% 70% at 20% 0%, rgba(255,150,70,.10) 0%, rgba(255,150,70,0) 60%),
+    linear-gradient(180deg, #0B1014 0%, #10171C 62%, var(--paper) 100%);
+  color: #fff;
+  padding: clamp(120px, 18vh, 210px) 0 clamp(52px, 8vh, 96px);
+  margin-bottom: clamp(40px, 6vh, 80px);
+}
+.doc-stage .doc-hero { max-width: 1080px; margin: 0 auto; padding: 0; }
+.doc-stage .eyebrow { color: rgba(255,255,255,.6); }
+.doc-stage h1 {
+  color: #fff; margin-top: 16px;
+  font-size: clamp(44px, 9vw, 108px); line-height: .92; letter-spacing: -.05em;
+}
+.doc-stage .updated {
+  display: inline-block; margin-top: 22px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.55);
+}
+.doc-stage .lede { color: rgba(255,255,255,.82); max-width: 46ch; margin-top: 20px; }
+.doc-figs {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px 34px;
+  margin-top: clamp(34px, 5vh, 54px); padding-top: 26px;
+  border-top: 1px solid rgba(255,255,255,.16); max-width: 640px;
+}
+.doc-figs b {
+  display: block; font-family: var(--display); font-weight: 800;
+  font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.04em; line-height: 1; color: #fff;
+}
+.doc-figs span {
+  display: block; margin-top: 8px; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.55);
+}
+.doc-note {
+  margin-top: 30px; max-width: 62ch; font-size: 15px; line-height: 1.65;
+  color: rgba(255,255,255,.62); border-left: 2px solid var(--lime); padding-left: 16px;
+}
+
+.langpick { display: flex; align-items: center; gap: 6px; margin-left: 18px; flex: 0 0 auto; }
+.langpick svg { width: 15px; height: 15px; color: var(--muted); flex: 0 0 auto; }
+.langpick select {
+  appearance: none; -webkit-appearance: none; background: transparent; border: 0;
+  padding: 2px 2px 2px 0; font: inherit; font-size: 12.5px; color: var(--body);
+  cursor: pointer; max-width: 128px;
+}
+.langpick select:hover { color: var(--ink); }
+.langpick option { color: #14181B; background: #fff; }
+@media (max-width: 560px) {
+  .navlinks { gap: 14px; overflow-x: auto; scrollbar-width: none; }
+  .navlinks::-webkit-scrollbar { display: none; }
+  .navlinks a { font-size: 12px; white-space: nowrap; }
+}
 </style>
 
 <nav id="nav">
@@ -309,6 +368,7 @@ footer .brand svg { height: 19px; }
     <div class="navlinks">
       <a href="index.html#buzz-section">buzz buzz</a>
       <a href="index.html#populace-section">populace</a>
+      <a href="index.html#principles">principles</a>
       <a href="index.html#company">company</a>
       <a href="index.html#contact">contact</a>
     </div>
@@ -316,11 +376,23 @@ footer .brand svg { height: 19px; }
 </nav>
 
 <main class="doc">
-  <div class="doc-hero">
-    <span class="eyebrow">Buzz Buzz</span>
-    <h1 style="font-size:clamp(40px,8vw,84px);margin-top:14px">privacy policy</h1>
-    <span class="updated">Last updated: 8 August 2026</span>
-    <p class="lede">What the app collects, why, and what control you have over it.</p>
+  <div class="doc-stage">
+    <div class="doc-hero">
+      <span class="eyebrow">Buzz Buzz &middot; Gigzen Private Limited</span>
+      <h1>privacy policy</h1>
+      <span class="updated">Last updated: 8 August 2026</span>
+      <p class="lede">What the app collects, why, and what control you have over it.
+      Written to be read, not to be survived.</p>
+
+      <div class="doc-figs">
+        <div><b>0</b><span>background tracking</span></div>
+        <div><b>48</b><span>row-level policies</span></div>
+        <div><b>1</b><span>tap to delete everything</span></div>
+      </div>
+
+      <p class="doc-note">Every promise below is enforced by the database rather than by our
+      good intentions. Where a claim is checked automatically, this page says which check.</p>
+    </div>
   </div>
 
   <section>
@@ -475,5 +547,6 @@ footer .brand svg { height: 19px; }
   </div>
 </footer>
 
+<script src="i18n/runtime.js" defer></script>
 </body>
 </html>
