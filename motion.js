@@ -17,16 +17,21 @@
 
   /* ───────────────────────── hero: long-exposure traffic ───────── */
 
-  function city(canvas) {
+  var mounted = [];   // [{el, resize, start, stop}] so hidden views can re-init
+
+  function city(canvas, opts) {
     if (!canvas) return;
     var ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
+    opts = opts || {};
+    var LIME_SHARE = opts.limeShare == null ? 0.13 : opts.limeShare;
+    var DENSITY = opts.density == null ? 1 : opts.density;
 
     var W = 0, H = 0, dpr = 1;
     var horizon = 0, focal = 0;
     var cars = [], roadsX = [], roadsZ = [];
     var camX = 0, drift = 0;
-    var running = false, raf = 0;
+    var running = false, raf = 0, retries = 0;
 
     var NEAR = 2.4;          // nearest z the camera can see
     var FAR = 46;            // fog swallows everything past this
@@ -43,14 +48,14 @@
       roadsZ = [];
       for (var z = NEAR; z < FAR; z += rand(3.2, 6.8)) roadsZ.push(z);
 
-      var budget = W < 700 ? 190 : W < 1300 ? 330 : 460;
+      var budget = Math.round((W < 700 ? 190 : W < 1300 ? 330 : 460) * DENSITY);
       cars = [];
       for (var i = 0; i < budget; i++) cars.push(spawn(true));
     }
 
     function spawn(seed) {
       var alongZ = Math.random() < 0.62;
-      var lime = Math.random() < 0.13;      // "our" drivers
+      var lime = Math.random() < LIME_SHARE; // "our" drivers
       var warm = Math.random() < 0.5;       // headlights vs tail lights
       if (alongZ) {
         var lane = roadsX[(Math.random() * roadsX.length) | 0] + rand(-0.32, 0.32);
@@ -83,9 +88,12 @@
       // the backing store to that leaves a 1px-wide canvas stretched across the
       // hero, which reads as a blank black band. Retry instead of committing.
       if (b.width < 2 || b.height < 2) {
-        requestAnimationFrame(resize);
+        // A canvas in a hidden view measures zero and always will, so retrying
+        // forever would spin a frame loop behind a screen nobody is looking at.
+        if (++retries < 90) requestAnimationFrame(resize);
         return;
       }
+      retries = 0;
       W = Math.round(b.width);
       H = Math.round(b.height);
       canvas.width = Math.round(W * dpr);
@@ -215,6 +223,8 @@
       raf = 0;
     }
 
+    mounted.push({ el: canvas, resize: resize, start: start, stop: stop });
+
     var ro = window.ResizeObserver ? new ResizeObserver(resize) : null;
     if (ro) ro.observe(canvas); else window.addEventListener("resize", resize);
     resize();
@@ -323,11 +333,32 @@
     setTimeout(function () { kids.forEach(function (c) { c.classList.add("in"); }); }, 2200);
   }
 
+  // Views are toggled with the hidden attribute. A canvas inside a hidden one
+  // cannot measure itself, so it is re-measured and restarted the moment its
+  // view appears.
+  function watchViews() {
+    var views = [].slice.call(document.querySelectorAll(".view"));
+    if (!views.length || !window.MutationObserver) return;
+    var mo = new MutationObserver(function (recs) {
+      recs.forEach(function (r) {
+        if (r.attributeName !== "hidden" || r.target.hidden) return;
+        mounted.forEach(function (m) {
+          if (r.target.contains(m.el)) { m.resize(); m.start(); }
+        });
+      });
+    });
+    views.forEach(function (v) { mo.observe(v, { attributes: true }); });
+  }
+
   function boot() {
     city(document.getElementById("cityscape"));
+    // Buzz Buzz is an app for people driving through cities, so it gets the
+    // same scene with a higher share of "our" drivers in it.
+    city(document.getElementById("cityscape-buzz"), { limeShare: 0.3, density: 0.85 });
     counters();
     parallax();
     stagger();
+    watchViews();
   }
 
   if (document.readyState === "loading") {
