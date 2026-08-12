@@ -143,7 +143,13 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outlin
 
 /* ── full-bleed sections ─────────────────────────────────── */
 .bleed { width: 100%; }
-.bleed.dark { background: var(--ink); color: #A8A8AD; }
+/* Pinned, not themed. This band is meant to be dark in BOTH colour schemes:
+   var(--ink) is the TEXT colour, so in dark mode it flipped to near-white
+   while the copy on top stayed light, and the whole contact section --
+   heading, lede and the product-sheet button -- rendered at contrast 1.0.
+   #08090A is exactly what --ink resolves to in light mode, so the light
+   appearance is unchanged. */
+.bleed.dark { background: #08090A; color: #A8A8AD; }
 .bleed.dark h1, .bleed.dark h2, .bleed.dark h3 { color: #F5F5F7; }
 .bleed.night { background: #050708; color: #93A1A8; }
 .bleed.night h2, .bleed.night h3 { color: #F2F7F9; }
