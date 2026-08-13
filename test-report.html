@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gigzen — Test Report, 12 August 2026</title>
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #FFFFFF; color: #14181B;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  font-size: 8.4pt; line-height: 1.46;
+}
+.page { width: 210mm; min-height: 297mm; padding: 11mm 13mm 8mm; margin: 0 auto;
+        display: flex; flex-direction: column; page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+
+.mast { display: flex; align-items: center; gap: 3mm; padding-bottom: 3.2mm;
+        border-bottom: 0.5mm solid #14181B; }
+.mast svg { width: 7.5mm; height: 7.5mm; color: #14181B; flex: 0 0 auto; }
+.wordmark { font-size: 15pt; font-weight: 800; letter-spacing: .14em; }
+.mast .tag { margin-left: auto; text-align: right; font-size: 7pt; color: #5C6871; line-height: 1.45; }
+
+h1 { font-size: 19pt; font-weight: 800; letter-spacing: -.025em; line-height: 1.08; margin-top: 6mm; }
+.sub { margin-top: 2.4mm; font-size: 9pt; color: #3D474E; max-width: 160mm; }
+.meta { margin-top: 4mm; display: flex; gap: 8mm; font-size: 7.2pt; color: #5C6871;
+        border-top: .25mm solid #D9DEE2; border-bottom: .25mm solid #D9DEE2; padding: 2.4mm 0; }
+.meta b { color: #14181B; display: block; font-size: 7.6pt; }
+
+h2 { font-size: 11pt; font-weight: 800; letter-spacing: -.015em; margin-top: 5.4mm;
+     padding-bottom: 1.4mm; border-bottom: .4mm solid #14181B; }
+h3 { font-size: 9pt; font-weight: 700; margin-top: 3.4mm; }
+p  { margin-top: 2mm; max-width: 172mm; }
+.small { font-size: 7.4pt; color: #5C6871; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 3mm; font-size: 7.8pt; }
+th { text-align: left; font-size: 6.6pt; letter-spacing: .12em; text-transform: uppercase;
+     color: #6B7883; border-bottom: .3mm solid #14181B; padding: 0 2mm 1.4mm 0; }
+td { padding: 1.5mm 2mm 1.5mm 0; border-bottom: .2mm solid #E6EAED; vertical-align: top; }
+td.v { white-space: nowrap; font-weight: 700; }
+.pass { color: #1C7A46; }
+.fail { color: #B3261E; }
+.na   { color: #8A6D00; }
+
+.callout { margin-top: 3.4mm; border-left: .8mm solid #14181B; padding: 2.2mm 0 2.2mm 4mm;
+           background: #F7F8F9; }
+.callout.warn { border-left-color: #C8621B; }
+.callout h3 { margin-top: 0; }
+code { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+       font-size: 7.4pt; background: #EEF1F3; padding: .3mm 1mm; border-radius: .8mm; }
+pre { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 6.7pt; background: #0B1014; color: #E8EFF4; padding: 3mm 3.5mm;
+      border-radius: 1.6mm; margin-top: 2.5mm; overflow: hidden; line-height: 1.5; }
+pre .g { color: #9FE870; } pre .r { color: #FF9B8A; } pre .d { color: #7C8B96; }
+
+ul { margin-top: 2mm; list-style: none; }
+li { position: relative; padding-left: 4mm; margin-bottom: 1.4mm; max-width: 172mm; }
+li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm; height: 1.4mm;
+             background: #B9D400; border-radius: 50%; }
+
+.foot { margin-top: auto; padding-top: 3.4mm; border-top: .4mm solid #14181B;
+        display: flex; gap: 6mm; font-size: 6.9pt; color: #5C6871; line-height: 1.55; }
+.foot b { color: #14181B; }
+.foot div:last-child { margin-left: auto; text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────────── PAGE 1 ─────────────────────────── -->
+<div class="page">
+  <div class="mast">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></svg>
+    <span class="wordmark">GIGZEN</span>
+    <span class="tag">Gigzen Private Limited · Bhubaneswar, Odisha, India<br>Internal engineering record</span>
+  </div>
+
+  <h1>Test Report — Buzz Buzz &amp; Populace</h1>
+  <p class="sub">A record of what was verified on 12 August 2026, what could not be, and one
+  defect found in our own tooling during the attempt. Written to be checkable: every figure below
+  came from a command whose output is reproducible.</p>
+
+  <div class="meta">
+    <div><b>12 August 2026</b>Date of testing</div>
+    <div><b>Populace 0.1.0</b>Test platform</div>
+    <div><b>jqepegeifmnfofeyebrz</b>Isolated test project</div>
+    <div><b>Partial</b>Overall outcome</div>
+  </div>
+
+  <h2>1 · Summary</h2>
+  <p>Seven of eight planned checks passed. The eighth — a live multi-user simulation against
+  Buzz Buzz — <b>could not be completed</b>, because the test machine's network dropped roughly
+  half of all outbound TLS connections for the duration. No result is reported for it, and no
+  figure from the two aborted attempts has been published anywhere.</p>
+  <p>The attempt was not wasted. It exposed a genuine defect in Populace's <code>clean</code>
+  command that had been present since the command was written, and which would have affected any
+  customer on an unreliable connection. That defect is fixed, tested and released.</p>
+
+  <table>
+    <tr><th style="width:52%">Check</th><th style="width:16%">Result</th><th>Evidence</th></tr>
+    <tr><td>Populace self-test suite</td><td class="v pass">PASS</td><td>24 of 24 checks</td></tr>
+    <tr><td>End-to-end demo run</td><td class="v pass">PASS</td><td>Planted defect found; exit 1</td></tr>
+    <tr><td>Production safety guard</td><td class="v pass">PASS</td><td>Refused live host; exit 1</td></tr>
+    <tr><td>Adapter contract coverage</td><td class="v pass">PASS</td><td>13 of 13 methods</td></tr>
+    <tr><td>Test-project schema</td><td class="v pass">PASS</td><td>16 of 16 tables created</td></tr>
+    <tr><td>Backend access control</td><td class="v pass">PASS</td><td>0 rows to anonymous callers</td></tr>
+    <tr><td>Buzz Buzz build integrity</td><td class="v pass">PASS</td><td>Type check clean; build 6.06 s</td></tr>
+    <tr><td>Live multi-user simulation</td><td class="v na">NOT RUN</td><td>Network unfit; see §4</td></tr>
+  </table>
+
+  <h2>2 · Product one — Buzz Buzz</h2>
+
+  <h3>2.1 Build integrity</h3>
+  <p>TypeScript compilation completed with no errors. The production bundle built in 6.06 seconds.
+  One advisory remains: a chunk exceeds 500 kB after minification. It is a warning, not a failure,
+  and is recorded here rather than omitted.</p>
+
+  <h3>2.2 Database schema</h3>
+  <p>The consolidated schema (<code>00_complete_backend.sql</code>, 1,581 lines, 17 parts) was
+  applied to a newly created, empty Supabase project. All <b>16 public tables</b> were created:
+  profiles, driver_settings, worker_locations, route_points, jobs, feed_posts, chat_threads,
+  chat_thread_members, chat_messages, notifications, device_tokens, post_likes, post_comments,
+  connections, groups, group_members.</p>
+
+  <div class="foot">
+    <div><b>Gigzen Private Limited</b><br>Bhubaneswar, Odisha, India</div>
+    <div><b>Prepared by</b> Sankur Kundu — Co-founder &amp; Director, Technology<br>sankur.kundu.tw@gmail.com</div>
+    <div>12 August 2026<br>Page 1 of 4</div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="mast">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></svg>
+    <span class="wordmark">GIGZEN</span>
+    <span class="tag">Test Report — 12 August 2026<br>Buzz Buzz &amp; Populace</span>
+  </div>
+  <h3>2.3 Access control</h3>
+  <p>Probed as an unauthenticated caller holding only the publishable key — the same key that
+  ships inside the Android package, and therefore the key an attacker is assumed to hold.</p>
+  <table>
+    <tr><th style="width:34%">Table</th><th style="width:26%">Rows returned</th><th>Interpretation</th></tr>
+    <tr><td>profiles</td><td class="v pass">Access denied (42501)</td><td>Column-level grant holds; phone numbers unreadable</td></tr>
+    <tr><td>feed_posts</td><td class="v pass">0</td><td>Row-level security filtering correctly</td></tr>
+    <tr><td>worker_locations</td><td class="v pass">0</td><td>No GPS history exposed</td></tr>
+    <tr><td>chat_messages</td><td class="v pass">0</td><td>No private messages exposed</td></tr>
+    <tr><td>route_points</td><td class="v pass">0</td><td>No route history exposed</td></tr>
+  </table>
+  <p class="small">A status of 200 with zero rows is the correct outcome: the request succeeds and
+  row-level security returns nothing. It is materially different from an error, and both were
+  checked rather than assumed.</p>
+
+</div>
+
+<!-- ─────────────────────────── PAGE 2 ─────────────────────────── -->
+<div class="page">
+  <div class="mast">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></svg>
+    <span class="wordmark">GIGZEN</span>
+    <span class="tag">Test Report — 12 August 2026<br>Buzz Buzz &amp; Populace</span>
+    <div class="foot">
+    <div><b>Gigzen Private Limited</b><br>Bhubaneswar, Odisha, India</div>
+    <div><b>Prepared by</b> Sankur Kundu — Co-founder &amp; Director, Technology<br>sankur.kundu.tw@gmail.com</div>
+    <div>12 August 2026<br>Page 2 of 4</div>
+  </div>
+</div>
+
+  <h2>3 · Product two — Populace</h2>
+
+  <h3>3.1 Self-tests and end-to-end demo</h3>
+  <p>The suite runs the entire product against an in-memory adapter, so a pass demonstrates that
+  the engine carries no coupling to any real application. <b>24 of 24 checks passed.</b> The
+  bundled demo, which runs against a fake app containing a deliberately planted row-level-security
+  defect, found that defect and exited non-zero as designed.</p>
+  <pre><span class="r">✖like                      41     10     43ms     60ms</span>
+    <span class="d">↳ 10× new row violates row-level security policy "post_likes_insert"</span>
+<span class="g">✔ Cleanup complete — 6 accounts removed.</span>          <span class="d">exit 1</span></pre>
+
+  <h3>3.2 Production safety guard</h3>
+  <p>Populace was pointed deliberately at Buzz Buzz's <b>live production backend</b> to confirm it
+  refuses. It stopped before loading the adapter:</p>
+  <pre><span class="r">✖ REFUSING TO RUN</span>
+  The target matches a host listed in neverRunAgainst:
+    https://ypdaetbeexyepswyhbui.supabase.co
+  Simulated people must never be visible to real users.   <span class="d">exit 1</span></pre>
+  <p class="small">This is the safety property the product is sold on, demonstrated against the
+  real host rather than asserted.</p>
+
+  <h2>4 · The check that did not complete</h2>
+  <p>A live simulation of six drivers across Manila and Mumbai was attempted twice and abandoned
+  both times.</p>
+  <p><b>Cause.</b> Measured on the test machine: Node lost approximately <b>half of all new TLS
+  connections</b>, each failing at a ten-second connect timeout, sequential and concurrent alike,
+  while <code>curl</code> succeeded four times in five. The link is NAT64 and drops connections in
+  bursts. In practice five of six drivers failed to register and the survivor advanced one
+  simulation tick every forty-five seconds.</p>
+  <p><b>Decision.</b> The runs were discarded. Figures from them would describe the office
+  connection, not the product, and publishing them would be worse than publishing nothing. The
+  result of 9 August 2026 — five defects found in three and a half minutes, then no failures across
+  400 API calls — remains the standing measurement, and it was taken on a sound connection.</p>
+
+  <div class="callout warn">
+    <h3>Incident: eight simulated accounts left behind</h3>
+    <p>The first attempt was terminated mid-run by an operator timeout, stranding its accounts in
+    the test project. This is the documented failure mode for an interrupted run. Recovery was
+    performed and the project is a disposable test instance holding no real data; no production
+    system was involved at any point.</p>
+  </div>
+
+  <div class="foot">
+    <div><b>Gigzen Private Limited</b><br>Bhubaneswar, Odisha, India</div>
+    <div><b>Prepared by</b> Sankur Kundu — Co-founder &amp; Director, Technology<br>sankur.kundu.tw@gmail.com</div>
+    <div>12 August 2026<br>Page 3 of 4</div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="mast">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></svg>
+    <span class="wordmark">GIGZEN</span>
+    <span class="tag">Test Report — 12 August 2026<br>Buzz Buzz &amp; Populace</span>
+  </div>
+  <h2>5 · Defect found in our own tooling</h2>
+  <div class="callout">
+    <h3>POP-001 · <code>clean</code> reported a false all-clear · Severity: high · Fixed</h3>
+    <p><b>What happened.</b> The cleanup loop caught every error and counted it as an account that
+    no longer existed. A network failure therefore produced the message
+    <i>"0 removed, 8 not found (already gone)"</i> while the accounts were still present — proved
+    by a direct password sign-in that succeeded moments later.</p>
+    <p><b>Why it matters.</b> <code>clean</code> is the mechanism that removes invented people from
+    <i>a customer's</i> database. A false all-clear there is the precise failure this product
+    exists to prevent, and it sat on the safety path.</p>
+    <p><b>Fix.</b> Transport failures are now separated from genuine absences, listed by name, and
+    the command exits non-zero so neither a human nor a CI job is told the environment is clear
+    when it was never checked.</p>
+  </div>
+
+  <h3>5.1 A second, related defect</h3>
+  <p>Investigating the first exposed a second: <code>clean</code> reached each account through
+  <code>createUser</code>, which <i>signs up</i> when an identity is absent. Cleaning an
+  already-clean environment therefore created every identity and deleted it again — writing to a
+  customer's authentication table purely to prove that table was empty, and making the per-account
+  result useless as evidence of what had been stranded.</p>
+  <p>An optional cleanup capability, <code>signIn</code>, now lets an adapter answer
+  <i>"does this identity exist?"</i> without creating it. It is deliberately <b>not</b> a
+  fourteenth contract method: coverage measures how much of a customer's application a run
+  exercises, and a cleanup-only capability does not belong in that denominator. The published
+  thirteen-method contract is unchanged. Four self-tests cover both an adapter that implements the
+  capability and one that does not.</p>
+  <p class="small">A candour note. During this investigation the author briefly cited the
+  cleanup output as proof the first defect was real; it was not proof, because the command may have
+  created the very accounts it reported removing. The sound evidence was the direct sign-in probe.
+  The claim was withdrawn and the misleading wording removed. It is recorded here because a report
+  that hides its own corrections is the kind of report this company does not write.</p>
+
+  <h2>6 · Conclusion</h2>
+  <ul>
+    <li><b>Buzz Buzz</b> builds cleanly, its schema applies in full to a fresh environment, and its
+    access controls hold against an anonymous caller holding the shipped key.</li>
+    <li><b>Populace</b> passes its full suite, finds a planted defect end to end, and refuses a
+    production target when instructed to attack one.</li>
+    <li><b>One live check remains outstanding.</b> It is blocked on network conditions, not on
+    either product, and the procedure to complete it is recorded.</li>
+    <li><b>One defect was found and fixed</b> in Populace, in the code that protects a customer's
+    environment — found precisely because the tool was pointed at a real one.</li>
+  </ul>
+
+  <div class="foot">
+    <div><b>Gigzen Private Limited</b><br>Bhubaneswar, Odisha, India</div>
+    <div><b>Prepared by</b> Sankur Kundu — Co-founder &amp; Director, Technology<br>sankur.kundu.tw@gmail.com</div>
+    <div>12 August 2026<br>Page 4 of 4</div>
+  </div>
+</div>
+
+</body>
+</html>
