@@ -9,10 +9,26 @@
 <meta property="og:description" content="Gigzen — a software company in Bhubaneswar building Buzz Buzz and Populace.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0A0A0A">
-<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}section, .bleed { position: relative; }
+</style>
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20role%3D%22img%22%20aria-label%3D%22Gigzen%22%3E%20%3Ctitle%3EGigzen%3C%2Ftitle%3E%20%3Cpath%20d%3D%22M33.19%202%20L60.1%2014.82%20L48.54%2020.68%20L33.66%2013.4%20L16.25%2023.06%20L15.14%2023.85%20L15.14%2040.15%20L33.19%2047.91%20L49.02%2039.84%20L49.34%2038.73%20L48.54%2038.25%20L30.34%2033.66%20L30.5%2030.97%20L44.43%2024.01%20L61.05%2029.86%20L61.05%2046.64%20L33.5%2062%20L2.95%2046.64%20L2.95%2017.51%20L33.03%202.16%20Z%22%20fill%3D%22%230A0A0C%22%2F%3E%20%3C%2Fsvg%3E">
 </head>
 <body>
+<!-- The mark's gradient lives here, once, and is referenced by every instance
+     of the logo via fill="url(#gzBlue)". Kept out of the marks themselves so
+     the id is never duplicated — a repeated id would make only the first
+     gradient resolve and the rest fall back to flat colour. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false"
+     style="position:absolute;pointer-events:none">
+  <defs>
+    <linearGradient id="gzBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"   stop-color="#8FC2FF"/>
+      <stop offset=".45" stop-color="#3A7FE0"/>
+      <stop offset="1"   stop-color="#0038B8"/>
+    </linearGradient>
+  </defs>
+</svg>
+<div class="gz-progress" id="gzProgress" aria-hidden="true"></div>
 <style>
 :root {
   --ink:      #08090A;
@@ -21,9 +37,26 @@
   --body:     #46474B;
   --muted:    #67676C;
   --rule:     #E3E3E6;
-  --orange:   #FF4D17;
+  --orange:   #0B63C4;
   --orange-2: #F03700;
+  /* Light blue replaces the orange throughout. --sky is the colour itself,
+     for washes and marks; --orange keeps its name where it means "section
+     accent" and now points at a blue dark enough to be read as text. */
+  --sky:      #7FC0F5;
   --lime:     #D3FF00;
+  /* Text-safe lime. #D3FF00 on paper is 1.16:1 — brand colour, not a
+     text colour. This is 6.0:1 and reads as the same hue family. */
+  --lime-ink: #55660A;
+
+  /* A spectrum, so the company reads as a company rather than one product.
+     Orange stays the signature; these give each section its own identity while
+     scrolling. Every value is chosen to clear 4.5:1 on white — saturation, not
+     brightness that has to be dimmed later to be legible. */
+  --violet:   #6D3BD4;
+  --cyan:     #0E7C74;
+  --blue:     #1257C4;
+  --magenta:  #C01F6E;
+  --amber:    #9C4E00;
   --display: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI",
              "Helvetica Neue", Helvetica, Arial, sans-serif;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -33,11 +66,24 @@
    read, and it leaves no tonal room between one section and the next --
    everything flattens into a single void. A few points of lift lets
    paper and paper-2 separate, the way they do in light mode. */
-@media (prefers-color-scheme: dark) {
-  :root { --paper:#0B0E11; --paper-2:#121619; --ink:#F5F7F9; --body:#AEB8C0; --muted:#8894A0; --rule:#222A31; }
+/* One dark definition, not two. These tokens used to live inside a
+   prefers-color-scheme block, which meant the OS decided the design; the page
+   is light-themed by intent, so dark is now something a visitor opts into
+   rather than something their laptop imposes. Keeping the block OUT of the
+   media query matters: nested inside it, an explicit dark choice on a
+   light-set OS would have matched nothing and produced a half-styled page. */
+:root[data-theme="dark"] {
+  --sky:#2C4A66; --paper:#0B0E11; --paper-2:#121619; --ink:#F5F7F9;
+  --body:#AEB8C0; --muted:#8894A0; --rule:#222A31;
+  --violet:#B79CFF; --cyan:#4ED8D0; --blue:#5FA8FF; --magenta:#FF6FB5; --amber:#FF9A3C;
+  --orange:#5FA8FF; --lime-ink:#D3FF00;
 }
-:root[data-theme="dark"] { --paper:#0B0E11; --paper-2:#121619; --ink:#F5F7F9; --body:#AEB8C0; --muted:#8894A0; --rule:#222A31; }
-:root[data-theme="light"] { --paper:#FFF; --paper-2:#F5F5F7; --ink:#08090A; --body:#46474B; --muted:#67676C; --rule:#E3E3E6; }
+:root[data-theme="light"] { --paper:#FFF; --paper-2:#F5F5F7; --ink:#08090A; --body:#46474B; --muted:#67676C; --rule:#E3E3E6;
+  /* The spectrum must be repeated here. Without it, a visitor on an OS set
+     to dark who chooses light mode keeps the DARK accents — light violet on
+     a white page, measured at 2.28:1. A colour defined in the base :root and
+     overridden in a media query has to be overridden back here too. */
+  --violet:#6D3BD4; --cyan:#0E7C74; --blue:#1257C4; --magenta:#C01F6E; --amber:#9C4E00; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -68,7 +114,10 @@ h3 { font-size: clamp(21px, 2.7vw, 28px); letter-spacing: -0.035em; }
 /* ── nav ─────────────────────────────────────────────────── */
 nav {
   position: sticky; top: 0; z-index: 90; height: 46px;
-  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  /* 72% let the deep orange band read through behind grey nav text. The nav
+     has to stay legible over every band it passes, and it passes over all of
+     them, so it sits on near-paper rather than on whatever is underneath. */
+  background: color-mix(in srgb, var(--paper) 93%, transparent);
   backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid transparent; transition: border-color .3s;
 }
@@ -218,12 +267,53 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outlin
    heading, lede and the product-sheet button -- rendered at contrast 1.0.
    #08090A is exactly what --ink resolves to in light mode, so the light
    appearance is unchanged. */
-.bleed.dark { background: #08090A; color: #A8A8AD; }
-.bleed.dark h1, .bleed.dark h2, .bleed.dark h3 { color: #F5F5F7; }
-.bleed.night { background: #050708; color: #93A1A8; }
-.bleed.night h2, .bleed.night h3 { color: #F2F7F9; }
-.bleed.flame { background: linear-gradient(168deg, #FF6A2C 0%, #FF4D17 46%, #E23100 100%); color: #FFE7DC; }
-.bleed.flame h2, .bleed.flame h3 { color: #fff; }
+/* ── Bands ────────────────────────────────────────────────────────────
+   These were two near-black slabs, which is what made the page read dark
+   however light the sections between them were. They are now pale washes
+   carrying dark ink, so the whole page is light-themed and the colour
+   arrives as tint rather than as weight.
+
+   Each band is defined for BOTH themes: the pale values here, and deep
+   tinted counterparts under the dark-theme blocks below. A band with only
+   one definition would strand white text on a pale wash for half the
+   audience. The orange stays saturated — one bold block is punctuation;
+   three would be noise. */
+.bleed.dark  { background: linear-gradient(165deg,
+                 color-mix(in srgb, var(--violet) 13%, var(--paper)) 0%,
+                 color-mix(in srgb, var(--blue) 8%, var(--paper)) 60%,
+                 var(--paper) 100%); color: var(--body); }
+.bleed.night { background: linear-gradient(165deg,
+                 color-mix(in srgb, var(--cyan) 15%, var(--paper)) 0%,
+                 color-mix(in srgb, var(--cyan) 6%, var(--paper)) 55%,
+                 var(--paper) 100%); color: var(--body); }
+.bleed.dark h1, .bleed.dark h2, .bleed.dark h3,
+.bleed.night h1, .bleed.night h2, .bleed.night h3 { color: var(--ink); }
+/* Light blue, with dark ink. A saturated blue deep enough to carry white text
+   would no longer read as light blue, and a light one fails contrast outright,
+   so the band is pale and the text is ink — the same construction as the other
+   two bands, which is why they now look like one family. */
+.bleed.sky { background: linear-gradient(165deg,
+               color-mix(in srgb, var(--sky) 30%, var(--paper)) 0%,
+               color-mix(in srgb, var(--sky) 12%, var(--paper)) 55%,
+               var(--paper) 100%); color: var(--body); }
+.bleed.sky h1, .bleed.sky h2, .bleed.sky h3 { color: var(--ink); }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="dark"] .bleed.dark  { background: linear-gradient(165deg,
+      color-mix(in srgb, var(--violet) 16%, #08090A) 0%, #08090A 65%); color: #A8A8AD; }
+  :root[data-theme="dark"] .bleed.night { background: linear-gradient(165deg,
+      color-mix(in srgb, var(--cyan) 15%, #050708) 0%, #050708 60%); color: #93A1A8; }
+  :root[data-theme="dark"] .bleed.dark h1,  :root[data-theme="dark"] .bleed.dark h2,
+  :root[data-theme="dark"] .bleed.dark h3,  :root[data-theme="dark"] .bleed.night h1,
+  :root[data-theme="dark"] .bleed.night h2, :root[data-theme="dark"] .bleed.night h3 { color: #F5F7F9; }
+}
+:root[data-theme="dark"] .bleed.dark  { background: linear-gradient(165deg,
+    color-mix(in srgb, var(--violet) 16%, #08090A) 0%, #08090A 65%); color: #A8A8AD; }
+:root[data-theme="dark"] .bleed.night { background: linear-gradient(165deg,
+    color-mix(in srgb, var(--cyan) 15%, #050708) 0%, #050708 60%); color: #93A1A8; }
+:root[data-theme="dark"] .bleed.dark h1,  :root[data-theme="dark"] .bleed.dark h2,
+:root[data-theme="dark"] .bleed.dark h3,  :root[data-theme="dark"] .bleed.night h1,
+:root[data-theme="dark"] .bleed.night h2, :root[data-theme="dark"] .bleed.night h3 { color: #F5F7F9; }
 section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 
 /* ── hero ────────────────────────────────────────────────── */
@@ -238,27 +328,44 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 /* ── cinematic hero ─────────────────────────────────── */
 .hero-stage {
   position: relative; isolation: isolate; overflow: hidden;
-  /* Not a full 100svh: leaving the next section peeking above the fold
-     tells a first-time visitor there is more here, and that the whole
-     site is not this dark. */
+  /* Leaving the next section peeking above the fold tells a first-time
+     visitor there is more here. */
   min-height: 88svh; display: flex; flex-direction: column; justify-content: center;
-  background: #05070A; color: #fff;
+  background: var(--paper); color: var(--body);
 }
 #cityscape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
 
 /* Depth and mood, layered in CSS so the animation loop stays cheap: a warm
    glow on the horizon, darkness at the edges, and a hard fade into the page
    colour at the bottom so the section ends rather than stops. */
+/* A light colour mesh in place of the night scene: five soft fields, one per
+   brand hue, drifting slowly against paper. Colour arrives as light rather
+   than as darkness, which is the whole point of the change. The fields are
+   wide and low-opacity so text sits on near-white everywhere it matters —
+   the contrast sweep is run against this, not eyeballed. */
 .hero-veil {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='150' height='150' filter='url(%23n)' opacity='.09'/></svg>"),
-    radial-gradient(120% 58% at 50% 32%, rgba(255,150,70,.22) 0%, rgba(255,150,70,0) 62%),
-    radial-gradient(72% 54% at 50% 52%, rgba(5,7,10,.90) 0%, rgba(5,7,10,.55) 46%, rgba(5,7,10,0) 100%),
-    radial-gradient(105% 78% at 50% 45%, rgba(5,7,10,0) 52%, rgba(5,7,10,.55) 100%),
-    linear-gradient(180deg, rgba(5,7,10,.72) 0%, rgba(5,7,10,0) 22%,
-                    rgba(5,7,10,0) 62%, var(--paper) 100%);
+    /* Colour lives at the corners; the centre stays paper so the headline sits
+       on white. The first pass filled the whole field and the hero read as a
+       muddy purple wash rather than a light page with colour in it. */
+    radial-gradient(42% 38% at 6% 4%,   color-mix(in srgb, var(--violet) 30%, transparent) 0%, transparent 72%),
+    radial-gradient(40% 36% at 95% 2%,  color-mix(in srgb, var(--cyan) 30%, transparent) 0%, transparent 70%),
+    radial-gradient(44% 40% at 92% 92%, color-mix(in srgb, var(--magenta) 24%, transparent) 0%, transparent 72%),
+    radial-gradient(42% 40% at 8% 94%,  color-mix(in srgb, var(--blue) 26%, transparent) 0%, transparent 72%),
+    radial-gradient(30% 26% at 62% 20%, color-mix(in srgb, var(--amber) 16%, transparent) 0%, transparent 76%),
+    /* A soft white core keeps the type off the colour entirely. */
+    radial-gradient(58% 52% at 50% 52%, var(--paper) 0%, color-mix(in srgb, var(--paper) 55%, transparent) 55%, transparent 100%),
+    linear-gradient(180deg, transparent 72%, var(--paper) 100%),
+    var(--paper);
+  background-size: 170% 170%, 170% 170%, 170% 170%, 170% 170%, 170% 170%, 100% 100%, 100% 100%, 100% 100%;
+  animation: gz-mesh 26s ease-in-out infinite alternate;
 }
+@keyframes gz-mesh {
+  from { background-position: 0% 0%, 100% 0%, 100% 100%, 0% 100%, 50% 50%, 0 0, 0 0, 0 0; }
+  to   { background-position: 16% 10%, 84% 12%, 86% 90%, 14% 88%, 58% 42%, 0 0, 0 0, 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-veil { animation: none; } }
 /* The hero copy is above the fold, so it must never begin invisible waiting for
    a reveal to fire. On a slow device, or any renderer that defers transitions,
    that is a blank hero. It is on screen from the first paint; the motion below
@@ -267,21 +374,21 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 
 .hero-stage .hero { position: relative; z-index: 3; padding-block: 0; will-change: transform, opacity; }
 .hero-stage .hero h1 {
-  color: #fff; max-width: 15ch;
+  color: var(--ink); max-width: 15ch;
   font-size: clamp(46px, 9.2vw, 132px); line-height: .96; letter-spacing: -.045em;
-  text-shadow: 0 2px 40px rgba(0,0,0,.9), 0 0 120px rgba(0,0,0,.75);
 }
-.hero-stage .hero h1 span { color: rgba(255,255,255,.44); }
-.hero-stage .hero .lede { color: rgba(255,255,255,.80); max-width: 42ch; }
-.hero-stage .place { color: rgba(255,255,255,.58); }
+/* The emphasis span is where the colour sweep lands (see the motion script). */
+.hero-stage .hero h1 span { color: var(--violet); }
+.hero-stage .hero .lede { color: var(--body); max-width: 42ch; }
+.hero-stage .place { color: var(--muted); }
 
 .scrollcue {
   position: absolute; z-index: 3; left: 50%; bottom: 34px; transform: translateX(-50%);
-  width: 24px; height: 40px; border: 1px solid rgba(255,255,255,.34); border-radius: 14px;
+  width: 24px; height: 40px; border: 1px solid color-mix(in srgb, var(--ink) 26%, transparent); border-radius: 14px;
 }
 .scrollcue span {
   position: absolute; left: 50%; top: 9px; width: 3px; height: 7px; border-radius: 2px;
-  background: var(--lime); transform: translateX(-50%);
+  background: var(--blue); transform: translateX(-50%);
   animation: cue 2.1s cubic-bezier(.7,0,.3,1) infinite;
 }
 @keyframes cue {
@@ -304,10 +411,10 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 #nav.over-hero .navlinks a,
 #nav.over-hero .brand,
 #nav.over-hero .navtoggle,
-#nav.over-hero .langpick select { color: rgba(255,255,255,.9); }
-#nav.over-hero .langpick svg { color: rgba(255,255,255,.6); }
+#nav.over-hero .langpick select { color: var(--ink); }
+#nav.over-hero .langpick svg { color: var(--muted); }
 #nav.over-hero .navlinks a:hover,
-#nav.over-hero .langpick select:hover { color: #fff; }
+#nav.over-hero .langpick select:hover { color: var(--blue); }
 
 /* ── richer reveals ───────────────────────────────────── */
 /* Stagger reuses the site's own .rv reveal: motion.js tags each child .rv and
@@ -335,27 +442,28 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
   color: #fff; margin-top: 14px;
   font-size: clamp(52px, 11vw, 150px); line-height: .9; letter-spacing: -.05em;
 }
-.prod-hero .eyebrow { color: rgba(255,255,255,.62); }
-.prod-hero .lede { color: rgba(255,255,255,.82); max-width: 44ch; margin-top: 24px; margin-inline: 0; }
+.prod-hero .eyebrow { color: var(--accent); }
+.bleed.sky .prod-hero .eyebrow, .bleed.sky .eyebrow { color: var(--accent); }
+.prod-hero .lede { color: var(--body); max-width: 44ch; margin-top: 24px; margin-inline: 0; }
 .back.light {
-  color: rgba(255,255,255,.72); border-color: rgba(255,255,255,.26);
-  background: rgba(255,255,255,.05);
+  color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
 }
-.back.light:hover { color: #fff; border-color: rgba(255,255,255,.5); }
+.back.light:hover { color: var(--accent); border-color: var(--accent); }
 
 .hero-figs {
   display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 22px 30px;
   margin-top: clamp(34px, 5vh, 56px); padding-top: 26px;
-  border-top: 1px solid rgba(255,255,255,.16); max-width: 720px;
+  border-top: 1px solid var(--rule); max-width: 720px;
 }
 @media (min-width: 780px) { .hero-figs { grid-template-columns: repeat(4, minmax(0,1fr)); } }
 .hero-figs b {
   display: block; font-family: var(--display); font-weight: 800;
-  font-size: clamp(30px, 3.6vw, 46px); letter-spacing: -.04em; color: #fff; line-height: 1;
+  font-size: clamp(30px, 3.6vw, 46px); letter-spacing: -.04em; color: var(--ink); line-height: 1;
 }
 .hero-figs span {
   display: block; margin-top: 8px; font-family: var(--mono); font-size: 11px;
-  letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.55);
+  letter-spacing: .13em; text-transform: uppercase; color: var(--muted);
 }
 
 /* The Populace scene is agents, not traffic: cooler and quieter behind the type. */
@@ -382,8 +490,8 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
   display: flex; flex-direction: column; gap: 12px; align-items: center;
 }
 .seq-cap.on { opacity: 1; transform: none; }
-.seq-cap h3 { color: #fff; }
-.seq-cap p { font-size: 15.5px; line-height: 1.5; max-width: 46ch; color: rgba(255,255,255,.82); }
+.seq-cap h3 { color: var(--ink); }
+.seq-cap p { font-size: 15.5px; line-height: 1.5; max-width: 46ch; color: var(--body); }
 .seq-phones { display: flex; gap: clamp(14px, 3vw, 38px); align-items: center; justify-content: center; }
 .seq-phones .device {
   transition: transform .7s cubic-bezier(.22,.61,.36,1), opacity .7s ease, filter .7s ease;
@@ -391,8 +499,8 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 }
 .seq-phones .device.active { opacity: 1; transform: scale(1) translateY(-6px); filter: none; }
 .seq-dots { display: flex; gap: 7px; flex: none; }
-.seq-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.32); transition: background .4s, width .4s; }
-.seq-dots i.on { background: #fff; width: 20px; border-radius: 3px; }
+.seq-dots i { width: 6px; height: 6px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 22%, transparent); transition: background .4s, width .4s; }
+.seq-dots i.on { background: var(--accent); width: 20px; border-radius: 3px; }
 @media (max-width: 780px) {
   .seq-phones .device { --w: 190px; }
   .seq-phones { gap: 10px; }
@@ -412,7 +520,17 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 /* ── swarm ───────────────────────────────────────────────── */
 .swarm-wrap { position: relative; min-height: clamp(520px, 82vh, 760px); display: flex; align-items: center; }
 #swarm { position: absolute; inset: 0; width: 100%; height: 100%; }
-.swarm-veil { position: absolute; inset: 0; background: radial-gradient(112% 78% at 22% 50%, rgba(5,7,8,.95) 30%, rgba(5,7,8,.6) 60%, rgba(5,7,8,.12) 100%); pointer-events: none; }
+/* This scrim existed to hold text off a dark starfield. With the band now
+   pale it was painting rgba(5,7,8,.95) over everything — the section rendered
+   as grey text on a black smudge. Same job, inverted: paper over the copy so
+   the text side stays clean, thinning out to let the swarm show on the right. */
+.swarm-veil {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(112% 78% at 22% 50%,
+    color-mix(in srgb, var(--paper) 94%, transparent) 30%,
+    color-mix(in srgb, var(--paper) 62%, transparent) 60%,
+    transparent 100%);
+}
 .swarm-wrap .wrap { position: relative; }
 
 /* ── tiles / cards ───────────────────────────────────────── */
@@ -426,7 +544,9 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
   padding: 14px 26px; border-radius: 3px; text-decoration: none; border: 1px solid;
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.btn.solid { background: #fff; color: #101112; border-color: #fff; }
+.btn.solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.btn.ghost { color: inherit; }
 .btn.solid:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.25); }
 .btn.ghost { background: transparent; color: inherit; border-color: currentColor; opacity: .78; }
 .btn.ghost:hover { opacity: 1; }
@@ -463,7 +583,7 @@ section.pad { padding: clamp(96px, 16vh, 190px) 0; }
 .stats { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 60px; }
 .stat .v { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(36px, 5.4vw, 60px); letter-spacing: -.055em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
 .stat .l { display: block; margin-top: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; color: var(--muted); }
-.bleed.dark .stat .v { color: #F5F5F7; }
+.bleed.dark .stat .v, .bleed.night .stat .v { color: var(--ink); }
 
 /* ── detail views ────────────────────────────────────────── */
 .view[hidden] { display: none; }
@@ -703,13 +823,292 @@ footer .brand svg { height: 19px; }
   font-family: var(--display); font-weight: 800; letter-spacing: .17em;
   color: var(--ink); text-transform: uppercase;
 }
+
+/* ══════════════════════════════════════════════════════
+   COLOUR SYSTEM — one accent per section
+   ══════════════════════════════════════════════════════
+   The site was black, white and orange. That reads as restrained
+   on a laptop and as unfinished on a phone, where a visitor sees
+   one section at a time and has nothing to tell them apart.
+
+   Each section now declares --accent and everything inside
+   inherits it, so a single variable re-tints a whole band and the
+   palette cannot drift apart. Orange stays the signature: it opens
+   the page and closes it, and the others sit between.
+   ══════════════════════════════════════════════════════ */
+section, .bleed { --accent: var(--orange); }
+#mission     { --accent: var(--violet); }
+#principles  { --accent: var(--cyan); }
+#buzz-section{ --accent: var(--blue); }
+#populace-section { --accent: var(--lime-ink); }
+#global      { --accent: var(--magenta); }
+#milestones  { --accent: var(--amber); }
+#company     { --accent: var(--cyan); }
+#contact     { --accent: var(--orange); }
+
+.eyebrow { color: var(--accent); }
+
+/* No aurora. The reference for this page is about.google, which has no glowing
+   fields anywhere — its character is white space, large rounded shapes and calm
+   colour used as punctuation. Blurred gradient blobs would fight that, so the
+   .aura elements are kept in the markup but render nothing; the section accent
+   now shows up in the type, the rules and the shapes instead. */
+.aura { display: none; }
+
+
+/* Engineering grid, very faint, masked so it fades rather than stopping. */
+.gridlines {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .55;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--rule) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--rule) 70%, transparent) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: radial-gradient(ellipse 76% 60% at 50% 40%, #000 28%, transparent 76%);
+  -webkit-mask-image: radial-gradient(ellipse 76% 60% at 50% 40%, #000 28%, transparent 76%);
+}
+
+/* Content sits above both layers. */
+.wrap { position: relative; z-index: 2; }
+
+/* Gradient display type. -webkit-text-fill-color:transparent hides the real
+   colour, so every stop must itself be legible on the ground — there is no
+   fallback doing the work once this applies. */
+.grad {
+  background: linear-gradient(96deg, var(--ink) 0%, var(--ink) 22%, var(--accent) 62%, var(--orange) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+@supports not (background-clip: text) { .grad { -webkit-text-fill-color: currentColor; color: var(--ink); } }
+
+/* Cards gain a lit top edge and an accent shadow on hover, so a grid of them
+   reads as wired together rather than as boxes. */
+.card, .principle, .milestone {
+  position: relative; overflow: hidden;
+  transition: border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+}
+.card::before, .principle::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: .55; transition: opacity .22s ease;
+}
+.card:hover, .principle:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 44%, var(--rule));
+  box-shadow: 0 18px 44px -26px color-mix(in srgb, var(--accent) 62%, transparent);
+}
+.card:hover::before, .principle:hover::before { opacity: 1; }
+
+/* Reading position — the page is long enough to want one. */
+.gz-progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 90;
+  background: linear-gradient(90deg, var(--orange), var(--violet), var(--cyan));
+  transition: width .1s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura::before, .aura::after { animation: none; }
+  .card:hover, .principle:hover { transform: none; }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   ABOUT.GOOGLE CHARACTER
+   ══════════════════════════════════════════════════════
+   Calm, not loud. Three things carry that page and none of
+   them are effects:
+
+     1. SPACE. Sections breathe — the reader is never asked to
+        take in two ideas at once.
+     2. ROUNDNESS. Big radii on everything: cards, images,
+        buttons. Nothing has a sharp corner.
+     3. COLOUR AS PUNCTUATION. Several hues, each used once,
+        never as a wash behind the text.
+   ══════════════════════════════════════════════════════ */
+
+/* 1. SPACE. section.pad already carries the section rhythm and wins on
+      specificity, so it is raised here rather than shadowed by a weaker rule. */
+section.pad { padding: clamp(104px, 17vh, 200px) 0; }
+.wrap.center.mid { max-width: 760px; }
+h2 + .lede, .eyebrow + h2 { margin-top: 22px; }
+.findings { margin-top: 68px; }
+.finding { padding: 32px 0; }
+
+/* 2. ROUNDNESS — applied only to things that are objects on the page.
+      NOT to .bleed: those are full-width colour bands running edge to edge,
+      and a band with corners reads as a stray box rather than a section. */
+.glass, .shot, .device, .stat, .fig { border-radius: 28px; }
+.btn { border-radius: 999px; padding: 14px 28px; font-weight: 550; }
+.btn.solid { border-color: transparent; }
+.btn.solid:hover { box-shadow: 0 12px 34px rgba(0,0,0,.22); }
+
+/* 3. COLOUR AS PUNCTUATION — the section accent appears as a short rule beside
+      the eyebrow, never as a wash behind the words. */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 650; letter-spacing: .12em;
+}
+.eyebrow::before {
+  content: ""; width: 24px; height: 3px; border-radius: 2px;
+  background: currentColor; flex: none; opacity: .9;
+}
+.prod-hero .eyebrow, .dhero .eyebrow { display: inline-flex; }
+
+/* Friendly, not shouty: the warmth on that page comes from size and space,
+   not from weight. */
+h1 { font-weight: 600; letter-spacing: -0.028em; line-height: 1.08; }
+h2 { font-weight: 600; letter-spacing: -0.024em; line-height: 1.14; }
+.lede { line-height: 1.55; font-weight: 400; }
+
+/* Findings sit flat, separated by a hairline — no shadows. A page of shadows
+   reads as heavy, which is the opposite of the reference. */
+.finding { border-top-color: var(--rule); }
+.finding:hover .fn { color: var(--accent); }
+
+/* The grid stays, but as texture rather than decoration. */
+.gridlines { opacity: .28; background-size: 96px 96px; }
+
+@media (max-width: 720px) {
+  section.pad { padding: clamp(72px, 14vw, 108px) 0; }
+  .glass, .shot, .device, .stat, .fig { border-radius: 22px; }
+  .finding { padding: 24px 0; }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   MOTION
+   ══════════════════════════════════════════════════════
+   Every rule below is inside the reduced-motion guard at the
+   bottom. Motion here is meant to acknowledge the reader —
+   things arrive, respond to the pointer, and settle. Nothing
+   loops forever in the corner of the eye, and nothing moves
+   that the reader did not cause by scrolling or pointing.
+   ══════════════════════════════════════════════════════ */
+
+/* Headline: a slow colour sweep across the display type. Because it paints
+   through background-clip, the text keeps its own colour as a fallback for
+   any engine that cannot clip — never a transparent, invisible headline. */
+.grad {
+  background: linear-gradient(100deg, var(--violet), var(--blue), var(--cyan), var(--magenta), var(--amber), var(--violet));
+  background-size: 320% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gz-sweep 14s linear infinite;
+}
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .grad { background: none; -webkit-text-fill-color: currentColor; color: var(--accent); }
+}
+@keyframes gz-sweep { to { background-position: 320% 0; } }
+
+/* Reveals get a little more character than a straight fade: content rises and
+   scales up by a hair, which reads as arriving rather than appearing. */
+.js .rv { transform: translateY(30px) scale(.985); }
+.js .rv.in { transform: none; }
+
+/* Staggered children — each one a beat behind the last, capped so a long list
+   never leaves the reader waiting on the tenth item. */
+.js .stagger > * { transition-delay: calc(var(--i, 0) * 70ms); }
+
+/* Pointer response. Objects lift toward the reader and pick up their section
+   accent; the transition is fast in and slow out, which feels responsive
+   rather than springy. */
+.glass, .stat, .fig, .device {
+  transition: transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s cubic-bezier(.22,.61,.36,1);
+}
+.glass:hover, .fig:hover, .device:hover { transform: translateY(-6px); }
+.stat:hover { transform: translateY(-4px); }
+.finding { transition: background .35s ease, padding-left .35s cubic-bezier(.22,.61,.36,1); }
+.finding:hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  padding-left: 14px;
+}
+.finding .fn { transition: color .35s ease; }
+
+/* Buttons: the fill slides in from the leading edge instead of snapping. */
+.btn { position: relative; overflow: hidden; isolation: isolate;
+       transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease, color .35s ease; }
+.btn::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform .45s cubic-bezier(.22,.61,.36,1);
+}
+.btn:hover::after { transform: scaleX(1); }
+.btn.ghost:hover { color: var(--paper); border-color: var(--accent); }
+.bleed.sky .btn::after { background: var(--accent); }
+.bleed.sky .btn.ghost:hover { color: var(--paper); }
+
+/* The section accent draws itself in as the section arrives. */
+.eyebrow::before { transform: scaleX(0); transform-origin: left;
+                   transition: transform .8s cubic-bezier(.22,.61,.36,1) .15s; }
+.rv.in .eyebrow::before, .eyebrow.in::before, .in .eyebrow::before { transform: scaleX(1); }
+
+/* Counters animate from zero when their band scrolls into view (see motion JS). */
+.stat .v { font-variant-numeric: tabular-nums; }
+
+/* Link underlines grow from the leading edge. */
+a.u { position: relative; text-decoration: none; }
+a.u::after {
+  content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 100%;
+  background: var(--accent); transform: scaleX(0); transform-origin: right;
+  transition: transform .4s cubic-bezier(.22,.61,.36,1);
+}
+a.u:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* Nothing above survives a reader who has asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .grad { animation: none; background-position: 0 0; }
+  .js .rv { transform: none; }
+  .js .stagger > * { transition-delay: 0s; }
+  .glass:hover, .fig:hover, .device:hover, .stat:hover { transform: none; }
+  .finding:hover { padding-left: 0; }
+  .btn::after, a.u::after { transition: none; }
+  .eyebrow::before { transform: scaleX(1); transition: none; }
+}
+
+
+/* ── The mark, in blue ────────────────────────────────────────────────────
+   The logo keeps its geometry exactly; only its colour changes. currentColor
+   is set to blue as well, so the flat fallback is still a blue mark rather
+   than a black one if the gradient reference does not resolve. On the orange
+   band the mark goes white, because a blue mark on deep orange is the one
+   place the gradient has nothing to sit against. */
+.mark { color: #0038B8; }
+
+
+/* The wordmark follows the mark into blue rather than running the full
+   spectrum — the logo is one identity, and the rest of the page is where the
+   colour range belongs. */
+.wordmark {
+  background: linear-gradient(100deg, #8FC2FF 0%, #4A8CE8 45%, #0038B8 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .wordmark { background: none; -webkit-text-fill-color: currentColor; color: #0038B8; }
+}
+
+
+/* Populace keeps its bright lime wherever the background is genuinely dark. */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="dark"] #populace-section { --accent: var(--lime); }
+}
+:root[data-theme="dark"] #populace-section { --accent: var(--lime); }
+.bleed.sky #populace-section, .bleed.night .seq-dots i.on { }
+
+
+/* Buttons state their own colour rather than inheriting the band's body text.
+   Inheriting is what left a ghost button carrying the old dark-band grey at
+   2.66:1 once the band underneath it turned pale. */
+.bleed.night .btn.ghost, .bleed.dark .btn.ghost { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+.bleed.night .btn.ghost:hover, .bleed.dark .btn.ghost:hover { color: var(--paper); border-color: var(--accent); }
+
 </style>
 
 <nav id="nav">
   <div class="wrap">
     <a class="brand" href="#top" data-home aria-label="Gigzen — home">
       <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z" fill="currentColor"/>
+        <path fill="url(#gzBlue)" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/>
       </svg>
       <span class="wordmark" style="font-size:15px">GIGZEN</span>
     </a>
@@ -743,6 +1142,8 @@ footer .brand svg { height: 19px; }
 
   <!-- ── mission ── -->
   <section class="pad" id="mission" style="padding-block:clamp(56px,8vw,110px)">
+    <div class="aura" aria-hidden="true"></div>
+    <div class="gridlines" aria-hidden="true"></div>
     <div class="wrap">
       <span class="eyebrow rv">Our mission</span>
       <p class="mission rv">We build software for the people who keep cities moving &mdash;
@@ -774,11 +1175,11 @@ footer .brand svg { height: 19px; }
   </section>
 
   <!-- ── Buzz Buzz: full-bleed flame + scroll sequence ── -->
-  <div class="bleed flame" id="buzz-section">
+  <div class="bleed sky" id="buzz-section">
     <div class="wrap" style="padding-top:clamp(80px,12vh,150px);text-align:center">
-      <span class="eyebrow rv" style="color:rgba(255,255,255,.72)">Android app</span>
+      <span class="eyebrow rv">Android app</span>
       <h2 class="rv" style="margin-top:16px">buzz buzz</h2>
-      <p class="lede rv" style="margin:26px auto 0;max-width:30ch;color:rgba(255,255,255,.9)">
+      <p class="lede rv" style="margin:26px auto 0;max-width:30ch">
         Every kilometre counts. So count them.</p>
     </div>
 
@@ -842,15 +1243,15 @@ footer .brand svg { height: 19px; }
       <canvas id="swarm" aria-hidden="true"></canvas>
       <div class="swarm-veil"></div>
       <div class="wrap">
-        <span class="eyebrow rv" style="color:var(--lime)">Developer tool</span>
+        <span class="eyebrow rv">Developer tool</span>
         <h2 class="rv" style="margin-top:16px">populace</h2>
-        <p class="lede rv" style="margin-top:26px;max-width:26ch;color:#B9C6CC">
+        <p class="lede rv" style="margin-top:26px;max-width:26ch;color:var(--body)">
           Fill your app with people before it has any.</p>
         <p class="rv" style="margin-top:22px;max-width:48ch;font-size:16px;line-height:1.6">
           A simulated population signs up, moves through real cities, posts and messages —
           through your API, as real authenticated users. Then it reports everything that broke.
         </p>
-        <p class="rv" style="margin-top:26px;max-width:48ch;font-size:15px;line-height:1.6;color:var(--lime)">
+        <p class="rv" style="margin-top:26px;max-width:48ch;font-size:15px;line-height:1.6;color:var(--body)">
           Its first run against a shipping app found five bugs in three and a half minutes —
           including one that stopped account creation, in an app that had just passed a full
           manual test.
@@ -871,6 +1272,8 @@ footer .brand svg { height: 19px; }
 
   <!-- ── international ── -->
   <section class="pad" id="global">
+    <div class="aura" aria-hidden="true"></div>
+    <div class="gridlines" aria-hidden="true"></div>
     <div class="wrap center mid">
       <span class="eyebrow rv">Everywhere</span>
       <h2 class="rv" style="margin-top:18px">a driver in delhi shouldn't get a worse app than a driver in london.</h2>
@@ -911,6 +1314,8 @@ footer .brand svg { height: 19px; }
 
   <!-- ── principles ── -->
   <section class="pad" id="principles">
+    <div class="aura" aria-hidden="true"></div>
+    <div class="gridlines" aria-hidden="true"></div>
     <div class="wrap center mid">
       <span class="eyebrow rv">What we stand behind</span>
       <h2 class="rv" style="margin-top:18px">three commitments, each with a mechanism behind it.</h2>
@@ -957,6 +1362,8 @@ footer .brand svg { height: 19px; }
 
   <!-- ── milestones ── -->
   <section class="pad" id="milestones" style="background:var(--paper-2)">
+    <div class="aura" aria-hidden="true"></div>
+    <div class="gridlines" aria-hidden="true"></div>
     <div class="wrap">
       <span class="eyebrow rv">Where we have got to</span>
       <h2 class="rv" style="margin-top:18px;max-width:20ch">a short history, because it is a short history.</h2>
@@ -999,6 +1406,8 @@ footer .brand svg { height: 19px; }
 
   <!-- ── company ── -->
   <section class="pad" id="company" style="background:var(--paper-2)">
+    <div class="aura" aria-hidden="true"></div>
+    <div class="gridlines" aria-hidden="true"></div>
     <div class="wrap center mid">
       <span class="eyebrow rv">Company</span>
       <h2 class="rv" style="margin-top:18px">small, and deliberate about it.</h2>
@@ -1041,20 +1450,21 @@ footer .brand svg { height: 19px; }
 
   <!-- ── contact ── -->
   <div class="bleed dark" id="contact">
+    <div class="aura" aria-hidden="true"></div>
     <section class="pad center">
       <div class="wrap mid">
         <h2 class="rv">work with us.</h2>
-        <p class="lede rv" style="margin-top:26px;color:#A8A8AD">
+        <p class="lede rv" style="margin-top:26px;color:var(--body)">
           Building something that needs testing at scale, or want early access to Populace?</p>
         <p class="rv" style="margin-top:34px">
-          <a href="mailto:sankur.kundu.tw@gmail.com" style="color:var(--lime);font-size:21px;font-weight:600;text-decoration:none;letter-spacing:-.02em">sankur.kundu.tw@gmail.com</a>
+          <a href="mailto:sankur.kundu.tw@gmail.com" style="color:var(--accent);font-size:21px;font-weight:600;text-decoration:none;letter-spacing:-.02em">sankur.kundu.tw@gmail.com</a>
         </p>
         <p class="rv" style="margin-top:26px">
-          <a href="Gigzen-Product-Sheet.pdf" download style="display:inline-block;border:1px solid rgba(255,255,255,.34);border-radius:999px;padding:13px 26px;color:#fff;text-decoration:none;font-size:15px;font-weight:600">
+          <a href="Gigzen-Product-Sheet.pdf" download class="btn solid" style="display:inline-block;text-decoration:none;font-size:15px;font-weight:600">
             Download the product sheet &nbsp;&middot;&nbsp; PDF, one page
           </a>
         </p>
-        <p class="rv" style="margin-top:14px;font-size:13px;color:#7C8B96">
+        <p class="rv" style="margin-top:14px;font-size:13px;color:var(--muted)">
           Both products, and both Populace runs &mdash; the one that found five bugs and the one that found none.
         </p>
       </div>
@@ -1084,7 +1494,7 @@ footer .brand svg { height: 19px; }
     <div class="scrollcue" aria-hidden="true"><span></span></div>
   </div>
 
-  <div class="bleed flame">
+  <div class="bleed sky">
     <div class="wrap" style="padding:clamp(56px,8vh,90px) 26px;display:flex;justify-content:center;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
       <div class="device" style="--w:236px">
         <div class="glass">
@@ -1267,7 +1677,7 @@ footer .brand svg { height: 19px; }
   <rect width="1200" height="986" rx="16" fill="#0B1014"/>
   <rect x="1" y="1" width="1198" height="984" rx="15" fill="none" stroke="#233039"/>
 
-  <g transform="translate(48,40.5) scale(0.46875)" fill="#D3FF00"><path d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></g>
+  <g transform="translate(48,40.5) scale(0.46875)" fill="#D3FF00"><path fill="url(#gzBlue)" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></g>
   <text x="90" y="63" fill="#EAF1F6" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="0.14em">GIGZEN</text>
   <text x="1152" y="63" fill="#6B7C89" font-family="ui-monospace,'SF Mono',SFMono-Regular,'Cascadia Mono',Menlo,Consolas,monospace" font-size="15" letter-spacing="0.18em" text-anchor="end">POPULACE REPORT · 9 AUGUST 2026</text>
   <line x1="48" y1="92" x2="1152" y2="92" stroke="#233039"/>
@@ -1606,7 +2016,7 @@ footer .brand svg { height: 19px; }
     <div>
       <span class="brand" style="gap:9px">
         <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" style="height:20px">
-          <path d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z" fill="currentColor"/>
+          <path fill="url(#gzBlue)" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/>
         </svg>
         <span class="wordmark" style="font-size:17px">GIGZEN</span>
       </span>
@@ -1770,7 +2180,9 @@ footer .brand svg { height: 19px; }
     function draw() {
       ctx.clearRect(0, 0, W, H);
       for (const a of agents) {
-        const base = a.lime ? "211,255,0" : "120,214,206";
+        // Dot colours are picked for the surface they land on. The bright lime and
+        // pale teal were chosen against a black field; on paper they vanish.
+        const base = a.lime ? "85,102,10" : "14,124,116";
         for (let i = 1; i < a.trail.length; i++) {
           const p = a.trail[i - 1], q = a.trail[i];
           ctx.strokeStyle = "rgba(" + base + "," + (i / a.trail.length) * 0.26 + ")";
@@ -1855,5 +2267,67 @@ footer .brand svg { height: 19px; }
 <script src="motion.js" defer></script>
 <script src="i18n/runtime.js" defer></script>
 <script src="nav.js" defer></script>
+<script>
+(function () {
+  // rAF-gated: writing a style on every scroll event is what makes a long page
+  // feel heavy on a phone.
+  var bar = document.getElementById("gzProgress"), ticking = false;
+  function paint() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (h > 0 ? Math.min(100, (scrollY / h) * 100) : 0) + "%";
+    ticking = false;
+  }
+  addEventListener("scroll", function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(paint); }
+  }, { passive: true });
+  paint();
+})();
+</script>
+<script>
+/* ── Motion wiring ────────────────────────────────────────────────────────
+   Three small behaviours, each written so that failing does nothing worse
+   than leaving the page static. Nothing here is required to read the page.  */
+(() => {
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // 1. Stagger indices. The CSS reads --i to delay each child a beat behind
+  //    the last; capped at 10 so a long list never makes the reader wait.
+  document.querySelectorAll(".stagger").forEach((g) => {
+    [...g.children].forEach((c, i) => c.style.setProperty("--i", Math.min(i, 10)));
+  });
+
+  // 2. The hero's emphasis takes the colour sweep. Only that span — a whole
+  //    headline in moving colour is harder to read, not more modern.
+  const em = document.querySelector("h1 span");
+  if (em) em.classList.add("grad");
+
+  // 3. Counters. Figures count up once, when their band first arrives.
+  //    The suffix is preserved, so "20+" counts to 20 and keeps the plus.
+  const counters = [...document.querySelectorAll(".stat .v")].filter((el) =>
+    /^\s*\d/.test(el.textContent));
+  if (counters.length && !reduced && "IntersectionObserver" in window) {
+    const run = (el) => {
+      const raw = el.textContent.trim();
+      const target = parseFloat(raw);
+      if (!isFinite(target)) return;
+      const suffix = raw.replace(/^[\d.,]+/, "");
+      const started = performance.now();
+      const dur = 1100;
+      const step = (now) => {
+        const t = Math.min(1, (now - started) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);           // ease-out cubic
+        el.textContent = Math.round(target * eased) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = raw;                       // land exactly on the real value
+      };
+      requestAnimationFrame(step);
+    };
+    const cio = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { run(e.target); cio.unobserve(e.target); }
+    }), { threshold: 0.6 });
+    counters.forEach((el) => cio.observe(el));
+  }
+})();
+</script>
 </body>
 </html>
