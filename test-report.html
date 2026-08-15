@@ -229,11 +229,47 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <tr><td class="v">8</td><td>1,626</td><td class="pass">0</td><td>727&thinsp;ms</td><td>935&thinsp;ms</td></tr>
     <tr><td class="v">10</td><td>2,030</td><td class="pass">0</td><td>669&thinsp;ms</td><td>1.0&thinsp;s</td></tr>
     <tr><td class="v">20</td><td>6,450</td><td class="pass">0</td><td>645&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
-    <tr><td class="v"><b>30</b></td><td><b>6,539</b></td><td class="pass"><b>0</b></td><td><b>799&thinsp;ms</b></td><td class="na"><b>2.8&thinsp;s</b></td></tr>
+    <tr><td class="v">30</td><td>6,539</td><td class="pass">0</td><td>799&thinsp;ms</td><td>2.8&thinsp;s</td></tr>
+    <tr><td class="v"><b>36</b></td><td><b>7,499</b></td><td class="na"><b>14</b></td><td><b>757&thinsp;ms</b></td><td><b>1.4&thinsp;s</b></td></tr>
   </table>
+  <p class="small">The 36-user row is a 50-user run. Fourteen accounts could not be created — see
+  the signup ceiling below — so it ran with the 36 that were. All 14 failures are those signups;
+  the other <strong>7,449 calls across twelve methods returned zero</strong>.</p>
 
   <div class="callout warn">
-    <h3>The tail degrades before the median does</h3>
+    <h3>Correction: the 30-user tail was an outlier</h3>
+    <p>An earlier version of this section read the p95 jump at thirty users — 1.1&thinsp;s to
+    2.8&thinsp;s — as the write path beginning to saturate. <strong>A later run at higher load
+    contradicts it.</strong> At thirty-six concurrent users p95 came back to 1.4&thinsp;s, so the
+    2.8&thinsp;s did not reproduce under more pressure and cannot be load.</p>
+    <p>That claim is withdrawn. It is the second latency finding this report has had to retract,
+    and the lesson is the same both times: <strong>a single measurement between runs on different
+    days is not a trend</strong>, however good a story it tells. The paragraph below is kept as a
+    record of the reasoning that was wrong, because deleting it would hide that this happened
+    twice.</p>
+  </div>
+
+  <div class="callout">
+    <h3>What actually limits this system: signup throughput</h3>
+    <p>A run of fifty agents found the real ceiling, and it is not in Buzz Buzz.
+    <strong>Fourteen of fifty accounts could not be created</strong>, every one of them refused by
+    Supabase Auth with <code>Request rate limit reached</code> — a free-tier quota on signups per
+    hour, hit by creating fifty accounts in seconds.</p>
+    <p>Verified as external rather than assumed: <strong>there is no rate-limiting code anywhere in
+    the application or its SQL</strong>, and the message is passed through verbatim from the auth
+    provider.</p>
+    <p>Two things follow. Real riders sign up over weeks, so this would not occur naturally — but
+    it <em>would</em> occur during a bulk onboarding or a launch event, and it is a plan limit
+    rather than a wall, so a paid tier raises it. And it says nothing about how many people can
+    <em>use</em> the app at once: the ceiling found here is on account creation, and the
+    thirty-six that got through ran for ten minutes with no failures at all.</p>
+    <p class="small"><strong>The honest limit statement:</strong> Buzz Buzz has been shown to
+    sustain 36 concurrent users cleanly. That is the highest tested, not a proven maximum — nothing
+    yet says where its own ceiling is.</p>
+  </div>
+
+  <div class="callout warn">
+    <h3>The reasoning that was withdrawn</h3>
     <p>From six to twenty users the median held between 414 and 727&thinsp;ms with no trend — the
     variation there is noise between runs on different days, and an earlier version of this report
     was wrong to read the six-to-eight step as superlinear growth.</p>
