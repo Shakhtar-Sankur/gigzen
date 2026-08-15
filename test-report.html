@@ -105,15 +105,18 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>1 &middot; Headline</h2>
   <div class="grid">
-    <div class="kpi"><b>400</b><span>API calls in the clean Buzz Buzz run</span></div>
+    <div class="kpi"><b>672</b><span>API calls in the largest clean run</span></div>
     <div class="kpi"><b>0</b><span>failures in that run</span></div>
-    <div class="kpi"><b>5</b><span>real bugs found in a finished app</span></div>
+    <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
     <div class="kpi"><b>75</b><span>Populace self-tests, all passing</span></div>
   </div>
 
   <p>The single most useful result in this document is not the clean run. It is that a
   <strong>finished, signed, manually tested application could not create a working account</strong>,
   and that this was found in the first fifteen seconds by software rather than by a person.</p>
+
+  <p>The second most useful is that the <strong>sixth defect was found on the sign-off run</strong> —
+  the run whose whole purpose was to confirm there was nothing left to find.</p>
 
   <h2>2 &middot; How the products were tested</h2>
   <p>Buzz Buzz is a multi-user product: a social feed, group chat, presence on a map, and
@@ -149,6 +152,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <tr><td class="v">3</td><td>Profile edit failed silently</td><td class="fail">Changes discarded</td><td>Same upsert, same column</td></tr>
     <tr><td class="v">4</td><td>RPC argument named wrongly</td><td class="fail">Call rejected</td><td>Populace's own reference adapter</td></tr>
     <tr><td class="v">5</td><td>A write's error was ignored</td><td class="fail">Report blamed the wrong method</td><td>Populace's own reference adapter</td></tr>
+    <tr><td class="v">6</td><td>Re-joining a group you were already in</td><td class="fail">"Join" failed silently</td><td>Upsert on a table with no UPDATE policy &mdash; found later, see &sect;3.3</td></tr>
   </table>
 
   <div class="callout">
@@ -157,7 +161,8 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <code>INSERT … ON CONFLICT DO UPDATE</code> requires SELECT permission on every column it
     touches. Three of the five defects were this same mistake wearing different clothes. It is
     invisible in code review, invisible in a single-user walkthrough, and obvious within seconds
-    to six accounts signing up at once.</p>
+    to six accounts signing up at once. It surfaced a third time in defect six, long after the
+    first two were fixed, which is the real lesson: not a bug to fix once, but a habit to break.</p>
   </div>
 
   <p class="small">Defects 4 and 5 were in our own testing tool, and 5 is the one worth dwelling
@@ -207,12 +212,44 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   joins. Account deletion is included deliberately — it is the path almost nobody exercises and
   the one regulators ask about.</p>
 
+  <h3>3.3 &nbsp;The later runs, and a sixth defect</h3>
+  <p>Work continued against a <strong>local Supabase stack</strong> rather than the cloud project,
+  which takes the network out of the measurement. Two further runs, six agents for about five
+  minutes each:</p>
+  <table>
+    <tr><th>Run</th><th>Calls</th><th>Failures</th><th>Duration</th><th>Activity</th></tr>
+    <tr><td class="v">Local, first</td><td>627</td><td class="pass">0</td><td>308.3&thinsp;s</td>
+      <td>10.6&nbsp;km &middot; 43 posts &middot; 87 likes &middot; 37 comments &middot; 35 messages &middot; 6 joins</td></tr>
+    <tr><td class="v">Local, sign-off</td><td><b>672</b></td><td class="pass"><b>0</b></td><td>307.9&thinsp;s</td>
+      <td>10.7&nbsp;km &middot; 29 posts &middot; 104 likes &middot; 36 comments &middot; 43 messages &middot; 3 joins</td></tr>
+  </table>
+  <p class="small">Both reported <code>preclean=0 &middot; run=0 &middot; postclean=0</code> — clean before,
+  clean during, clean after. The sign-off run was the <strong>first <code>exit 0</code> Populace had
+  ever returned against Buzz Buzz</strong>.</p>
+
   <div class="callout warn">
-    <h3>What this run does not claim</h3>
-    <p>Six users for three minutes is a <strong>correctness run, not a load test</strong>, and it
-    ran against that project while it was still effectively empty. The latencies above are what
-    six concurrent users saw and nothing more. No conclusion about behaviour at scale can be
-    drawn from them.</p>
+    <h3>Defect six, found on the sign-off run</h3>
+    <p>The run whose purpose was to confirm the app was finished did not confirm it.
+    <code>joinGroup</code> used <code>.upsert()</code>, which compiles to
+    <code>ON CONFLICT DO UPDATE</code>, and <code>group_members</code> has no <code>UPDATE</code>
+    policy. <strong>Tapping "Join" on a group you had already joined failed.</strong></p>
+    <p>Third appearance of the same upsert family, after signup and likes. Corrected in both the
+    app and the reference adapter, then the run repeated — the 672 calls above.</p>
+  </div>
+
+  <div class="callout warn">
+    <h3>Do not compare these latencies with &sect;3.2</h3>
+    <p>The local runs put <code>reportLocation</code> at a p50 of <strong>19&ndash;21&thinsp;ms</strong>
+    against <strong>414&thinsp;ms</strong> on the cloud project. That is the network being absent, not
+    the software being twenty times faster. Local figures are good for finding logic and permission
+    faults; only the cloud figures say anything about what a rider would experience.</p>
+  </div>
+
+  <div class="callout warn">
+    <h3>What these runs do not claim</h3>
+    <p>Six users for three to five minutes is a <strong>correctness run, not a load test</strong>,
+    and each ran against a project that was effectively empty. The latencies are what six
+    concurrent users saw and nothing more. No conclusion about behaviour at scale follows.</p>
   </div>
 
   <h2>4 &middot; Populace's own correctness</h2>
@@ -382,15 +419,17 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <h2>9 &middot; Conclusion</h2>
   <p>Both products do what is claimed of them, within limits this document states rather than
   hides. Buzz Buzz builds, type-checks, ships as a signed artefact, and survived a concurrent
-  multi-user run against its live backend with no failures across 400 calls. Populace found five
-  genuine defects in a finished application in under four minutes, passes 75 self-tests, and
-  distinguishes a fault in your code from a fault in the network between you.</p>
+  multi-user run against its live backend with no failures across 400 calls, and a longer local
+  run of 672 calls with none either. Populace found six genuine defects in a finished
+  application, passes 75 self-tests, and distinguishes a fault in your code from a fault in the
+  network between you.</p>
 
   <p>The honest summary is this: <strong>what has been tested has been tested properly, and the
   largest untested areas are known and written down.</strong> The most valuable outcome was not
   a passing run — it was discovering that an application which had passed a careful manual test
-  by its own author could not create a working account, and that three separate symptoms shared
-  one cause.</p>
+  by its own author could not create a working account, that three separate symptoms shared one
+  cause, and that the same cause surfaced a third time on the very run intended to sign the work
+  off.</p>
 
   <div class="callout">
     <h3>Next</h3>
