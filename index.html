@@ -15,19 +15,9 @@
 </head>
 <body>
 <!-- The mark's gradient lives here, once, and is referenced by every instance
-     of the logo via fill="url(#gzBlue)". Kept out of the marks themselves so
+     of the logo via fill="currentColor". Kept out of the marks themselves so
      the id is never duplicated — a repeated id would make only the first
      gradient resolve and the rest fall back to flat colour. -->
-<svg width="0" height="0" aria-hidden="true" focusable="false"
-     style="position:absolute;pointer-events:none">
-  <defs>
-    <linearGradient id="gzBlue" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#6FB4F5"/>
-      <stop offset=".55" stop-color="#2E7FE0"/>
-      <stop offset="1" stop-color="#0038B8"/>
-    </linearGradient>
-  </defs>
-</svg>
 <div class="gz-progress" id="gzProgress" aria-hidden="true"></div>
 <style>
 :root {
@@ -181,12 +171,6 @@ nav .brand { height: 100%; padding-right: 8px; }
 }
 .navlinks a:hover { color: var(--ink); }
 
-/* ── mobile navigation ─────────────────────────────────
-   Five links, a brand and a language picker do not fit a phone bar. They used
-   to shrink into the wordmark and then scroll sideways, which hid three of the
-   five destinations behind a swipe nobody makes. Below 820px the links move
-   into a panel; the picker stays in the bar, because on a sixteen-language
-   site changing language should not be buried. */
 .navtoggle { display: none; }
 
 @media (max-width: 820px) {
@@ -1071,21 +1055,9 @@ a.u:hover::after { transform: scaleX(1); transform-origin: left; }
    than a black one if the gradient reference does not resolve. On the orange
    band the mark goes white, because a blue mark on deep orange is the one
    place the gradient has nothing to sit against. */
-.mark { color: #2E7FE0; }
 
 
-/* The wordmark follows the mark into blue rather than running the full
-   spectrum — the logo is one identity, and the rest of the page is where the
-   colour range belongs. */
-.wordmark {
-  background: linear-gradient(100deg, #6FB4F5 0%, #2E7FE0 50%, #0038B8 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
-@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-  .wordmark { background: none; -webkit-text-fill-color: currentColor; color: #0038B8; }
-}
 
 
 /* Populace keeps its bright lime wherever the background is genuinely dark. */
@@ -1102,13 +1074,22 @@ a.u:hover::after { transform: scaleX(1); transform-origin: left; }
 .bleed.night .btn.ghost, .bleed.dark .btn.ghost { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
 .bleed.night .btn.ghost:hover, .bleed.dark .btn.ghost:hover { color: var(--paper); border-color: var(--accent); }
 
+
+/* Gigzen electric indigo. Flat, not a gradient: at the 20px this renders at,
+   a gradient cannot be perceived, but it still costs one-colour printing and a
+   clean favicon. #5B2BE0 measures 7.3:1 on white; #9B7BFF is the lifted tone for
+   near-black grounds, where the darker indigo closes up. */
+.wordmark { color: #5B2BE0; -webkit-text-fill-color: #5B2BE0; background: none;
+  font-weight: 700; letter-spacing: -.01em; }
+.mark { color: #5B2BE0; }
+footer .mark { color: #5B2BE0; }
 </style>
 
 <nav id="nav">
   <div class="wrap">
     <a class="brand" href="#top" data-home aria-label="Gigzen — home">
       <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
-        <path fill="url(#gzBlue)" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/>
+        <path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/>
       </svg>
       <span class="wordmark" style="font-size:15px">GIGZEN</span>
     </a>
@@ -1677,7 +1658,7 @@ a.u:hover::after { transform: scaleX(1); transform-origin: left; }
   <rect width="1200" height="986" rx="16" fill="#0B1014"/>
   <rect x="1" y="1" width="1198" height="984" rx="15" fill="none" stroke="#233039"/>
 
-  <g transform="translate(48,40.5) scale(0.46875)" fill="#D3FF00"><path fill="url(#gzBlue)" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></g>
+  <g transform="translate(48,40.5) scale(0.46875)" fill="#D3FF00"><path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/></g>
   <text x="90" y="63" fill="#EAF1F6" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="0.14em">GIGZEN</text>
   <text x="1152" y="63" fill="#6B7C89" font-family="ui-monospace,'SF Mono',SFMono-Regular,'Cascadia Mono',Menlo,Consolas,monospace" font-size="15" letter-spacing="0.18em" text-anchor="end">POPULACE REPORT · 9 AUGUST 2026</text>
   <line x1="48" y1="92" x2="1152" y2="92" stroke="#233039"/>
@@ -2016,7 +1997,7 @@ a.u:hover::after { transform: scaleX(1); transform-origin: left; }
     <div>
       <span class="brand" style="gap:9px">
         <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" style="height:20px">
-          <path fill="url(#gzBlue)" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/>
+          <path fill="currentColor" d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z"/>
         </svg>
         <span class="wordmark" style="font-size:17px">GIGZEN</span>
       </span>
