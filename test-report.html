@@ -108,7 +108,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <div class="kpi"><b>2,116</b><span>API calls in the largest clean run</span></div>
     <div class="kpi"><b>0</b><span>failures in that run</span></div>
     <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
-    <div class="kpi"><b>75</b><span>Populace self-tests, all passing</span></div>
+    <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
   </div>
 
   <p>The single most useful result in this document is not the clean run. It is that a
@@ -323,6 +323,54 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     concurrent users saw and nothing more. No conclusion about behaviour at scale follows.</p>
   </div>
 
+  <h2>3.5 &middot; A second backend, and what it exposed</h2>
+  <p>Every run above uses the same backend technology. That made the strongest
+  caveat in earlier versions of this report an open one: <strong>Populace had been
+  pointed at exactly one real application, and that application was ours.</strong> A
+  testing tool that has only tested its author's own app has been shown to work once,
+  not shown to be portable.</p>
+
+  <p>So a second backend was built, deliberately unlike the first on every axis that
+  could hide an assumption, and shipped in the repository as
+  <code>examples/rest-api/</code> so the result can be reproduced by anyone:</p>
+
+  <table>
+    <tr><th></th><th>Buzz Buzz</th><th>The REST demo</th></tr>
+    <tr><td class="v">Transport</td><td>supabase-js client</td><td>plain <code>fetch</code></td></tr>
+    <tr><td class="v">Identifiers</td><td>UUID strings</td><td>integers</td></tr>
+    <tr><td class="v">Errors</td><td><code>{data, error}</code> tuples</td><td>HTTP status + <code>{error}</code></td></tr>
+    <tr><td class="v">Auth</td><td>session on a client object</td><td>bearer token in a header</td></tr>
+    <tr><td class="v">List endpoints</td><td>row objects</td><td>bare id arrays</td></tr>
+    <tr><td class="v">Enforcement</td><td>row-level security, in the database</td><td>application code, in the handler</td></tr>
+  </table>
+
+  <p class="small"><strong>Result: no failures across 430 API calls</strong>, 13/13 methods,
+  6 accounts created and 6 removed. The engine could not tell the two apart.</p>
+
+  <div class="callout warn">
+    <h3>Two defects in Populace, found by pointing it somewhere new</h3>
+    <p><strong>The engine could not read a bare identifier.</strong> It read
+    <code>target.id</code> from whatever the feed returned, so an API answering
+    <code>[1, 2, 3]</code> produced <code>undefined</code> on every like and join.
+    <code>smoke</code> had always accepted both shapes — so an adapter like this
+    <strong>passed the smoke test and then failed on the first tick of a real run</strong>,
+    which is the exact case smoke exists to rule out.</p>
+    <p><strong><code>smoke</code> called <code>createUser</code> with a different object
+    than the engine.</strong> The contract documents <code>{name, phone, persona, index}</code>;
+    smoke passed a flat persona carrying a password the engine never supplies. An adapter
+    written against either shape passed one check and failed the other. This was only
+    visible because a run and a smoke test disagreed about the same new backend.</p>
+    <p>Both are now pinned by self-tests, including one that fails if the two ever drift
+    apart again. The bare-identifier test was verified to fail with its fix reverted: a
+    regression test that cannot fail proves nothing.</p>
+  </div>
+
+  <h3>3.6 &nbsp;Regression run after those changes</h3>
+  <p>The 2,116-call result above was measured on code that has since changed. Buzz Buzz was
+  therefore re-run in full against the modified engine: <strong>2,030 API calls, 0 failures</strong>,
+  10 agents, 818.1 s, 13/13 methods, 10 accounts created and 10 removed, verdict
+  <code>clean</code>. Fixing portability did not cost correctness on the original backend.</p>
+
   <h2>4 &middot; Populace's own correctness</h2>
   <p>A testing tool that is wrong is worse than no testing tool, because it is believed. Populace
   therefore ships a suite that runs the whole product against an in-memory application with no
@@ -474,8 +522,9 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
       at slightly more pressure, not a load test — nothing here supports a claim about hundreds or
       thousands, and the latency growth in &sect;3.3 is a reason to be careful rather than confident.</td></tr>
     <tr><td class="v">Populace against other backends</td><td class="na">Not tested</td>
-      <td>It has been pointed at exactly one real application, and that application was ours.
-      The next one should not be.</td></tr>
+      <td>It now drives two unrelated backends (&sect;3.5), so the engine is demonstrably not
+      shaped around one stack. Both, however, are still ours. What remains unproven is how it
+      behaves against an API designed by someone who never read the contract.</td></tr>
     <tr><td class="v">Google Play review</td><td class="na">Not passed</td>
       <td>The app is in closed testing. It has not been through public review.</td></tr>
     <tr><td class="v">Company site dark theme</td><td class="fail">20 known failures</td>
@@ -493,7 +542,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   hides. Buzz Buzz builds, type-checks, ships as a signed artefact, and survived a concurrent
   multi-user run against its live backend with no failures across 400 calls, and a ten-user run of
   2,116 calls with none either. Populace found six genuine defects in a finished
-  application, passes 75 self-tests, and distinguishes a fault in your code from a fault in the
+  application, passes 78 self-tests, and distinguishes a fault in your code from a fault in the
   network between you.</p>
 
   <p>The honest summary is this: <strong>what has been tested has been tested properly, and the
