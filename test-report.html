@@ -17,7 +17,18 @@ body {
 .page { width: 210mm; min-height: 297mm; padding: 11mm 13mm 8mm; margin: 0 auto 6mm;
         display: flex; flex-direction: column; page-break-after: always; background: #fff; }
 .page:last-child { page-break-after: auto; margin-bottom: 0; }
-@media print { body { background: #fff; } .page { margin: 0; } }
+/* Each .page now holds enough run detail to outgrow a single sheet, and its
+   padding only lands at the div's start and end — so every spill boundary
+   printed with no margin at all. Give the margins to @page instead, which
+   applies them to every physical sheet, and keep rows and callouts whole. */
+@media print {
+  @page { size: A4; margin: 11mm 13mm 9mm; }
+  body { background: #fff; }
+  .page { width: auto; min-height: 0; padding: 0; margin: 0; display: block; }
+  thead { display: table-header-group; }
+  tr, .callout, .kpi, .foot { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}
 
 /* Screen readers of this file are often on a phone; A4 must not force a
    horizontal scroll there. */
