@@ -217,7 +217,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   joins. Account deletion is included deliberately — it is the path almost nobody exercises and
   the one regulators ask about.</p>
 
-  <h3>3.3 &nbsp;Where the capacity ends — 6 to 30 concurrent users</h3>
+  <h3>3.3 &nbsp;Where the capacity ends — 6 to 36 concurrent users</h3>
   <p>Five runs at increasing concurrency, all of them clean. The zero-failure results are the
   least interesting thing about them: taken together they show <strong>where this backend starts
   to queue</strong>, which is the number worth knowing before real riders arrive rather than
@@ -291,7 +291,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     before it matters.</p>
   </div>
 
-  <h3>3.3a &nbsp;Twenty concurrent users, fifteen minutes — 15 August 2026</h3>
+  <h3>Run detail &middot; twenty concurrent users, fifteen minutes</h3>
   <p>The final and largest run: twenty agents for 1,264 seconds against the isolated cloud test
   project, preceded by <code>clean</code>, <code>doctor</code> and <code>smoke</code>, and followed
   by <code>clean</code> again.</p>
@@ -317,18 +317,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   minutes this is also the first run long enough to exercise session refresh properly — all twenty
   sessions survived it.</p>
 
-  <div class="callout">
-    <h3>The latency warning is retired (superseded by &sect;3.3)</h3>
-    <p><code>reportLocation</code> p50 across every run: <strong>414&thinsp;ms at six users,
-    727 at eight, 669 at ten, 645 at twenty.</strong> It did not degrade as concurrency doubled, and
-    every other method held flat near 235&thinsp;ms throughout.</p>
-    <p>An earlier version of this report recorded the six-to-eight jump as possibly superlinear
-    growth. Twenty users settles it: that was variance between runs on different days and networks,
-    not load. The warning is withdrawn rather than left standing, because a scary number nobody
-    revisits is worse than no number.</p>
-  </div>
-
-  <h3>3.3b &nbsp;Ten concurrent users, ten minutes</h3>
+  <h3>Run detail &middot; ten concurrent users, ten minutes</h3>
   <p>The final run, and the largest. Ten agents across Manila and Mumbai for 809.1 seconds against
   the isolated cloud test project. <code>clean</code> was run first to prove the target was empty,
   then <code>doctor</code> and <code>smoke</code>, then the run, then <code>clean</code> again.</p>
@@ -352,17 +341,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   &middot; 23 group joins. Verdict <code>clean</code>: 0 API failures, 0 transport failures, 0 retries,
   0 engine errors, 13/13 methods, 10 accounts created and 10 removed with none stranded.</p>
 
-  <div class="callout">
-    <h3>The latency growth did not continue</h3>
-    <p><code>reportLocation</code> p50 went 414&thinsp;ms at six users, 727 at eight, and
-    <strong>669 at ten</strong> — it did not keep climbing. That weakens the superlinear reading
-    recorded below at eight users, and is the more likely explanation for both: these are three
-    measurements on three different days over three different networks, and the variation between
-    them is network noise rather than load. Recorded as a correction to the earlier note, not a
-    new finding.</p>
-  </div>
-
-  <h3>3.3b &nbsp;Eight concurrent users, ten minutes</h3>
+  <h3>Run detail &middot; eight concurrent users, ten minutes</h3>
   <p>The largest run to date, and the only one at eight agents. Against the isolated cloud test
   project, not production: <code>doctor</code> confirmed <em>2 production host(s) denied</em>
   before it started.</p>
@@ -387,17 +366,6 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   failures, 0 retries, 0 engine errors, 13/13 methods covered, 8 accounts created and 8 removed with
   none stranded. First run in which <code>openConversation</code> and <code>sendMessage</code> were
   exercised at volume.</p>
-
-  <div class="callout warn">
-    <h3>Latency rose faster than load, and that is worth watching</h3>
-    <p><code>reportLocation</code> went from a p50 of <strong>414&thinsp;ms at six users to
-    727&thinsp;ms at eight</strong> — roughly <strong>+76% for +33% more users</strong>, on the
-    method that accounts for 727 of 1,626 calls. It is the hot path by a wide margin.</p>
-    <p>This is recorded as a <strong>signal, not a finding</strong>. The two runs used different
-    projects on different days over different networks, so it is not a controlled comparison and
-    no scaling law should be read into it. It does say where to measure first if throughput ever
-    starts to matter.</p>
-  </div>
 
   <h3>3.4 &nbsp;The local runs, and a sixth defect</h3>
   <p>Work continued against a <strong>local Supabase stack</strong> rather than the cloud project,
