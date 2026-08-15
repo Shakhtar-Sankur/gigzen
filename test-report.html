@@ -123,7 +123,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <div class="grid">
     <div class="kpi"><b>36</b><span>concurrent users, sustained, no failures</span></div>
     <div class="kpi"><b>0</b><span>failures across 24,000+ calls</span></div>
-    <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
+    <div class="kpi"><b>7</b><span>real bugs found in a finished app</span></div>
     <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
   </div>
 
@@ -607,8 +607,10 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <tr><td class="v">Application ID</td><td><code>com.masayaako.driver</code></td><td class="pass">Verified</td></tr>
     <tr><td class="v">Version</td><td>1.5 (versionCode 6)</td><td class="pass">Verified</td></tr>
     <tr><td class="v">Variant</td><td>release</td><td class="pass">Verified</td></tr>
-    <tr><td class="v">Size</td><td>8,273,558 bytes (7.89 MB)</td><td class="pass">Measured over HTTP</td></tr>
-    <tr><td class="v">SHA-256</td><td style="word-break:break-all"><code>3c1ffa3616b26111148a84cdccb36c46a171383d1e93879d20ab845bc21496f7</code></td><td class="pass">Published</td></tr>
+    <tr><td class="v">Size</td><td>8,273,594 bytes (7.89 MB)</td><td class="pass">Measured</td></tr>
+    <tr><td class="v">SHA-256</td><td style="word-break:break-all"><code>aead83377e32d57e49535997b857ac3fa6fa073c2689e36ffcc159f1779e35ec</code></td><td class="pass">Published</td></tr>
+    <tr><td class="v">Backend URL in bundle</td><td>production host; <b>0</b> occurrences of <code>127.0.0.1</code></td><td class="pass">Verified in APK and AAB</td></tr>
+    <tr><td class="v">Signature</td><td>APK Signature Scheme v2, certificate unchanged</td><td class="pass"><code>apksigner verify</code></td></tr>
     <tr><td class="v">TypeScript</td><td>0 errors</td><td class="pass">tsc --noEmit</td></tr>
     <tr><td class="v">Minimum Android</td><td>8.0</td><td class="pass">Verified</td></tr>
   </table>
@@ -620,6 +622,30 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     which was not on the PATH; the step failed quietly and Gradle proceeded with whatever had
     last been copied. A green build is not evidence that your changes are in the artefact. A
     staleness gate was added so the build now fails rather than lies.</p>
+  </div>
+
+  <div class="callout warn">
+    <h3>Defect seven: every artefact shipped today pointed at localhost</h3>
+    <p>Found by the owner, not by this test suite, and only after the artefacts had been published.
+    Signing in on a real handset returned <code>fetch failed</code>. The cause was in the build
+    rather than the app: <code>.env.local</code> sets the backend to the local Docker stack for
+    development, and <strong>Vite resolves <code>.env.local</code> above <code>.env</code> in every
+    mode, release builds included</strong>. The APK on the download page, the AAB staged for Play
+    and the copies on disk therefore all carried <code>http://127.0.0.1:54321</code> — an address
+    that on a phone means the phone itself. None of them could ever have signed in.</p>
+    <p>The same file set <code>VITE_ENABLE_PUSH=false</code>, which compiled the push registration
+    out of the bundle. <strong>Part of why push had never been seen working on hardware is that it
+    was not in the build being tested.</strong></p>
+    <p>Fixed with a <code>.env.production</code>, which Vite resolves above <code>.env.local</code>,
+    so local settings can no longer reach a release build. Everything was rebuilt and then
+    <em>checked</em> rather than trusted: the web bundle, the synced Android assets, the signed APK
+    and the signed AAB each contain the production host and zero occurrences of the loopback
+    address, and the APK is still v2-signed with the same certificate.</p>
+    <p>Two things this says plainly. <strong>Section 3 tested the API, not the shipped app.</strong>
+    Populace drives the backend directly, so a client built against the wrong host is invisible to
+    it — 7,485 clean calls proved nothing about whether the APK worked. And the staleness gate above
+    did not catch this, because the assets were not stale: they were current, correct, and compiled
+    against the wrong configuration.</p>
   </div>
 
   <h2>6 &middot; Internationalisation</h2>
@@ -697,6 +723,11 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
       <td>Push notification delivery, and one person seeing another move on a map in real time,
       need real accounts on real handsets. Accounts cannot be created on the user's behalf, so
       these paths are documented as a manual script and remain unrun.</td></tr>
+    <tr><td class="v">The shipped client, end to end</td><td class="na">Not tested</td>
+      <td>Nothing in this document installs the APK and uses it. Populace speaks to the API
+      directly, so everything in &sect;3 would pass identically against a client that cannot start —
+      which is exactly what defect seven turned out to be. Until someone installs the artefact and
+      signs in, the app itself is unverified, however green the API numbers are.</td></tr>
     <tr><td class="v">Behaviour at scale</td><td class="na">Not tested</td>
       <td>The largest run was thirty-six concurrent users, and it was clean. That is the highest
       figure tested, <strong>not a measured maximum</strong> — the runs were stopped by a signup
@@ -722,10 +753,18 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <h2>9 &middot; Conclusion</h2>
   <p>Both products do what is claimed of them, within limits this document states rather than
   hides. Buzz Buzz builds, type-checks, ships as a signed artefact, and survived a concurrent
-  multi-user run against its live backend with no failures across 400 calls, and a twenty-user run
-  of 6,450 calls with none either. Populace found six genuine defects in a finished
+  multi-user run against its live backend with no failures across 400 calls, and a thirty-six-user
+  run of 7,485 calls with none either. Populace found six genuine defects in a finished
   application, passes 78 self-tests, and distinguishes a fault in your code from a fault in the
   network between you.</p>
+
+  <p>A seventh defect was found by the owner rather than by any of this, on a handset, after the
+  artefacts were published: every build shipped that day was compiled against a developer's local
+  backend and could not sign in at all. It is the most useful result in the document, because it
+  marks the edge of what everything above actually measures. <strong>Populace tests an API. It
+  never opens the app.</strong> A client built against the wrong host, with push compiled out,
+  passes every server-side check ever written and still fails the moment a person taps
+  &ldquo;sign in&rdquo;.</p>
 
   <p>The honest summary is this: <strong>what has been tested has been tested properly, and the
   largest untested areas are known and written down.</strong> The most valuable outcome was not
@@ -737,7 +776,10 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <div class="callout">
     <h3>Next</h3>
     <ul>
-      <li>Run the two- and four-device notification script on real handsets.</li>
+      <li>Install the rebuilt APK and confirm sign-in works on a handset. Nothing else on this
+      list matters until that is seen with human eyes.</li>
+      <li>Run the two- and four-device notification script on real handsets — now against a build
+      that actually has push compiled in.</li>
       <li>Point Populace at a backend that is not ours.</li>
       <li>Decide the company site's dark theme: give it a control and fix it, or remove it.</li>
       <li>Complete Google Play review and move out of closed testing.</li>
