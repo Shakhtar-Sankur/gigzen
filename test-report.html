@@ -249,6 +249,10 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   run proceeded with the 36 that existed. Those fourteen were provisioning, not load, and they are
   reported as their own finding below rather than charged to this row. No call failed at 36
   concurrent users.</p>
+  <p class="small">One row needs a pointer: <strong>the ten-user figure is the regression re-run of
+  &sect;3.6</strong> (2,030 calls), not the original ten-user run, which made 2,116 calls and has
+  its own detail block below. Both were clean; the later one is quoted here because it ran against
+  the current engine.</p>
 
   <div class="callout warn">
     <h3>Correction: the 30-user tail was an outlier</h3>
@@ -305,10 +309,88 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     before it matters.</p>
   </div>
 
+  <h3>Run detail &middot; thirty-six concurrent users, ten minutes</h3>
+  <p><strong>The largest run in this document, and the cleanest.</strong> It was launched as a
+  fifty-agent run; fifty accounts could not be created, so thirty-six went to work instead, for
+  931.3 seconds against the isolated cloud test project. Provisioning and the run are reported
+  separately below, because they failed and passed for entirely different reasons.</p>
+
+  <p class="small"><b>Provisioning, before the run.</b> <code>createUser</code> was called 50 times:
+  <strong>36 accounts created, 14 refused</strong> by Supabase Auth with
+  <code>Request rate limit reached</code> (p50 653&thinsp;ms, p95 1.3&thinsp;s across all fifty
+  attempts). This is the signup ceiling described above — a free-tier quota on account creation,
+  not a property of Buzz Buzz. The run then began with the 36 accounts that existed.</p>
+
+  <table>
+    <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
+    <tr><td class="v">reportLocation</td><td>3,240</td><td class="pass">0</td><td>757&thinsp;ms</td><td>1.4&thinsp;s</td></tr>
+    <tr><td class="v">recentPostsByOthers</td><td>1,119</td><td class="pass">0</td><td>246&thinsp;ms</td><td>410&thinsp;ms</td></tr>
+    <tr><td class="v">like</td><td>1,117</td><td class="pass">0</td><td>237&thinsp;ms</td><td>307&thinsp;ms</td></tr>
+    <tr><td class="v">post</td><td>474</td><td class="pass">0</td><td>243&thinsp;ms</td><td>472&thinsp;ms</td></tr>
+    <tr><td class="v">comment</td><td>441</td><td class="pass">0</td><td>237&thinsp;ms</td><td>357&thinsp;ms</td></tr>
+    <tr><td class="v">openConversation</td><td>423</td><td class="pass">0</td><td>242&thinsp;ms</td><td>465&thinsp;ms</td></tr>
+    <tr><td class="v">sendMessage</td><td>423</td><td class="pass">0</td><td>243&thinsp;ms</td><td>390&thinsp;ms</td></tr>
+    <tr><td class="v">listGroups</td><td>70</td><td class="pass">0</td><td>241&thinsp;ms</td><td>532&thinsp;ms</td></tr>
+    <tr><td class="v">joinGroup</td><td>70</td><td class="pass">0</td><td>242&thinsp;ms</td><td>498&thinsp;ms</td></tr>
+    <tr><td class="v">setProfile</td><td>36</td><td class="pass">0</td><td>275&thinsp;ms</td><td>571&thinsp;ms</td></tr>
+    <tr><td class="v">deleteUser</td><td>36</td><td class="pass">0</td><td>276&thinsp;ms</td><td>464&thinsp;ms</td></tr>
+    <tr><td class="v">Total, in run</td><td><b>7,449</b></td><td class="pass"><b>0</b></td><td>—</td><td>—</td></tr>
+  </table>
+  <p class="small">With the 36 successful <code>createUser</code> calls added, <strong>7,485
+  successful calls, none of which failed</strong>. Every method the app has was exercised: eleven
+  here plus <code>createUser</code>, and <code>listConversations</code> covered by the smoke check
+  beforehand.</p>
+
+  <p class="small" style="margin-top:2.5mm"><b>Throughput held for the full ten minutes.</b> The
+  engine reports every 24th tick, and the interesting thing is what does <em>not</em> happen —
+  each quarter of the run does roughly the same amount of work as the one before it, so nothing
+  sagged as sessions aged and tables grew:</p>
+  <table>
+    <tr><th>Tick</th><th>Distance</th><th>Posts</th><th>Likes</th><th>Comments</th><th>Messages</th><th>km this quarter</th></tr>
+    <tr><td class="v">24 / 120</td><td>28.2&nbsp;km</td><td>109</td><td>234</td><td>90</td><td>90</td><td>28.2</td></tr>
+    <tr><td class="v">48 / 120</td><td>55.6&nbsp;km</td><td>194</td><td>475</td><td>206</td><td>178</td><td>27.4</td></tr>
+    <tr><td class="v">72 / 120</td><td>80.1&nbsp;km</td><td>278</td><td>679</td><td>277</td><td>258</td><td>24.5</td></tr>
+    <tr><td class="v">96 / 120</td><td>106.2&nbsp;km</td><td>374</td><td>892</td><td>360</td><td>356</td><td>26.1</td></tr>
+    <tr><td class="v"><b>120 / 120</b></td><td><b>132.5&nbsp;km</b></td><td><b>474</b></td><td><b>1,117</b></td><td><b>441</b></td><td><b>423</b></td><td>26.3</td></tr>
+  </table>
+  <p class="small">132.5&nbsp;km driven &middot; 474 posts &middot; 1,117 likes &middot; 441 comments
+  &middot; 423 messages &middot; 70 group joins. <strong>0 API failures, 0 transport failures, 0
+  retries, 0 outages, 0 engine errors</strong>, and <strong>36 accounts created and 36 removed</strong> —
+  cleanup verified empty afterwards. Populace exited non-zero on this run, correctly: it was asked
+  for fifty users and delivered thirty-six, and a tool that reported success there would be
+  worthless. <em>The run itself did not fail.</em></p>
+
+  <h3>Run detail &middot; thirty concurrent users, ten minutes</h3>
+  <p>Thirty agents for 943.1 seconds against the isolated cloud test project. All thirty accounts
+  were created without trouble — the signup quota was not reached at this size — and the run
+  returned <code>exit 0</code>.</p>
+  <table>
+    <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
+    <tr><td class="v">reportLocation</td><td>2,793</td><td class="pass">0</td><td>799&thinsp;ms</td><td>2.8&thinsp;s</td></tr>
+    <tr><td class="v">recentPostsByOthers</td><td>984</td><td class="pass">0</td><td>241&thinsp;ms</td><td>387&thinsp;ms</td></tr>
+    <tr><td class="v">like</td><td>984</td><td class="pass">0</td><td>236&thinsp;ms</td><td>330&thinsp;ms</td></tr>
+    <tr><td class="v">post</td><td>403</td><td class="pass">0</td><td>238&thinsp;ms</td><td>401&thinsp;ms</td></tr>
+    <tr><td class="v">comment</td><td>397</td><td class="pass">0</td><td>240&thinsp;ms</td><td>416&thinsp;ms</td></tr>
+    <tr><td class="v">openConversation</td><td>389</td><td class="pass">0</td><td>240&thinsp;ms</td><td>381&thinsp;ms</td></tr>
+    <tr><td class="v">sendMessage</td><td>389</td><td class="pass">0</td><td>243&thinsp;ms</td><td>395&thinsp;ms</td></tr>
+    <tr><td class="v">listGroups</td><td>55</td><td class="pass">0</td><td>242&thinsp;ms</td><td>506&thinsp;ms</td></tr>
+    <tr><td class="v">joinGroup</td><td>55</td><td class="pass">0</td><td>241&thinsp;ms</td><td>522&thinsp;ms</td></tr>
+    <tr><td class="v">createUser</td><td>30</td><td class="pass">0</td><td>701&thinsp;ms</td><td>2.1&thinsp;s</td></tr>
+    <tr><td class="v">setProfile</td><td>30</td><td class="pass">0</td><td>254&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
+    <tr><td class="v">deleteUser</td><td>30</td><td class="pass">0</td><td>302&thinsp;ms</td><td>464&thinsp;ms</td></tr>
+    <tr><td class="v">Total</td><td><b>6,539</b></td><td class="pass"><b>0</b></td><td>—</td><td>—</td></tr>
+  </table>
+  <p class="small">116.2&nbsp;km &middot; 403 posts &middot; 984 likes &middot; 397 comments &middot; 389
+  messages &middot; 55 group joins. Verdict <code>clean</code>: 0 API failures, 0 transport failures,
+  0 retries, 0 outages, 0 engine errors, 30 accounts created and 30 removed. The 2.8&thinsp;s
+  <code>reportLocation</code> tail in the first row is the measurement that produced the withdrawn
+  saturation claim — it did not reproduce at thirty-six users, where the same figure came back to
+  1.4&thinsp;s.</p>
+
   <h3>Run detail &middot; twenty concurrent users, fifteen minutes</h3>
-  <p>The final and largest run: twenty agents for 1,264 seconds against the isolated cloud test
-  project, preceded by <code>clean</code>, <code>doctor</code> and <code>smoke</code>, and followed
-  by <code>clean</code> again.</p>
+  <p>Twenty agents for 1,264 seconds against the isolated cloud test project, preceded by
+  <code>clean</code>, <code>doctor</code> and <code>smoke</code>, and followed by <code>clean</code>
+  again. At 21 minutes it is the longest run in this document.</p>
   <table>
     <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
     <tr><td class="v">reportLocation</td><td>2,810</td><td class="pass">0</td><td>645&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
@@ -332,7 +414,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   sessions survived it.</p>
 
   <h3>Run detail &middot; ten concurrent users, ten minutes</h3>
-  <p>The final run, and the largest. Ten agents across Manila and Mumbai for 809.1 seconds against
+  <p>Ten agents across Manila and Mumbai for 809.1 seconds against
   the isolated cloud test project. <code>clean</code> was run first to prove the target was empty,
   then <code>doctor</code> and <code>smoke</code>, then the run, then <code>clean</code> again.</p>
   <table>
@@ -356,7 +438,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   0 engine errors, 13/13 methods, 10 accounts created and 10 removed with none stranded.</p>
 
   <h3>Run detail &middot; eight concurrent users, ten minutes</h3>
-  <p>The largest run to date, and the only one at eight agents. Against the isolated cloud test
+  <p>The only run at eight agents. Against the isolated cloud test
   project, not production: <code>doctor</code> confirmed <em>2 production host(s) denied</em>
   before it started.</p>
   <table>
