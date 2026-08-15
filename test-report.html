@@ -59,6 +59,11 @@ td.v { white-space: nowrap; font-weight: 700; }
 .callout h3 { margin-top: 0; }
 code { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
        font-size: 7.4pt; background: #EEF1F3; padding: .3mm 1mm; border-radius: .8mm; }
+/* A header cell's grey is chosen against white. Put a code element inside one
+   and its own light background lifts the ground under the text, dropping
+   `reportLocation` in the capacity table to 3.99:1. Code in a header takes the
+   ink colour instead. */
+th code { color: #14181B; background: #E2E6EA; }
 pre { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 6.7pt; background: #0B1014; color: #E8EFF4; padding: 3mm 3.5mm;
       border-radius: 1.6mm; margin-top: 2.5mm; overflow-x: auto; line-height: 1.5; }
@@ -105,8 +110,8 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>1 &middot; Headline</h2>
   <div class="grid">
-    <div class="kpi"><b>6,450</b><span>API calls in the largest clean run</span></div>
-    <div class="kpi"><b>0</b><span>failures in that run</span></div>
+    <div class="kpi"><b>30</b><span>concurrent users, sustained, no failures</span></div>
+    <div class="kpi"><b>0</b><span>failures across 17,000+ calls</span></div>
     <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
     <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
   </div>
@@ -212,7 +217,45 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   joins. Account deletion is included deliberately — it is the path almost nobody exercises and
   the one regulators ask about.</p>
 
-  <h3>3.3 &nbsp;Twenty concurrent users, fifteen minutes — 15 August 2026</h3>
+  <h3>3.3 &nbsp;Where the capacity ends — 6 to 30 concurrent users</h3>
+  <p>Five runs at increasing concurrency, all of them clean. The zero-failure results are the
+  least interesting thing about them: taken together they show <strong>where this backend starts
+  to queue</strong>, which is the number worth knowing before real riders arrive rather than
+  after.</p>
+
+  <table>
+    <tr><th>Users</th><th>Calls</th><th>Failures</th><th><code>reportLocation</code> p50</th><th>p95</th></tr>
+    <tr><td class="v">6</td><td>400</td><td class="pass">0</td><td>414&thinsp;ms</td><td>571&thinsp;ms</td></tr>
+    <tr><td class="v">8</td><td>1,626</td><td class="pass">0</td><td>727&thinsp;ms</td><td>935&thinsp;ms</td></tr>
+    <tr><td class="v">10</td><td>2,030</td><td class="pass">0</td><td>669&thinsp;ms</td><td>1.0&thinsp;s</td></tr>
+    <tr><td class="v">20</td><td>6,450</td><td class="pass">0</td><td>645&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
+    <tr><td class="v"><b>30</b></td><td><b>6,539</b></td><td class="pass"><b>0</b></td><td><b>799&thinsp;ms</b></td><td class="na"><b>2.8&thinsp;s</b></td></tr>
+  </table>
+
+  <div class="callout warn">
+    <h3>The tail degrades before the median does</h3>
+    <p>From six to twenty users the median held between 414 and 727&thinsp;ms with no trend — the
+    variation there is noise between runs on different days, and an earlier version of this report
+    was wrong to read the six-to-eight step as superlinear growth.</p>
+    <p>At thirty something changes. The median moves modestly, 645 to 799&thinsp;ms, but
+    <strong>p95 goes from 1.1&thinsp;s to 2.8&thinsp;s</strong> — a 2.5&times; jump.
+    <code>createUser</code> p95 reaches 2.1&thinsp;s and <code>setProfile</code> 1.1&thinsp;s.
+    Every read stays flat near 240&thinsp;ms.</p>
+    <p>That shape — median steady, tail stretching, and only on the write-heavy calls — is what a
+    resource beginning to saturate looks like. Most requests are still served immediately while a
+    growing minority queue behind something. It is concentrated in <code>reportLocation</code>,
+    which alone is 2,793 of the 6,539 calls, and in the signup path.</p>
+    <p><strong>Read this as one measurement, not a capacity model.</strong> It is a single run on a
+    free-tier project, and this report has already had to withdraw one latency claim that turned
+    out to be run-to-run variance. What makes this one worth recording is that it has a coherent
+    story: the calls that slow down are the ones that write, and the divergence between median and
+    tail is a pattern rather than a lone number. The honest summary is that
+    <strong>somewhere between twenty and thirty concurrent writers, this project's write path
+    starts queueing</strong> — comfortably beyond closed testing, and worth measuring deliberately
+    before it matters.</p>
+  </div>
+
+  <h3>3.3a &nbsp;Twenty concurrent users, fifteen minutes — 15 August 2026</h3>
   <p>The final and largest run: twenty agents for 1,264 seconds against the isolated cloud test
   project, preceded by <code>clean</code>, <code>doctor</code> and <code>smoke</code>, and followed
   by <code>clean</code> again.</p>
@@ -239,7 +282,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   sessions survived it.</p>
 
   <div class="callout">
-    <h3>The latency warning is retired</h3>
+    <h3>The latency warning is retired (superseded by &sect;3.3)</h3>
     <p><code>reportLocation</code> p50 across every run: <strong>414&thinsp;ms at six users,
     727 at eight, 669 at ten, 645 at twenty.</strong> It did not degrade as concurrency doubled, and
     every other method held flat near 235&thinsp;ms throughout.</p>
@@ -555,9 +598,10 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
       need real accounts on real handsets. Accounts cannot be created on the user's behalf, so
       these paths are documented as a manual script and remain unrun.</td></tr>
     <tr><td class="v">Behaviour at scale</td><td class="na">Not tested</td>
-      <td>The largest run was twenty concurrent users for fifteen minutes. That is a correctness run
-      at slightly more pressure, not a load test — nothing here supports a claim about hundreds or
-      thousands, and the latency growth in &sect;3.3 is a reason to be careful rather than confident.</td></tr>
+      <td>The largest run was thirty concurrent users. &sect;3.3 gives the first real capacity
+      signal — the write path starts queueing somewhere between twenty and thirty — but these are
+      still correctness runs, and one measurement each. Nothing here supports a claim about
+      hundreds or thousands of users, and the p95 curve is a reason for caution, not confidence.</td></tr>
     <tr><td class="v">Populace against other backends</td><td class="na">Not tested</td>
       <td>It now drives two unrelated backends (&sect;3.5), so the engine is demonstrably not
       shaped around one stack. Both, however, are still ours. What remains unproven is how it
