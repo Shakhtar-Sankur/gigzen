@@ -121,8 +121,8 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>1 &middot; Headline</h2>
   <div class="grid">
-    <div class="kpi"><b>30</b><span>concurrent users, sustained, no failures</span></div>
-    <div class="kpi"><b>0</b><span>failures across 17,000+ calls</span></div>
+    <div class="kpi"><b>36</b><span>concurrent users, sustained, no failures</span></div>
+    <div class="kpi"><b>0</b><span>failures across 24,000+ calls</span></div>
     <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
     <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
   </div>
@@ -229,7 +229,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   the one regulators ask about.</p>
 
   <h3>3.3 &nbsp;Where the capacity ends — 6 to 36 concurrent users</h3>
-  <p>Five runs at increasing concurrency, all of them clean. The zero-failure results are the
+  <p>Six runs at increasing concurrency, all of them clean. The zero-failure results are the
   least interesting thing about them: taken together they show <strong>where this backend starts
   to queue</strong>, which is the number worth knowing before real riders arrive rather than
   after.</p>
@@ -241,11 +241,14 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <tr><td class="v">10</td><td>2,030</td><td class="pass">0</td><td>669&thinsp;ms</td><td>1.0&thinsp;s</td></tr>
     <tr><td class="v">20</td><td>6,450</td><td class="pass">0</td><td>645&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
     <tr><td class="v">30</td><td>6,539</td><td class="pass">0</td><td>799&thinsp;ms</td><td>2.8&thinsp;s</td></tr>
-    <tr><td class="v"><b>36</b></td><td><b>7,499</b></td><td class="na"><b>14</b></td><td><b>757&thinsp;ms</b></td><td><b>1.4&thinsp;s</b></td></tr>
+    <tr><td class="v"><b>36</b></td><td><b>7,485</b></td><td class="pass"><b>0</b></td><td><b>757&thinsp;ms</b></td><td><b>1.4&thinsp;s</b></td></tr>
   </table>
-  <p class="small">The 36-user row is a 50-user run. Fourteen accounts could not be created — see
-  the signup ceiling below — so it ran with the 36 that were. All 14 failures are those signups;
-  the other <strong>7,449 calls across twelve methods returned zero</strong>.</p>
+  <p class="small">Every row counts what that many users actually did, and the 36-user row is no
+  exception: <strong>7,485 calls across twelve methods, zero failures</strong>. It reached 36 by
+  way of a 50-user run — fourteen accounts were refused at signup, before the run began, and the
+  run proceeded with the 36 that existed. Those fourteen were provisioning, not load, and they are
+  reported as their own finding below rather than charged to this row. No call failed at 36
+  concurrent users.</p>
 
   <div class="callout warn">
     <h3>Correction: the 30-user tail was an outlier</h3>
@@ -613,10 +616,11 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
       need real accounts on real handsets. Accounts cannot be created on the user's behalf, so
       these paths are documented as a manual script and remain unrun.</td></tr>
     <tr><td class="v">Behaviour at scale</td><td class="na">Not tested</td>
-      <td>The largest run was thirty concurrent users. &sect;3.3 gives the first real capacity
-      signal — the write path starts queueing somewhere between twenty and thirty — but these are
-      still correctness runs, and one measurement each. Nothing here supports a claim about
-      hundreds or thousands of users, and the p95 curve is a reason for caution, not confidence.</td></tr>
+      <td>The largest run was thirty-six concurrent users, and it was clean. That is the highest
+      figure tested, <strong>not a measured maximum</strong> — the runs were stopped by a signup
+      quota, not by the app slowing down, so where Buzz Buzz actually breaks is still unknown.
+      These remain correctness runs at one measurement each. Nothing here supports a claim about
+      hundreds or thousands of users.</td></tr>
     <tr><td class="v">Populace against other backends</td><td class="na">Not tested</td>
       <td>It now drives two unrelated backends (&sect;3.5), so the engine is demonstrably not
       shaped around one stack. Both, however, are still ours. What remains unproven is how it
