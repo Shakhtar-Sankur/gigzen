@@ -105,7 +105,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>1 &middot; Headline</h2>
   <div class="grid">
-    <div class="kpi"><b>672</b><span>API calls in the largest clean run</span></div>
+    <div class="kpi"><b>1,626</b><span>API calls in the largest clean run</span></div>
     <div class="kpi"><b>0</b><span>failures in that run</span></div>
     <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
     <div class="kpi"><b>75</b><span>Populace self-tests, all passing</span></div>
@@ -212,7 +212,44 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   joins. Account deletion is included deliberately — it is the path almost nobody exercises and
   the one regulators ask about.</p>
 
-  <h3>3.3 &nbsp;The later runs, and a sixth defect</h3>
+  <h3>3.3 &nbsp;Eight concurrent users, ten minutes — 15 August 2026</h3>
+  <p>The largest run to date, and the only one at eight agents. Against the isolated cloud test
+  project, not production: <code>doctor</code> confirmed <em>2 production host(s) denied</em>
+  before it started.</p>
+  <table>
+    <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
+    <tr><td class="v">reportLocation</td><td>727</td><td class="pass">0</td><td>727&thinsp;ms</td><td>935&thinsp;ms</td></tr>
+    <tr><td class="v">recentPostsByOthers</td><td>234</td><td class="pass">0</td><td>235&thinsp;ms</td><td>291&thinsp;ms</td></tr>
+    <tr><td class="v">like</td><td>233</td><td class="pass">0</td><td>240&thinsp;ms</td><td>337&thinsp;ms</td></tr>
+    <tr><td class="v">openConversation</td><td>106</td><td class="pass">0</td><td>239&thinsp;ms</td><td>445&thinsp;ms</td></tr>
+    <tr><td class="v">sendMessage</td><td>106</td><td class="pass">0</td><td>248&thinsp;ms</td><td>385&thinsp;ms</td></tr>
+    <tr><td class="v">comment</td><td>84</td><td class="pass">0</td><td>246&thinsp;ms</td><td>329&thinsp;ms</td></tr>
+    <tr><td class="v">post</td><td>78</td><td class="pass">0</td><td>233&thinsp;ms</td><td>290&thinsp;ms</td></tr>
+    <tr><td class="v">listGroups</td><td>17</td><td class="pass">0</td><td>249&thinsp;ms</td><td>329&thinsp;ms</td></tr>
+    <tr><td class="v">joinGroup</td><td>17</td><td class="pass">0</td><td>280&thinsp;ms</td><td>351&thinsp;ms</td></tr>
+    <tr><td class="v">createUser</td><td>8</td><td class="pass">0</td><td>676&thinsp;ms</td><td>1.5&thinsp;s</td></tr>
+    <tr><td class="v">setProfile</td><td>8</td><td class="pass">0</td><td>239&thinsp;ms</td><td>750&thinsp;ms</td></tr>
+    <tr><td class="v">deleteUser</td><td>8</td><td class="pass">0</td><td>320&thinsp;ms</td><td>577&thinsp;ms</td></tr>
+    <tr><td class="v">Total</td><td><b>1,626</b></td><td class="pass"><b>0</b></td><td>—</td><td>—</td></tr>
+  </table>
+  <p class="small">806.8&thinsp;s &middot; 27.8&nbsp;km &middot; 78 posts &middot; 233 likes &middot; 84 comments
+  &middot; 106 messages &middot; 17 group joins. Verdict <code>clean</code>: 0 API failures, 0 transport
+  failures, 0 retries, 0 engine errors, 13/13 methods covered, 8 accounts created and 8 removed with
+  none stranded. First run in which <code>openConversation</code> and <code>sendMessage</code> were
+  exercised at volume.</p>
+
+  <div class="callout warn">
+    <h3>Latency rose faster than load, and that is worth watching</h3>
+    <p><code>reportLocation</code> went from a p50 of <strong>414&thinsp;ms at six users to
+    727&thinsp;ms at eight</strong> — roughly <strong>+76% for +33% more users</strong>, on the
+    method that accounts for 727 of 1,626 calls. It is the hot path by a wide margin.</p>
+    <p>This is recorded as a <strong>signal, not a finding</strong>. The two runs used different
+    projects on different days over different networks, so it is not a controlled comparison and
+    no scaling law should be read into it. It does say where to measure first if throughput ever
+    starts to matter.</p>
+  </div>
+
+  <h3>3.4 &nbsp;The local runs, and a sixth defect</h3>
   <p>Work continued against a <strong>local Supabase stack</strong> rather than the cloud project,
   which takes the network out of the measurement. Two further runs, six agents for about five
   minutes each:</p>
@@ -399,8 +436,9 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
       need real accounts on real handsets. Accounts cannot be created on the user's behalf, so
       these paths are documented as a manual script and remain unrun.</td></tr>
     <tr><td class="v">Behaviour at scale</td><td class="na">Not tested</td>
-      <td>The largest run was six concurrent users for three minutes. Nothing here supports a
-      claim about hundreds or thousands.</td></tr>
+      <td>The largest run was eight concurrent users for ten minutes. That is a correctness run
+      at slightly more pressure, not a load test — nothing here supports a claim about hundreds or
+      thousands, and the latency growth in &sect;3.3 is a reason to be careful rather than confident.</td></tr>
     <tr><td class="v">Populace against other backends</td><td class="na">Not tested</td>
       <td>It has been pointed at exactly one real application, and that application was ours.
       The next one should not be.</td></tr>
@@ -419,8 +457,8 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <h2>9 &middot; Conclusion</h2>
   <p>Both products do what is claimed of them, within limits this document states rather than
   hides. Buzz Buzz builds, type-checks, ships as a signed artefact, and survived a concurrent
-  multi-user run against its live backend with no failures across 400 calls, and a longer local
-  run of 672 calls with none either. Populace found six genuine defects in a finished
+  multi-user run against its live backend with no failures across 400 calls, and an eight-user
+  run of 1,626 calls with none either. Populace found six genuine defects in a finished
   application, passes 75 self-tests, and distinguishes a fault in your code from a fault in the
   network between you.</p>
 
