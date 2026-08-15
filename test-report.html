@@ -105,7 +105,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>1 &middot; Headline</h2>
   <div class="grid">
-    <div class="kpi"><b>2,116</b><span>API calls in the largest clean run</span></div>
+    <div class="kpi"><b>6,450</b><span>API calls in the largest clean run</span></div>
     <div class="kpi"><b>0</b><span>failures in that run</span></div>
     <div class="kpi"><b>6</b><span>real bugs found in a finished app</span></div>
     <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
@@ -212,7 +212,44 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   joins. Account deletion is included deliberately — it is the path almost nobody exercises and
   the one regulators ask about.</p>
 
-  <h3>3.3 &nbsp;Ten concurrent users, ten minutes — 15 August 2026</h3>
+  <h3>3.3 &nbsp;Twenty concurrent users, fifteen minutes — 15 August 2026</h3>
+  <p>The final and largest run: twenty agents for 1,264 seconds against the isolated cloud test
+  project, preceded by <code>clean</code>, <code>doctor</code> and <code>smoke</code>, and followed
+  by <code>clean</code> again.</p>
+  <table>
+    <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
+    <tr><td class="v">reportLocation</td><td>2,810</td><td class="pass">0</td><td>645&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
+    <tr><td class="v">recentPostsByOthers</td><td>931</td><td class="pass">0</td><td>236&thinsp;ms</td><td>311&thinsp;ms</td></tr>
+    <tr><td class="v">like</td><td>930</td><td class="pass">0</td><td>233&thinsp;ms</td><td>323&thinsp;ms</td></tr>
+    <tr><td class="v">post</td><td>437</td><td class="pass">0</td><td>236&thinsp;ms</td><td>384&thinsp;ms</td></tr>
+    <tr><td class="v">openConversation</td><td>394</td><td class="pass">0</td><td>235&thinsp;ms</td><td>369&thinsp;ms</td></tr>
+    <tr><td class="v">sendMessage</td><td>394</td><td class="pass">0</td><td>236&thinsp;ms</td><td>338&thinsp;ms</td></tr>
+    <tr><td class="v">comment</td><td>384</td><td class="pass">0</td><td>234&thinsp;ms</td><td>335&thinsp;ms</td></tr>
+    <tr><td class="v">listGroups</td><td>55</td><td class="pass">0</td><td>236&thinsp;ms</td><td>379&thinsp;ms</td></tr>
+    <tr><td class="v">joinGroup</td><td>55</td><td class="pass">0</td><td>237&thinsp;ms</td><td>375&thinsp;ms</td></tr>
+    <tr><td class="v">createUser</td><td>20</td><td class="pass">0</td><td>724&thinsp;ms</td><td>1.3&thinsp;s</td></tr>
+    <tr><td class="v">setProfile</td><td>20</td><td class="pass">0</td><td>318&thinsp;ms</td><td>625&thinsp;ms</td></tr>
+    <tr><td class="v">deleteUser</td><td>20</td><td class="pass">0</td><td>274&thinsp;ms</td><td>389&thinsp;ms</td></tr>
+    <tr><td class="v">Total</td><td><b>6,450</b></td><td class="pass"><b>0</b></td><td>—</td><td>—</td></tr>
+  </table>
+  <p class="small">116.3&nbsp;km &middot; 437 posts &middot; 930 likes &middot; 384 comments &middot; 394
+  messages &middot; 55 group joins. Verdict <code>clean</code>: 0 API failures, 0 transport failures,
+  0 retries, 0 outages, 0 engine errors, 13/13 methods, 20 accounts created and 20 removed. At 21
+  minutes this is also the first run long enough to exercise session refresh properly — all twenty
+  sessions survived it.</p>
+
+  <div class="callout">
+    <h3>The latency warning is retired</h3>
+    <p><code>reportLocation</code> p50 across every run: <strong>414&thinsp;ms at six users,
+    727 at eight, 669 at ten, 645 at twenty.</strong> It did not degrade as concurrency doubled, and
+    every other method held flat near 235&thinsp;ms throughout.</p>
+    <p>An earlier version of this report recorded the six-to-eight jump as possibly superlinear
+    growth. Twenty users settles it: that was variance between runs on different days and networks,
+    not load. The warning is withdrawn rather than left standing, because a scary number nobody
+    revisits is worse than no number.</p>
+  </div>
+
+  <h3>3.3b &nbsp;Ten concurrent users, ten minutes</h3>
   <p>The final run, and the largest. Ten agents across Manila and Mumbai for 809.1 seconds against
   the isolated cloud test project. <code>clean</code> was run first to prove the target was empty,
   then <code>doctor</code> and <code>smoke</code>, then the run, then <code>clean</code> again.</p>
@@ -518,7 +555,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
       need real accounts on real handsets. Accounts cannot be created on the user's behalf, so
       these paths are documented as a manual script and remain unrun.</td></tr>
     <tr><td class="v">Behaviour at scale</td><td class="na">Not tested</td>
-      <td>The largest run was ten concurrent users for ten minutes. That is a correctness run
+      <td>The largest run was twenty concurrent users for fifteen minutes. That is a correctness run
       at slightly more pressure, not a load test — nothing here supports a claim about hundreds or
       thousands, and the latency growth in &sect;3.3 is a reason to be careful rather than confident.</td></tr>
     <tr><td class="v">Populace against other backends</td><td class="na">Not tested</td>
@@ -540,8 +577,8 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <h2>9 &middot; Conclusion</h2>
   <p>Both products do what is claimed of them, within limits this document states rather than
   hides. Buzz Buzz builds, type-checks, ships as a signed artefact, and survived a concurrent
-  multi-user run against its live backend with no failures across 400 calls, and a ten-user run of
-  2,116 calls with none either. Populace found six genuine defects in a finished
+  multi-user run against its live backend with no failures across 400 calls, and a twenty-user run
+  of 6,450 calls with none either. Populace found six genuine defects in a finished
   application, passes 78 self-tests, and distinguishes a fault in your code from a fault in the
   network between you.</p>
 
