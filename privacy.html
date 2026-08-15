@@ -432,9 +432,14 @@ footer .brand svg { height: 19px; }
    a gradient cannot be perceived, but it still costs one-colour printing and a
    clean favicon. #5B2BE0 measures 7.3:1 on white; #9B7BFF is the lifted tone for
    near-black grounds, where the darker indigo closes up. */
-.wordmark { color: #5B2BE0; -webkit-text-fill-color: #5B2BE0; background: none;
+/* This page is dark — its nav and footer are near-black, unlike the company
+   index which was converted to light bands. So it takes the LIFTED tone, the
+   same one the Populace site and the portfolio use on dark grounds. #5B2BE0
+   measured 2.48:1 here against the 4.5 the wordmark needs as a heading;
+   #A88FFF clears it. */
+.wordmark { color: #A88FFF; -webkit-text-fill-color: #A88FFF; background: none;
   font-weight: 700; letter-spacing: -.01em; }
-.mark { color: #5B2BE0; }
+.mark { color: #A88FFF; }
 </style>
 
 <nav id="nav">
