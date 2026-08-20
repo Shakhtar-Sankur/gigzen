@@ -249,29 +249,74 @@
   // kind of thing that setting is for.
   function counters() {
     var els = [].slice.call(document.querySelectorAll(".stat .v"));
-    if (!els.length || !window.IntersectionObserver) return;
+    if (!els.length) return;
+
+    // Read every target ONCE, out of the markup, and keep it. The previous
+    // version re-read the element's text each time it ran, so a number caught
+    // mid-animation became the new target — and a number sitting at 0 pinned
+    // itself at 0 for good.
+    els.forEach(function (el) {
+      if (el.hasAttribute("data-count-to")) return;
+      var m = el.textContent.trim().match(/^(\d+)(\D*)$/);
+      if (!m) return;
+      el.setAttribute("data-count-to", m[1]);
+      el.setAttribute("data-count-suffix", m[2] || "");
+    });
+
+    function finish(el) {
+      el.textContent = el.getAttribute("data-count-to") + el.getAttribute("data-count-suffix");
+    }
+
+    function run(el) {
+      if (el.getAttribute("data-counted") === "1") return;
+      el.setAttribute("data-counted", "1");
+      var target = +el.getAttribute("data-count-to");
+      // No frames to animate with: a hidden tab does not run rAF, and the old
+      // code wrote a synchronous 0 before the first frame and left it there.
+      if (document.hidden) { finish(el); return; }
+      var t0 = null, dur = 1100;
+      el.style.fontVariantNumeric = "tabular-nums";
+      requestAnimationFrame(function tick(now) {
+        // t0 comes from the first frame's own timestamp. Seeding it from
+        // performance.now() could put it AFTER the frame time and make the
+        // first progress value negative.
+        if (t0 === null) t0 = now;
+        var p = Math.min(1, (now - t0) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        if (p < 1) {
+          el.textContent = String(Math.round(target * eased));
+          requestAnimationFrame(tick);
+        } else {
+          finish(el);
+        }
+      });
+    }
+
+    // Reduced motion, or no observer to tell us when they are on screen: the
+    // number stays exactly as authored. Never zero.
+    if (reduced || !window.IntersectionObserver) {
+      els.forEach(function (el) { if (el.hasAttribute("data-count-to")) finish(el); });
+      return;
+    }
 
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
         io.unobserve(e.target);
-        var el = e.target;
-        var raw = el.textContent.trim();
-        var m = raw.match(/^(\d+)(\D*)$/);
-        if (!m || reduced) return;
-        var target = +m[1], suffix = m[2] || "";
-        var t0 = performance.now(), dur = 1100;
-        el.style.fontVariantNumeric = "tabular-nums";
-        (function tick(now) {
-          var p = Math.min(1, (now - t0) / dur);
-          var eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(target * eased) + (p === 1 ? suffix : "");
-          if (p < 1) requestAnimationFrame(tick);
-        })(t0);
+        run(e.target);
       });
     }, { threshold: 0.6 });
 
-    els.forEach(function (el) { io.observe(el); });
+    els.forEach(function (el) { if (el.hasAttribute("data-count-to")) io.observe(el); });
+
+    // If the tab is hidden while a count is in flight, the frames stop and the
+    // half-finished number is what the visitor comes back to. Settle them.
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) return;
+      els.forEach(function (el) {
+        if (el.getAttribute("data-counted") === "1") finish(el);
+      });
+    });
   }
 
   // A slow parallax lift on the hero copy as it leaves, so the section has
