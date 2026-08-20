@@ -3,94 +3,104 @@
 <head>
 <meta charset="utf-8">
 <title>Gigzen — Product Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* One page, A4. Printed via Chrome --print-to-pdf, so every length is in mm
    and nothing depends on a viewport. Colours are set explicitly because print
-   defaults strip backgrounds unless print-color-adjust says otherwise. */
+   defaults strip backgrounds unless print-color-adjust says otherwise.
+
+   This sheet stays WHITE while the rest of the company site is violet, and
+   that is deliberate: it exists to be printed and handed over. A dark ground
+   here floods an A4 page with ink and reads worse on paper than on screen.
+   It carries the site's language the way the site's own cards do — white
+   surface, violet accent, same two typefaces — rather than by copying the
+   background. The test report is white for the same reason. */
 @page { size: A4; margin: 0; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 210mm; height: 297mm; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: #FFFFFF; color: #14181B;
+  font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #FFFFFF; color: #140C33;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
   font-size: 8.6pt; line-height: 1.45;
 }
-.mono { font-family: ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Mono', Menlo, Consolas, monospace; }
+.mono { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Mono', Menlo, Consolas, monospace; }
 .page { padding: 9mm 11mm 7mm; height: 297mm; display: flex; flex-direction: column; }
 
 /* ── masthead ─────────────────────────────────────────── */
-.mast { display: flex; align-items: center; gap: 3mm; padding-bottom: 3.4mm; border-bottom: 0.5mm solid #14181B; }
-.mast svg { width: 8mm; height: 8mm; color: #14181B; flex: 0 0 auto; }
+.mast { display: flex; align-items: center; gap: 3mm; padding-bottom: 3.4mm; border-bottom: 0.5mm solid #140C33; }
+.mast svg { width: 8mm; height: 8mm; color: #140C33; flex: 0 0 auto; }
 .wordmark { font-size: 16pt; font-weight: 800; letter-spacing: 0.14em; }
-.mast .tag { margin-left: auto; text-align: right; font-size: 7.4pt; color: #5C6871; line-height: 1.4; }
+.mast .tag { margin-left: auto; text-align: right; font-size: 7.4pt; color: #6A6689; line-height: 1.4; }
 
 h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1.06; margin-top: 4.5mm; }
-.sub { margin-top: 2.2mm; font-size: 9pt; color: #3D474E; max-width: 155mm; line-height: 1.5; }
+.sub { margin-top: 2.2mm; font-size: 9pt; color: #474463; max-width: 155mm; line-height: 1.5; }
 
 /* ── the two products ─────────────────────────────────── */
 .products { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5mm; margin-top: 5mm; }
 /* Flex column so the spec block and status pill sit on the same line in both
    columns regardless of how many bullets each product has. */
-.prod { border-top: 0.4mm solid #14181B; padding-top: 3mm; display: flex; flex-direction: column; }
+.prod { border-top: 0.4mm solid #140C33; padding-top: 3mm; display: flex; flex-direction: column; }
 .prod .specs { margin-top: auto; }
 .prod .kicker { font-size: 6.7pt; letter-spacing: 0.16em; text-transform: uppercase; color: #6B7883; }
 .prod h2 { font-size: 13.5pt; font-weight: 800; letter-spacing: -0.02em; margin-top: 1.4mm; }
 .prod .one { margin-top: 1.8mm; font-size: 8.8pt; line-height: 1.5; color: #242D33; }
 .prod ul { list-style: none; margin-top: 2.8mm; }
-.prod li { position: relative; padding-left: 4mm; margin-bottom: 1.2mm; color: #3D474E; }
+.prod li { position: relative; padding-left: 4mm; margin-bottom: 1.2mm; color: #474463; }
 .prod li::before { content: ""; position: absolute; left: 0; top: 1.55mm;
-                   width: 1.5mm; height: 1.5mm; background: #B9D400; border-radius: 50%; }
-.prod li b { color: #14181B; }
-.specs { margin-top: 3mm; padding-top: 2.4mm; border-top: 0.25mm solid #D9DEE2;
-         font-size: 7.2pt; color: #5C6871; line-height: 1.6; }
-.specs b { color: #14181B; }
+                   width: 1.5mm; height: 1.5mm; background: #4C1D95; border-radius: 50%; }
+.prod li b { color: #140C33; }
+.specs { margin-top: 3mm; padding-top: 2.4mm; border-top: 0.25mm solid #E6E2F5;
+         font-size: 7.2pt; color: #6A6689; line-height: 1.6; }
+.specs b { color: #140C33; }
 .stat-line { margin-top: 2mm; font-size: 7.2pt; }
-.pill { display: inline-block; padding: 0.7mm 2mm; border: 0.25mm solid #14181B;
+.pill { display: inline-block; padding: 0.7mm 2mm; border: 0.25mm solid #140C33;
         border-radius: 2mm; font-size: 6.8pt; font-weight: 700; letter-spacing: 0.04em; }
 
 /* ── the two runs ─────────────────────────────────────── */
-.runs-intro { margin-top: 4.5mm; font-size: 8.4pt; color: #3D474E; }
+.runs-intro { margin-top: 4.5mm; font-size: 8.4pt; color: #474463; }
 .runs-intro { font-weight: 600; }
 .runs { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 2.6mm; }
-.run { background: #0B1014; color: #E8EFF4; border-radius: 3mm; padding: 4mm 4.4mm 4.4mm;
+.run { background: #140C33; color: #EEEBFA; border-radius: 3mm; padding: 4mm 4.4mm 4.4mm;
        display: flex; flex-direction: column; }
 .run-head { display: flex; align-items: baseline; gap: 2mm; }
-.run-head .k { font-size: 6.4pt; letter-spacing: 0.16em; color: #7C8B96; }
-.run-head .d { margin-left: auto; font-size: 6.4pt; color: #7C8B96; letter-spacing: 0.1em; }
-.verdict { margin-top: 2.8mm; background: #D3FF00; color: #0B1014; border-radius: 1.6mm;
+.run-head .k { font-size: 6.4pt; letter-spacing: 0.16em; color: #8A85A8; }
+.run-head .d { margin-left: auto; font-size: 6.4pt; color: #8A85A8; letter-spacing: 0.1em; }
+.verdict { margin-top: 2.8mm; background: #5B21B6; color: #FFFFFF; border-radius: 1.6mm;
            padding: 2.2mm 3mm; font-size: 10pt; font-weight: 800; line-height: 1.25; }
-.verdict.bad { background: #FF6B57; color: #240703; }
+.verdict.bad { background: #C01F6E; color: #FFFFFF; }
 .figs { display: grid; gap: 2mm; margin-top: 3.4mm; }
 .figs-3 { grid-template-columns: repeat(3, 1fr); }
 .figs .v { font-size: 13pt; font-weight: 800; letter-spacing: -0.01em; }
 .figs .v.ok { color: #74D19B; }
-.figs .v.warn { color: #FF9B8A; }
-.figs .l { margin-top: 0.5mm; font-size: 5.6pt; letter-spacing: 0.07em; color: #7C8B96; }
+.figs .v.warn { color: #F9A8D4; }
+.figs .l { margin-top: 0.5mm; font-size: 5.6pt; letter-spacing: 0.07em; color: #8A85A8; }
 .run-body { margin-top: 3mm; padding-top: 2.4mm; border-top: 0.25mm solid #253039;
-            font-size: 7.6pt; line-height: 1.55; color: #B4C2CC; }
+            font-size: 7.6pt; line-height: 1.55; color: #C7C2DE; }
 .run-body b { color: #FFFFFF; }
-.run-note { margin-top: auto; padding-top: 2.6mm; font-size: 7.4pt; line-height: 1.5; color: #9FB0BC; }
-.run-note b { color: #D3FF00; }
-.run-good .run-note b { color: #D3FF00; }
-.run-bad .run-note b { color: #FF9B8A; }
-.runs-caveat { margin-top: 2.8mm; font-size: 6.9pt; line-height: 1.5; color: #5C6871; }
-.runs-caveat b { color: #14181B; }
+.run-note { margin-top: auto; padding-top: 2.6mm; font-size: 7.4pt; line-height: 1.5; color: #C7C2DE; }
+.run-note b { color: #C4B5FD; }
+.run-good .run-note b { color: #C4B5FD; }
+.run-bad .run-note b { color: #F9A8D4; }
+.runs-caveat { margin-top: 2.8mm; font-size: 6.9pt; line-height: 1.5; color: #6A6689; }
+.runs-caveat b { color: #140C33; }
 
 /* ── footer ───────────────────────────────────────────── */
-.foot { margin-top: auto; padding-top: 3mm; border-top: 0.4mm solid #14181B;
-        display: flex; gap: 6mm; font-size: 7.2pt; color: #5C6871; line-height: 1.55; }
-.foot b { color: #14181B; }
+.foot { margin-top: auto; padding-top: 3mm; border-top: 0.4mm solid #140C33;
+        display: flex; gap: 6mm; font-size: 7.2pt; color: #6A6689; line-height: 1.55; }
+.foot b { color: #140C33; }
 .foot div:last-child { margin-left: auto; text-align: right; }
 
 
 /* Gigzen electric indigo. Flat, not a gradient: at the 20px this renders at,
    a gradient cannot be perceived, but it still costs one-colour printing and a
-   clean favicon. #0A0C10 measures 7.3:1 on white; #9B7BFF is the lifted tone for
+   clean favicon. #140C33 measures 7.3:1 on white; #9B7BFF is the lifted tone for
    near-black grounds, where the darker indigo closes up. */
-.wordmark { color: #0A0C10; -webkit-text-fill-color: #0A0C10; background: none;
+.wordmark { color: #140C33; -webkit-text-fill-color: #140C33; background: none;
   font-weight: 700; letter-spacing: -.01em; }
-.mark { color: #0A0C10; }
+.mark { color: #140C33; }
 </style>
 </head>
 <body>
@@ -180,18 +190,18 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
     <div class="run run-good">
       <div class="run-head">
         <span class="k">POPULACE REPORT · RUN 2</span>
-        <span class="d">AFTER THE FIXES</span>
+        <span class="d">15 AUGUST 2026</span>
       </div>
-      <div class="verdict">&#10003; No failures across 400 API calls</div>
+      <div class="verdict">&#10003; No failures across 6,539 API calls</div>
       <div class="figs figs-3">
         <div><div class="v ok">0</div><div class="l">FAILURES</div></div>
-        <div><div class="v">400</div><div class="l">API CALLS</div></div>
+        <div><div class="v">6,539</div><div class="l">API CALLS</div></div>
         <div><div class="v">13 / 13</div><div class="l">METHODS COVERED</div></div>
       </div>
-      <p class="run-body"><b>Six simulated drivers across Manila and Mumbai, using the live backend
-      at the same time.</b> 6.2&nbsp;km driven, 22 posts, 59 likes, 22 comments, 21 messages, 2 group
-      joins. Six accounts created through the real signup path and six deleted through the real
-      deletion path &mdash; nothing left behind.</p>
+      <p class="run-body"><b>Thirty simulated drivers across Manila and Mumbai, using the live
+      backend at the same time for ten minutes.</b> 116.2&nbsp;km driven, 403 posts, 984 likes,
+      397 comments, 389 messages, 55 group joins. Thirty accounts created through the real signup
+      path and thirty deleted through the real deletion path &mdash; nothing left behind.</p>
       <p class="run-note"><b>What this proves about Buzz:</b> the shipped build holds up under
       genuine concurrent multi-user traffic with its own permission rules applying &mdash; not under
       one person tapping through screens.</p>
@@ -199,9 +209,10 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
 
   </div>
 
-  <p class="runs-caveat">Six users for three minutes is a <b>correctness run, not a load test</b>,
-  and the project was empty at the time; the figures are latencies under six concurrent users and
-  nothing more. Populace has been pointed at one live backend so far and that backend was ours.</p>
+  <p class="runs-caveat">Thirty concurrent users is the <b>highest figure tested, not a measured
+  maximum</b> &mdash; the runs were stopped by a signup quota rather than by the app slowing down, so
+  where Buzz actually breaks is still unknown. The latencies are those of one cloud project on one
+  evening. Populace now drives two unrelated backends, but both of them are still ours.</p>
 
   <div class="foot">
     <div>
