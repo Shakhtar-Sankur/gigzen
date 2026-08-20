@@ -6,7 +6,7 @@
 <title>Gigzen — software for people who work</title>
 <meta name="description" content="Gigzen Private Limited builds software for the 1.57 billion people who work the gig economy. Two products: Buzz, a platform for drivers and riders, and Populace, the tool that tests it with a whole population instead of one person.">
 <meta name="author" content="Gigzen Private Limited">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#150E33">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Gigzen — software for people who work">
@@ -23,13 +23,14 @@
 /* ══════════════════════════════════════════════════════════════════════════
    GIGZEN — company site
    ══════════════════════════════════════════════════════════════════════════
-   Light, colourful, and led by the product itself: the hero shows the actual
-   app on actual phones rather than an abstract background, because a company
-   that makes a thing should show the thing.
+   White cards on a deep violet ground, which is how both halves of the brief
+   fit together: the surfaces you read are light, the world they sit in is
+   colourful. Behind each section sits one enormous ghosted word, and the
+   cards arrive with a zoom and lift under the pointer.
 
-   The colour is a spectrum, one hue per section, and every value used as text
-   is chosen to clear 4.5:1 on white. Saturation carries the identity;
-   brightness never has to be dimmed afterwards to make it readable.
+   Text inside a card is measured against white; text on the ground is
+   measured against violet, and uses the lifted tones for that reason. A
+   colour that works in one place is not assumed to work in the other.
 
    Self-contained: no build step, nothing fetched at runtime but the fonts and
    the screenshots sitting next to this file.
@@ -38,21 +39,36 @@
 *,*::before,*::after { box-sizing: border-box; }
 
 :root {
+  /* The ground is deep violet; the cards on it are white. Both halves of the
+     brief — colourful and light — live in that split, and it is why the type
+     inside a card is measured against white while the type on the ground is
+     measured against violet. */
+  --space:   #150E33;
+  --space-2: #1D1247;
+  --space-3: #100A28;
   --paper:   #FFFFFF;
-  --paper-2: #F5F6F8;
-  --paper-3: #EEF0F4;
-  --ink:     #0A0C10;
-  --body:    #474A52;
-  --muted:   #656973;
-  --rule:    #E3E5EA;
+  --paper-2: #F6F5FC;
+  --paper-3: #EEEBFA;
+  --ink:     #140C33;
+  --body:    #474463;
+  --muted:   #6A6689;
+  --rule:    #E6E2F5;
+  /* On the violet ground, not on paper. */
+  --on-space:      #EDEAFB;
+  --on-space-soft: #B9B2E4;
+  --rule-space:    rgba(255,255,255,.14);
 
-  /* Every one of these clears 4.5:1 on white, so any of them can be text. */
-  --violet:  #6D3BD4;
+  /* Every one of these clears 4.5:1 on white, so any of them can be text
+     inside a card. */
+  --violet:  #5B21B6;
   --cyan:    #0E7C74;
   --blue:    #1257C4;
   --magenta: #C01F6E;
   --amber:   #9C4E00;
   --flame:   #C63B00;
+  /* Lifted tones, for text and marks sitting ON the violet ground. */
+  --violet-lift: #C4B5FD;
+  --amber-lift:  #FFB067;
 
   --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -64,13 +80,37 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
+/* The cosmic ground: a violet field with an orange glow swept through it,
+   fixed so the page moves over the light rather than dragging it along. */
 body {
-  margin: 0; background: var(--paper); color: var(--body);
+  margin: 0; color: var(--on-space);
+  background: var(--space);
   font-family: var(--sans); font-size: 17px; line-height: 1.62;
   -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(48% 38% at 12% 6%,  rgba(124,58,237,.42) 0%, transparent 66%),
+    radial-gradient(42% 34% at 88% 12%, rgba(99,102,241,.34) 0%, transparent 64%),
+    radial-gradient(46% 40% at 78% 88%, rgba(255,138,42,.20) 0%, transparent 66%),
+    radial-gradient(40% 34% at 18% 82%, rgba(192,31,110,.18) 0%, transparent 66%),
+    linear-gradient(180deg, var(--space-2) 0%, var(--space) 42%, var(--space-3) 100%);
+}
+/* A faint star field, drawn rather than fetched. */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background-image:
+    radial-gradient(1.4px 1.4px at 18% 22%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 72% 14%, rgba(255,255,255,.6) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 44% 62%, rgba(255,255,255,.5) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 86% 54%, rgba(255,255,255,.55) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 28% 78%, rgba(255,255,255,.5) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 62% 88%, rgba(255,255,255,.45) 50%, transparent 51%);
+  background-size: 780px 620px;
+}
 
-h1,h2,h3,h4 { margin: 0; color: var(--ink); line-height: 1.04; font-weight: 700; letter-spacing: -.035em; }
+h1,h2,h3,h4 { margin: 0; color: var(--on-space); line-height: 1.04; font-weight: 700; letter-spacing: -.035em; }
 h1 { font-size: clamp(40px, 5.6vw, 76px); letter-spacing: -.045em; }
 h2 { font-size: clamp(29px, 4vw, 50px); }
 h3 { font-size: clamp(19px, 2vw, 23px); letter-spacing: -.022em; line-height: 1.26; }
@@ -89,32 +129,32 @@ section[id] { counter-increment: sec; }
 .eyebrow {
   display: inline-flex; align-items: baseline; gap: 11px;
   font-family: var(--mono); font-size: 11.5px; font-weight: 600;
-  letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+  letter-spacing: .2em; text-transform: uppercase; color: var(--on-space-soft);
 }
 section[id] .eyebrow::before {
   content: counter(sec, decimal-leading-zero);
-  color: var(--accent, var(--blue)); letter-spacing: .06em;
+  color: var(--violet-lift); letter-spacing: .06em;
 }
 .sec-head { max-width: 46ch; margin-bottom: clamp(32px, 4.6vw, 56px); }
 .sec-head h2 { margin-top: 15px; }
-.sec-head p { margin-top: 16px; }
+.sec-head p { margin-top: 16px; color: var(--on-space-soft); }
 
 /* ── nav ─────────────────────────────────────────────────────────────────── */
 nav {
   position: sticky; top: 0; z-index: 90;
-  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  background: color-mix(in srgb, var(--space) 78%, transparent);
   backdrop-filter: saturate(180%) blur(18px);
   -webkit-backdrop-filter: saturate(180%) blur(18px);
   border-bottom: 1px solid transparent; transition: border-color .3s;
 }
-nav.stuck { border-bottom-color: var(--rule); }
+nav.stuck { border-bottom-color: var(--rule-space); }
 nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
-.brand svg { width: 22px; height: 22px; color: var(--ink); flex: none; }
-.brand b { font-size: 15px; font-weight: 700; letter-spacing: .16em; color: var(--ink); text-transform: uppercase; }
+.brand svg { width: 22px; height: 22px; color: var(--on-space); flex: none; }
+.brand b { font-size: 15px; font-weight: 700; letter-spacing: .16em; color: var(--on-space); text-transform: uppercase; }
 .navlinks { display: flex; gap: 28px; }
-.navlinks a { font-size: 14.5px; color: var(--muted); text-decoration: none; transition: color .2s; }
-.navlinks a:hover { color: var(--ink); }
+.navlinks a { font-size: 14.5px; color: var(--on-space-soft); text-decoration: none; transition: color .2s; }
+.navlinks a:hover { color: #fff; }
 @media (max-width: 900px) { .navlinks { display: none; } }
 
 /* ── buttons ─────────────────────────────────────────────────────────────── */
@@ -125,10 +165,10 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
   transition: transform .2s cubic-bezier(.22,.61,.36,1), background .2s, border-color .2s, color .2s;
 }
 .btn svg { width: 16px; height: 16px; }
-.btn-primary { background: var(--ink); color: #fff; }
-.btn-primary:hover { transform: translateY(-2px); background: #1B1F28; }
-.btn-ghost { border-color: var(--rule); color: var(--ink); background: var(--paper); }
-.btn-ghost:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+.btn-primary { background: #fff; color: var(--ink); }
+.btn-primary:hover { transform: translateY(-2px) scale(1.02); background: #F3F0FF; }
+.btn-ghost { border-color: var(--rule-space); color: var(--on-space); background: rgba(255,255,255,.06); }
+.btn-ghost:hover { border-color: var(--violet-lift); color: #fff; transform: translateY(-2px) scale(1.02); background: rgba(255,255,255,.12); }
 @media (prefers-reduced-motion: reduce) { .btn:hover { transform: none; } }
 
 /* ── hero ────────────────────────────────────────────────────────────────── */
@@ -137,7 +177,7 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
    feels lit rather than painted. */
 .hero::before {
   content: ""; position: absolute; inset: -10% -5% auto -5%; height: 130%; z-index: 0;
-  pointer-events: none;
+  pointer-events: none; opacity: .5;
   background:
     radial-gradient(38% 42% at 6% 8%,   color-mix(in srgb, var(--violet) 20%, transparent) 0%, transparent 68%),
     radial-gradient(34% 40% at 92% 4%,  color-mix(in srgb, var(--cyan) 20%, transparent) 0%, transparent 66%),
@@ -150,20 +190,20 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
              grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); }
 @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; } }
 
-.hero h1 span { background: linear-gradient(96deg, var(--violet), var(--blue) 55%, var(--cyan));
+.hero h1 span { background: linear-gradient(96deg, #C4B5FD, #A78BFA 45%, #FFB067);
                 -webkit-background-clip: text; background-clip: text; color: transparent; }
 /* If the gradient cannot be clipped to the glyphs, the text must still have a
    colour of its own rather than staying transparent. */
-@supports not (background-clip: text) { .hero h1 span { color: var(--blue); } }
-.hero .lede { margin-top: 22px; max-width: 46ch; }
+@supports not (background-clip: text) { .hero h1 span { color: var(--violet-lift); } }
+.hero .lede { margin-top: 22px; max-width: 46ch; color: var(--on-space-soft); }
 .hero-cta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
 .place {
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--mono); font-size: 11.5px; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--muted);
-  border: 1px solid var(--rule); background: var(--paper); border-radius: 999px; padding: 7px 15px;
+  text-transform: uppercase; color: var(--on-space-soft);
+  border: 1px solid var(--rule-space); background: rgba(255,255,255,.06); border-radius: 999px; padding: 7px 15px;
 }
-.place s { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan);
+.place s { width: 7px; height: 7px; border-radius: 50%; background: #FFB067;
            text-decoration: none; flex: none; }
 
 /* ── the phones ──
@@ -188,27 +228,31 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 @media (max-width: 560px) { .phone.c { display: none; } }
 
 /* ── stat band ───────────────────────────────────────────────────────────── */
-.band { background: var(--paper-2); border-block: 1px solid var(--rule); }
+.band { background: rgba(255,255,255,.045); border-block: 1px solid var(--rule-space); }
 .stats { display: grid; grid-template-columns: repeat(2, 1fr); }
 @media (min-width: 880px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-.stat { padding: clamp(24px, 3.4vw, 40px) clamp(14px, 2vw, 26px); border-right: 1px solid var(--rule); }
+.stat { padding: clamp(24px, 3.4vw, 40px) clamp(14px, 2vw, 26px); border-right: 1px solid var(--rule-space); }
 .stat:last-child { border-right: 0; }
 .stat b { display: block; font-size: clamp(34px, 4.6vw, 54px); font-weight: 700;
-          letter-spacing: -.05em; line-height: 1; color: var(--ink);
+          letter-spacing: -.05em; line-height: 1; color: #fff;
           font-variant-numeric: tabular-nums; }
-.stat:nth-child(1) b { color: var(--violet); }
-.stat:nth-child(2) b { color: var(--cyan); }
-.stat:nth-child(3) b { color: var(--blue); }
-.stat:nth-child(4) b { color: var(--magenta); }
-.stat span { display: block; margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+/* These sit on the violet ground, not on a card, so they take the lifted
+   tones. The on-white spectrum measured 1.86:1 here — the deep violet against
+   a deep violet field. A colour that is safe on paper is not safe on space. */
+.stat:nth-child(1) b { color: #C4B5FD; }
+.stat:nth-child(2) b { color: #5EEAD4; }
+.stat:nth-child(3) b { color: #93C5FD; }
+.stat:nth-child(4) b { color: #F9A8D4; }
+.stat span { display: block; margin-top: 10px; font-size: 13.5px; color: var(--on-space-soft); }
 
 /* ── product cards ───────────────────────────────────────────────────────── */
 .products { display: grid; gap: 20px; grid-template-columns: 1fr; }
 @media (min-width: 940px) { .products { grid-template-columns: repeat(2, 1fr); } }
 .product {
   position: relative; overflow: hidden; text-decoration: none;
-  background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r);
-  padding: clamp(26px, 3.2vw, 38px); display: flex; flex-direction: column;
+  background: var(--paper); border: 1px solid rgba(255,255,255,.4); border-radius: 24px;
+  padding: clamp(26px, 3.2vw, 38px); display: flex; flex-direction: column; color: var(--body);
+  box-shadow: 0 28px 60px -36px rgba(6,2,26,.6);
   transition: border-color .25s, transform .25s cubic-bezier(.22,.61,.36,1), box-shadow .25s;
 }
 .product::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--accent); }
@@ -217,7 +261,7 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 @media (prefers-reduced-motion: reduce) { .product:hover { transform: none; } }
 .product .kind { font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
                  text-transform: uppercase; color: var(--accent); }
-.product h3 { margin-top: 14px; font-size: clamp(26px, 3vw, 34px); letter-spacing: -.035em; }
+.product h3 { color: var(--ink); margin-top: 14px; font-size: clamp(26px, 3vw, 34px); letter-spacing: -.035em; }
 .product p { margin-top: 14px; flex: 1; }
 .product .facts { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
 .product .facts span {
@@ -232,8 +276,8 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 /* ── screenshot strip ────────────────────────────────────────────────────── */
 .shots { display: grid; gap: 18px; grid-template-columns: repeat(2, 1fr); margin-top: 42px; }
 @media (min-width: 820px) { .shots { grid-template-columns: repeat(4, 1fr); } }
-.shot { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r);
-        padding: 12px; box-shadow: 0 14px 34px -26px rgba(10,12,16,.4); }
+.shot { background: var(--paper); border: 1px solid rgba(255,255,255,.4); border-radius: 22px;
+        padding: 12px; box-shadow: 0 26px 56px -32px rgba(6,2,26,.6); }
 .shot img { border-radius: 12px; width: 100%; height: auto; }
 .shot figcaption { margin-top: 11px; font-family: var(--mono); font-size: 11px;
                    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
@@ -243,8 +287,10 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 .grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
 @media (min-width: 760px) { .grid.two   { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 900px) { .grid.three { grid-template-columns: repeat(3, 1fr); } }
-.card { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r);
-        padding: clamp(22px, 2.6vw, 30px); }
+.card { background: var(--paper); border: 1px solid rgba(255,255,255,.4); border-radius: 24px;
+        padding: clamp(22px, 2.6vw, 30px); color: var(--body);
+        box-shadow: 0 24px 54px -34px rgba(6,2,26,.55); }
+.card h3, .card h4 { color: var(--ink); }
 .card h3 { font-size: 19px; }
 .card p { margin-top: 11px; font-size: 15.5px; }
 .card .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
@@ -253,10 +299,12 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 .card .ic svg { width: 18px; height: 18px; }
 
 /* ── commitments ─────────────────────────────────────────────────────────── */
-.pledge { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule);
-          border-radius: var(--r); overflow: hidden; }
+.pledge { display: grid; gap: 14px; }
 @media (min-width: 900px) { .pledge { grid-template-columns: repeat(3, 1fr); } }
-.pledge > div { background: var(--paper); padding: clamp(24px, 3vw, 36px); }
+.pledge > div { background: var(--paper); padding: clamp(24px, 3vw, 36px); border-radius: 24px;
+                border: 1px solid rgba(255,255,255,.4); color: var(--body);
+                box-shadow: 0 24px 54px -34px rgba(6,2,26,.55); }
+.pledge h3 { color: var(--ink); }
 .pledge .n { font-family: var(--mono); font-size: 12px; letter-spacing: .18em; color: var(--accent); }
 .pledge h3 { margin-top: 14px; }
 .pledge p { margin-top: 12px; font-size: 15.5px; }
@@ -267,24 +315,25 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 /* ── languages ───────────────────────────────────────────────────────────── */
 .langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
 .langs span { font-size: 14px; padding: 7px 13px; border-radius: 999px;
-              border: 1px solid var(--rule); background: var(--paper); color: var(--body); }
+              border: 1px solid var(--rule-space); background: rgba(255,255,255,.07); color: var(--on-space); }
 
 /* ── timeline ────────────────────────────────────────────────────────────── */
 .tl { position: relative; padding-left: 28px; }
-.tl::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1px; background: var(--rule); }
+.tl::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1px; background: var(--rule-space); }
 .tl > div { position: relative; padding-bottom: 30px; }
 .tl > div:last-child { padding-bottom: 0; }
 .tl > div::before { content: ""; position: absolute; left: -28px; top: 7px; width: 13px; height: 13px;
-                    border-radius: 50%; background: var(--paper); border: 2px solid var(--accent); }
+                    border-radius: 50%; background: var(--space); border: 2px solid var(--violet-lift); }
 .tl time { font-family: var(--mono); font-size: 12px; letter-spacing: .12em;
-           text-transform: uppercase; color: var(--accent); }
-.tl p { margin-top: 8px; }
+           text-transform: uppercase; color: var(--amber-lift); }
+.tl p { margin-top: 8px; color: var(--on-space-soft); }
 
 /* ── directors ───────────────────────────────────────────────────────────── */
 .people { display: grid; gap: 18px; grid-template-columns: 1fr; margin-top: 30px; }
 @media (min-width: 760px) { .people { grid-template-columns: repeat(2, 1fr); } }
 .person { display: flex; gap: 16px; align-items: flex-start; background: var(--paper);
-          border: 1px solid var(--rule); border-radius: var(--r); padding: 22px; }
+          border: 1px solid rgba(255,255,255,.4); border-radius: 24px; padding: 22px;
+          color: var(--body); box-shadow: 0 24px 54px -34px rgba(6,2,26,.55); }
 .person .av { width: 46px; height: 46px; border-radius: 50%; flex: none; display: grid;
               place-items: center; font-weight: 700; font-size: 15px;
               background: color-mix(in srgb, var(--accent) 13%, transparent); color: var(--accent); }
@@ -293,24 +342,61 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 .person p { margin-top: 9px; font-size: 15px; }
 
 /* ── closing CTA ─────────────────────────────────────────────────────────── */
-.cta { background: var(--paper-2); border-block: 1px solid var(--rule); text-align: center; }
-.cta p { margin: 16px auto 0; max-width: 48ch; }
+.cta { background: rgba(255,255,255,.045); border-block: 1px solid var(--rule-space); text-align: center; }
+.cta p { margin: 16px auto 0; max-width: 48ch; color: var(--on-space-soft); }
 .cta .row { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 .cta .mail { margin-top: 20px; font-family: var(--mono); font-size: 15px; }
-.cta .mail a { color: var(--blue); text-underline-offset: 4px; }
+.cta .mail a { color: var(--violet-lift); text-underline-offset: 4px; }
 
-footer { padding-block: 34px; border-top: 1px solid var(--rule); }
+footer { padding-block: 34px; border-top: 1px solid var(--rule-space); }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
 footer .links { display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px; }
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--ink); }
-footer small { color: var(--muted); font-size: 13.5px; }
+footer a { color: var(--on-space-soft); text-decoration: none; }
+footer a:hover { color: #fff; }
+footer small { color: var(--on-space-soft); font-size: 13.5px; }
 
-/* ── reveal ──────────────────────────────────────────────────────────────── */
+/* ── the ghost word ──
+   A single huge word set behind each section, low contrast, purely
+   decorative — the thing that makes the reference feel like a poster rather
+   than a page. aria-hidden, and it never sits under body copy. */
+.ghost {
+  position: absolute; left: 50%; translate: -50% 0; top: clamp(-18px, -1vw, -6px);
+  z-index: 0; pointer-events: none; user-select: none; white-space: nowrap;
+  font-weight: 800; letter-spacing: -.06em; line-height: .78;
+  font-size: clamp(84px, 17vw, 260px);
+  color: transparent;
+  background: linear-gradient(180deg, rgba(196,181,253,.19) 0%, rgba(196,181,253,0) 88%);
+  -webkit-background-clip: text; background-clip: text;
+}
+@supports not (background-clip: text) { .ghost { display: none; } }
+section > .wrap { position: relative; z-index: 1; }
+
+/* ── reveal, with the zoom the cards come in on ──────────────────────────── */
 .rv { opacity: 0; transform: translateY(18px);
       transition: opacity .62s cubic-bezier(.22,.61,.36,1), transform .62s cubic-bezier(.22,.61,.36,1); }
 .rv.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
+
+/* Cards arrive slightly small and settle to full size. Scale is separate from
+   the translate above so the two can be tuned without fighting each other. */
+.zoom { opacity: 0; transform: scale(.94) translateY(24px);
+        transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+.zoom.in { opacity: 1; transform: none; }
+
+/* And they lift and grow a little under the pointer. */
+.card, .product, .shot, .person, .pledge > div {
+  transition: transform .32s cubic-bezier(.22,.61,.36,1), box-shadow .32s ease, border-color .25s ease;
+  will-change: transform;
+}
+.card:hover, .shot:hover, .person:hover, .pledge > div:hover {
+  transform: translateY(-6px) scale(1.018);
+  box-shadow: 0 34px 70px -34px rgba(6,2,26,.6);
+}
+.product:hover { transform: translateY(-6px) scale(1.014); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv, .zoom { opacity: 1; transform: none; transition: none; }
+  .card:hover, .shot:hover, .person:hover, .pledge > div:hover, .product:hover { transform: none; }
+}
 
 :where(a, button, [tabindex]):focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
 .skip { position: absolute; left: -9999px; top: 8px; z-index: 200;
@@ -386,6 +472,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   <!-- ══════════ products ══════════ -->
   <section id="products" style="--accent:var(--violet)">
+    <span class="ghost" aria-hidden="true">PRODUCTS</span>
     <div class="wrap">
       <div class="sec-head rv">
         <span class="eyebrow">What we build</span>
@@ -394,7 +481,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
            and the tool that proves it works before anyone has to depend on it.</p>
       </div>
       <div class="products">
-        <a class="product rv" style="--accent:var(--flame)" href="https://shakhtar-sankur.github.io/buzz-buzz/" rel="noreferrer">
+        <a class="product zoom" style="--accent:var(--flame)" href="https://shakhtar-sankur.github.io/buzz-buzz/" rel="noreferrer">
           <span class="kind">Product 01 &middot; Android</span>
           <h3>Buzz</h3>
           <p>A platform for the 1.57&nbsp;billion people working the gig economy. Earnings that
@@ -410,7 +497,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
               <path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></span>
         </a>
 
-        <a class="product rv" style="--accent:var(--cyan)" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">
+        <a class="product zoom" style="--accent:var(--cyan)" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">
           <span class="kind">Product 02 &middot; Developer tool</span>
           <h3>Populace</h3>
           <p>Brings a population of simulated people to life inside your app and drives it through
@@ -429,13 +516,13 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
       <!-- the app itself, on the page -->
       <div class="shots">
-        <figure class="shot rv"><img src="shots/home.jpg" width="720" height="1520" loading="lazy" decoding="async"
+        <figure class="shot zoom"><img src="shots/home.jpg" width="720" height="1520" loading="lazy" decoding="async"
           alt="Buzz home screen with distance, active time and earnings."><figcaption>Home</figcaption></figure>
-        <figure class="shot rv"><img src="shots/community.jpg" width="720" height="1520" loading="lazy" decoding="async"
+        <figure class="shot zoom"><img src="shots/community.jpg" width="720" height="1520" loading="lazy" decoding="async"
           alt="Buzz community feed with posts from other drivers."><figcaption>Community</figcaption></figure>
-        <figure class="shot rv"><img src="shots/map.jpg" width="720" height="1520" loading="lazy" decoding="async"
+        <figure class="shot zoom"><img src="shots/map.jpg" width="720" height="1520" loading="lazy" decoding="async"
           alt="Buzz routes map with a ready-to-record panel."><figcaption>Routes</figcaption></figure>
-        <figure class="shot rv"><img src="shots/messages.jpg" width="720" height="1520" loading="lazy" decoding="async"
+        <figure class="shot zoom"><img src="shots/messages.jpg" width="720" height="1520" loading="lazy" decoding="async"
           alt="Buzz messages screen with a chat list."><figcaption>Messages</figcaption></figure>
       </div>
     </div>
@@ -443,13 +530,14 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   <!-- ══════════ mission ══════════ -->
   <section id="mission" class="band" style="--accent:var(--cyan)">
+    <span class="ghost" aria-hidden="true">MISSION</span>
     <div class="wrap">
       <div class="sec-head rv">
         <span class="eyebrow">Our mission</span>
         <h2>Build it for the people who keep cities moving — then prove it works.</h2>
       </div>
       <div class="grid three">
-        <div class="card rv">
+        <div class="card zoom">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="9" cy="7.5" r="3.2"/><path d="M2.8 20a6.2 6.2 0 0 1 12.4 0"/><path d="M17 11h4M19 9v4"/></svg></div>
@@ -459,7 +547,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
              a 7&nbsp;MB download, sixteen languages at full parity, and an app that keeps
              accepting work when the signal drops.</p>
         </div>
-        <div class="card rv">
+        <div class="card zoom">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 6 9 17l-5-5"/></svg></div>
@@ -468,7 +556,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
              product cannot be found by one person. It found six in our own finished app — the
              last of them on the run meant to sign the work off.</p>
         </div>
-        <div class="card rv">
+        <div class="card zoom">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M5 3.5h14v17l-7-3.4-7 3.4z"/></svg></div>
@@ -482,6 +570,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   <!-- ══════════ everywhere ══════════ -->
   <section id="global" style="--accent:var(--blue)">
+    <span class="ghost" aria-hidden="true">GLOBAL</span>
     <div class="wrap">
       <div class="sec-head rv">
         <span class="eyebrow">Everywhere</span>
@@ -496,13 +585,13 @@ footer small { color: var(--muted); font-size: 13.5px; }
         <span>中文</span><span>日本語</span><span>한국어</span><span>العربية</span>
       </div>
       <div class="grid two" style="margin-top:34px">
-        <div class="card rv">
+        <div class="card zoom">
           <h3>Built for the connection people actually have</h3>
           <p>Buzz assumes patchy signal, prepaid data and a mid-range Android phone, because that
              is what the work runs on. A post or message written underground is queued on the
              device and sent when the connection returns.</p>
         </div>
-        <div class="card rv">
+        <div class="card zoom">
           <h3>Tested against the cities people actually work in</h3>
           <p>Populace models drivers moving through Manila, Mumbai, Delhi and Jakarta — real
              routes, real distances — rather than synthetic load pointed at an endpoint.</p>
@@ -513,6 +602,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   <!-- ══════════ principles ══════════ -->
   <section id="principles" class="band" style="--accent:var(--magenta)">
+    <span class="ghost" aria-hidden="true">PROMISES</span>
     <div class="wrap">
       <div class="sec-head rv">
         <span class="eyebrow">What we stand behind</span>
@@ -521,7 +611,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
            code that fails loudly if it stops being true.</p>
       </div>
       <div class="pledge">
-        <div class="rv">
+        <div class="zoom">
           <div class="n">01</div>
           <h3>Free for workers, permanently</h3>
           <p>Not a trial and not a freemium tier. Buzz costs a driver nothing and always will.</p>
@@ -530,14 +620,14 @@ footer small { color: var(--muted); font-size: 13.5px; }
              that funded LinkedIn and Waze — so there is never a quarter in which charging drivers
              becomes the obvious fix.</p>
         </div>
-        <div class="rv">
+        <div class="zoom">
           <div class="n">02</div>
           <h3>Privacy the database enforces</h3>
           <p>One driver cannot read another's data even if the app asks it to.</p>
           <p class="how"><b>The mechanism:</b> row-level security in Postgres, not a check in the
              client. An app bug cannot widen it, because the rule is enforced below the app.</p>
         </div>
-        <div class="rv">
+        <div class="zoom">
           <div class="n">03</div>
           <h3>We publish what failed</h3>
           <p>Every test run against both products is public, including the ones that found
@@ -551,6 +641,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   <!-- ══════════ milestones ══════════ -->
   <section id="milestones" style="--accent:var(--amber)">
+    <span class="ghost" aria-hidden="true">HISTORY</span>
     <div class="wrap">
       <div class="sec-head rv">
         <span class="eyebrow">Where we have got to</span>
@@ -579,6 +670,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   <!-- ══════════ company ══════════ -->
   <section id="company" class="band" style="--accent:var(--violet)">
+    <span class="ghost" aria-hidden="true">COMPANY</span>
     <div class="wrap">
       <div class="sec-head rv">
         <span class="eyebrow">Company</span>
@@ -588,13 +680,13 @@ footer small { color: var(--muted); font-size: 13.5px; }
            say plainly what our software does and does not do yet.</p>
       </div>
       <div class="people">
-        <div class="person rv">
+        <div class="person zoom">
           <span class="av">SD</span>
           <div><b>Snehasis Despande</b><em>Founder &amp; Director, Business</em>
             <p>Owns the commercial side — partnerships, market strategy, and how our products
                reach the people who need them.</p></div>
         </div>
-        <div class="person rv">
+        <div class="person zoom">
           <span class="av">SK</span>
           <div><b>Sankur Kundu</b><em>Co-founder &amp; Director, Technology</em>
             <p>Owns the engineering — both products end to end, the infrastructure they run on,
@@ -646,7 +738,7 @@ footer small { color: var(--muted); font-size: 13.5px; }
 
   /* Reveal. If the observer is unavailable everything is shown — content must
      never be left hidden by a feature check. */
-  var items = document.querySelectorAll(".rv");
+  var items = document.querySelectorAll(".rv, .zoom");
   if (reduced || !("IntersectionObserver" in window)) {
     Array.prototype.forEach.call(items, function (el) { el.classList.add("in"); });
   } else {
