@@ -122,8 +122,8 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <h2>1 &middot; Headline</h2>
   <div class="grid">
     <div class="kpi"><b>36</b><span>concurrent users, sustained, no failures</span></div>
-    <div class="kpi"><b>0</b><span>failures across 24,000+ calls</span></div>
-    <div class="kpi"><b>7</b><span>real bugs found in a finished app</span></div>
+    <div class="kpi"><b>0</b><span>failures across 42,000+ calls</span></div>
+    <div class="kpi"><b>8</b><span>real bugs found across both products</span></div>
     <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
   </div>
 
@@ -247,6 +247,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <tr><td class="v">20</td><td>6,450</td><td class="pass">0</td><td>645&thinsp;ms</td><td>1.1&thinsp;s</td></tr>
     <tr><td class="v">30</td><td>6,539</td><td class="pass">0</td><td>799&thinsp;ms</td><td>2.8&thinsp;s</td></tr>
     <tr><td class="v"><b>36</b></td><td><b>7,485</b></td><td class="pass"><b>0</b></td><td><b>757&thinsp;ms</b></td><td><b>1.4&thinsp;s</b></td></tr>
+    <tr><td class="v"><b>30</b> <span class="small">local</span></td><td><b>18,372</b></td><td class="pass"><b>0</b></td><td><b>51&thinsp;ms</b></td><td><b>88&thinsp;ms</b></td></tr>
   </table>
   <p class="small">Every row counts what that many users actually did, and the 36-user row is no
   exception: <strong>7,485 calls across twelve methods, zero failures</strong>. It reached 36 by
@@ -312,6 +313,50 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <strong>somewhere between twenty and thirty concurrent writers, this project's write path
     starts queueing</strong> — comfortably beyond closed testing, and worth measuring deliberately
     before it matters.</p>
+  </div>
+
+  <h3>Run detail &middot; thirty concurrent users, thirty minutes</h3>
+  <p><strong>The longest and largest run in this document, and the only one to exercise every
+  method the adapter has.</strong> Thirty agents for 1,856.7 seconds &mdash; just under thirty-one
+  minutes &mdash; against a <strong>local Supabase stack</strong> built that evening from this
+  project's own SQL, including the two migrations added the same day. Read the caveat below before
+  comparing its latencies with anything else here.</p>
+  <table>
+    <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
+    <tr><td class="v">reportLocation</td><td>8,033</td><td class="pass">0</td><td>51&thinsp;ms</td><td>88&thinsp;ms</td></tr>
+    <tr><td class="v">recentPostsByOthers</td><td>2,693</td><td class="pass">0</td><td>11&thinsp;ms</td><td>21&thinsp;ms</td></tr>
+    <tr><td class="v">like</td><td>2,693</td><td class="pass">0</td><td>8&thinsp;ms</td><td>15&thinsp;ms</td></tr>
+    <tr><td class="v">post</td><td>1,183</td><td class="pass">0</td><td>10&thinsp;ms</td><td>20&thinsp;ms</td></tr>
+    <tr><td class="v">openConversation</td><td>1,126</td><td class="pass">0</td><td>8&thinsp;ms</td><td>18&thinsp;ms</td></tr>
+    <tr><td class="v">sendMessage</td><td>1,126</td><td class="pass">0</td><td>8&thinsp;ms</td><td>18&thinsp;ms</td></tr>
+    <tr><td class="v">comment</td><td>1,054</td><td class="pass">0</td><td>7&thinsp;ms</td><td>13&thinsp;ms</td></tr>
+    <tr><td class="v">listGroups</td><td>172</td><td class="pass">0</td><td>7&thinsp;ms</td><td>17&thinsp;ms</td></tr>
+    <tr><td class="v">joinGroup</td><td>172</td><td class="pass">0</td><td>7&thinsp;ms</td><td>18&thinsp;ms</td></tr>
+    <tr><td class="v">createUser</td><td>30</td><td class="pass">0</td><td>154&thinsp;ms</td><td>189&thinsp;ms</td></tr>
+    <tr><td class="v">setProfile</td><td>30</td><td class="pass">0</td><td>15&thinsp;ms</td><td>21&thinsp;ms</td></tr>
+    <tr><td class="v"><code>refreshSession</code></td><td>30</td><td class="pass">0</td><td>252&thinsp;ms</td><td>308&thinsp;ms</td></tr>
+    <tr><td class="v">deleteUser</td><td>30</td><td class="pass">0</td><td>16&thinsp;ms</td><td>32&thinsp;ms</td></tr>
+    <tr><td class="v">Total</td><td><b>18,372</b></td><td class="pass"><b>0</b></td><td>&mdash;</td><td>&mdash;</td></tr>
+  </table>
+  <p class="small">332.7&nbsp;km driven &middot; 1,183 posts &middot; 2,693 likes &middot; 1,054
+  comments &middot; 1,126 messages &middot; 172 group joins. <strong>0 API failures, 0 transport
+  failures, 0 retries, 0 outages, 0 engine errors</strong>, and <strong>30 accounts created and 30
+  removed</strong>, cleanup verified empty afterwards. This is the first run long enough for
+  <code>refreshSession</code> to fire for every agent: all thirty sessions were renewed mid-run and
+  none dropped, which is why coverage reads 13 of 13 here rather than 12.</p>
+
+  <div class="callout warn">
+    <h3>Do not compare these latencies with the cloud runs</h3>
+    <p>Seven to eleven milliseconds is a loopback socket, not a network. The same twelve methods
+    measured 176&ndash;180&thinsp;ms against the cloud project earlier the same evening, and that
+    gap is the internet, not the code.</p>
+    <p>What a local run does establish is the part a cloud run cannot separate: <strong>with the
+    network removed, thirty concurrent users produced no failure of any kind for half an
+    hour</strong>. It also ran against a schema built that day from the project's own SQL files,
+    so the migrations are not merely syntactically valid &mdash; a full workload runs on top of
+    them.</p>
+    <p>The attempt to repeat this run against the cloud project is recorded in &sect;3.8. It did
+    not finish, and the reason was not Buzz.</p>
   </div>
 
   <h3>Run detail &middot; thirty-six concurrent users, ten minutes</h3>
@@ -555,6 +600,55 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   therefore re-run in full against the modified engine: <strong>2,030 API calls, 0 failures</strong>,
   10 agents, 818.1 s, 13/13 methods, 10 accounts created and 10 removed, verdict
   <code>clean</code>. Fixing portability did not cost correctness on the original backend.</p>
+
+  <h3>3.8 &nbsp;The same run over the network, which did not finish</h3>
+  <p>The thirty-user, thirty-minute run above was repeated against the cloud test project the same
+  evening, deliberately, to get the figure a local stack cannot give. <strong>It did not
+  complete.</strong> It is recorded here because a report that only keeps the runs that worked is
+  not a record.</p>
+  <table>
+    <tr><th>Property</th><th>Local</th><th>Cloud, same workload</th></tr>
+    <tr><td class="v">Completed</td><td class="pass">30 of 30 min</td><td class="fail">10.5 of 30 min</td></tr>
+    <tr><td class="v">API calls</td><td>18,372</td><td>1,569</td></tr>
+    <tr><td class="v">Failures</td><td class="pass">0</td><td class="fail">214, all transport</td></tr>
+    <tr><td class="v"><code>reportLocation</code> p50</td><td>51&thinsp;ms</td><td>550&thinsp;ms</td></tr>
+    <tr><td class="v">Accounts removed</td><td class="pass">30 of 30</td><td class="fail">0 of 30</td></tr>
+  </table>
+  <p class="small">Every failure was transport: 149 calls refused once the breaker opened, 30
+  <code>reportLocation</code> timeouts at 20&thinsp;s, and a handful of <code>fetch failed</code>.
+  Every method that reached the server was clean &mdash; <code>like</code> 179, <code>sendMessage</code>
+  85, <code>comment</code> 72, <code>createUser</code> 30, all at zero.</p>
+
+  <div class="callout warn">
+    <h3>The cause was DNS, and it was measured rather than assumed</h3>
+    <p>The obvious story is a slow connection. It was not. Breaking a single request into phases
+    puts the time somewhere specific:</p>
+    <pre><span class="d">dns=</span>11.06s  <span class="d">tcp=</span>11.13s  <span class="d">tls=</span>15.44s  <span class="d">total=</span>17.60s</pre>
+    <p><strong>Name resolution took eleven seconds; the TCP connection completed seventy
+    milliseconds after it.</strong> The path to the server was fine — finding its address was not.
+    The machine was on a phone hotspot whose primary resolver is an IPv6 link-local address that
+    times out before falling back, and queries to 8.8.8.8 and 1.1.1.1 were blocked outright, so the
+    only working resolver was the hotspot's own at roughly 2.2 seconds a lookup. Over the same
+    period <code>github.com</code> would not resolve at all.</p>
+    <p>This is why the local comparison matters. Identical code, identical workload, thirty agents:
+    zero failures for half an hour with no name lookups in the path, and a collapse inside eleven
+    minutes with them. <strong>Nothing in this section is evidence about Buzz.</strong></p>
+  </div>
+
+  <div class="callout warn">
+    <h3>Defect eight, in Populace: cleanup cannot outlive the process</h3>
+    <p>The failed run left <strong>thirty simulated accounts live in the test project</strong>, and
+    a follow-up <code>clean</code> could not remove them either.</p>
+    <p>The circuit breaker resets before teardown precisely so a dead-network verdict cannot block
+    cleanup — there is a comment in <code>net.mjs</code> explaining why, because an earlier version
+    left five invented accounts behind. That safeguard ran correctly and was still not enough: each
+    driver hit twelve consecutive failures on the retry path.</p>
+    <p>The real weakness is narrower than "the network was bad". <strong>The identities exist only
+    in the run's memory.</strong> Once the process exits, <code>clean</code> has to re-derive them
+    and can fail in exactly the same way. Writing each created identity to disk as it is made would
+    let a later cleanup finish with the network needed only to perform the deletion, not to know
+    what to delete. Not yet implemented.</p>
+  </div>
 
   <h2>4 &middot; Populace's own correctness</h2>
   <p>A testing tool that is wrong is worse than no testing tool, because it is believed. Populace
