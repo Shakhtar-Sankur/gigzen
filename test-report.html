@@ -121,9 +121,9 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>1 &middot; Headline</h2>
   <div class="grid">
-    <div class="kpi"><b>36</b><span>concurrent users, sustained, no failures</span></div>
-    <div class="kpi"><b>0</b><span>failures across 42,000+ calls</span></div>
-    <div class="kpi"><b>8</b><span>real bugs found across both products</span></div>
+    <div class="kpi"><b>300</b><span>concurrent users, sustained</span></div>
+    <div class="kpi"><b>0</b><span>API failures across 3.17 million calls</span></div>
+    <div class="kpi"><b>9</b><span>real bugs found across both products</span></div>
     <div class="kpi"><b>78</b><span>Populace self-tests, all passing</span></div>
   </div>
 
@@ -649,6 +649,68 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     let a later cleanup finish with the network needed only to perform the deletion, not to know
     what to delete. Not yet implemented.</p>
   </div>
+
+
+  <h2>3.9 &middot; The 21 August runs — thirty to three hundred drivers</h2>
+
+  <p>Seven counted runs in one day against a local Buzz backend, from thirty simulated drivers to
+  three hundred, across thirty cities in seventeen writing systems.
+  <strong>3,174,576 API calls and zero API failures.</strong> 740 accounts created, 740 removed,
+  verified by querying the database afterwards rather than by trusting the tool's own report.</p>
+
+  <table>
+    <tr><th>Run</th><th>Drivers</th><th>Cities</th><th>Calls</th><th>API fails</th><th>Network</th><th>Verdict</th></tr>
+    <tr><td class="v">Repeatability &times;3</td><td>30</td><td>4</td><td>140,691</td><td class="pass">0</td><td>0</td><td>clean</td></tr>
+    <tr><td class="v">Mega</td><td>50</td><td>5</td><td>232,837</td><td class="pass">0</td><td>0</td><td>clean</td></tr>
+    <tr><td class="v">Hundred</td><td>100</td><td>10</td><td>467,158</td><td class="pass">0</td><td>0</td><td>clean</td></tr>
+    <tr><td class="v"><b>Two Hundred</b></td><td><b>200</b></td><td><b>20</b></td><td><b>932,455</b></td><td class="pass"><b>0</b></td><td><b>0</b></td><td><b>clean</b></td></tr>
+    <tr><td class="v">Three Hundred</td><td>300</td><td>30</td><td>1,401,435</td><td class="pass">0</td><td>1</td><td>inconclusive</td></tr>
+  </table>
+
+  <p class="small">The three-hundred run is marked inconclusive because one <code>post</code> call
+  never reached the server &mdash; a socket exhausted on the test machine, after 1,316 retried
+  attempts across the run had succeeded. Its API failure count is zero, like every other row.
+  Populace will not label a run clean when it could not make every call, even when nothing in the
+  app went wrong.</p>
+
+  <div class="callout">
+    <h3>Throughput stops scaling around two hundred drivers</h3>
+    <p>Three runs share an identical shape &mdash; double engagement, one-second ticks &mdash; and
+    differ only in population, which makes them the one honest comparison. A hundred drivers
+    sustained 178 calls per second; two hundred sustained 241, a gain of <b>1.36&times;</b>; three
+    hundred sustained 272, a gain of <b>1.13&times;</b>.</p>
+    <p>The extra work did not vanish, it became waiting: <code>reportLocation</code> moved from
+    142&nbsp;ms to 606&nbsp;ms at the median across that range. Nothing failed and no percentile ran
+    away, so this is <b>saturation, not collapse</b> &mdash; where Buzz actually breaks is still
+    unfound.</p>
+  </div>
+
+  <div class="callout">
+    <h3>It did not slow down as the data grew</h3>
+    <p>Latency rising with concurrency is expected. Latency rising <em>with time</em> is the failure
+    that quietly kills a social feed: quick when the tables are empty, painful a year later at the
+    same user count.</p>
+    <p>Every long run was checked quarter by quarter. In the three-hundred-driver run the per-tick
+    cost <b>fell</b> &mdash; 3.06&nbsp;s, then 2.96, then 2.59 &mdash; while the database grew past
+    122,000 posts and 260,000 likes. The last quarter ran against four times the data of the first
+    and was the fastest of the four.</p>
+  </div>
+
+  <div class="callout warn">
+    <h3>Two runs are excluded, and why</h3>
+    <p>A five-hundred-driver run produced 106,110 calls and 51 <code>fetch failed</code> errors. The
+    cause was this machine exhausting its 16,384 ephemeral TCP ports &mdash; at that rate it needed
+    roughly 18,600 &mdash; not anything in the app. It measured the test harness, so it is not
+    counted. <strong>That is defect nine, and it is in Populace itself:</strong> the server offers
+    <code>Connection: keep-alive</code> and Node opens a fresh socket per sequential call.</p>
+    <p>A four-hundred-driver run was cancelled mid-flight for the same reason once ports passed 78%
+    of the ceiling. Its 400 accounts were found and removed.</p>
+  </div>
+
+  <p class="small"><b>What governs every figure above:</b> these runs are against a local Supabase
+  stack over loopback, so no network is included. The same calls measured about 175&nbsp;ms each
+  against the hosted project before any load at all &mdash; a real driver's experience is this cost
+  plus the network, not these numbers.</p>
 
   <h2>4 &middot; Populace's own correctness</h2>
   <p>A testing tool that is wrong is worse than no testing tool, because it is believed. Populace
