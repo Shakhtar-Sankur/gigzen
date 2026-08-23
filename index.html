@@ -78,7 +78,10 @@
 }
 
 html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body::before, body::after { animation: none; }
+}
 
 /* The cosmic ground: a violet field with an orange glow swept through it,
    fixed so the page moves over the light rather than dragging it along. */
@@ -96,6 +99,15 @@ body::before {
     radial-gradient(46% 40% at 78% 88%, rgba(255,138,42,.20) 0%, transparent 66%),
     radial-gradient(40% 34% at 18% 82%, rgba(192,31,110,.18) 0%, transparent 66%),
     linear-gradient(180deg, var(--space-2) 0%, var(--space) 42%, var(--space-3) 100%);
+  /* Scaled up so the drift never exposes an edge. */
+  transform: scale(1.18);
+  animation: aurora 54s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes aurora {
+  0%   { transform: scale(1.18) translate3d(0, 0, 0)        rotate(0deg); }
+  50%  { transform: scale(1.24) translate3d(-2.2%, 1.4%, 0) rotate(1.2deg); }
+  100% { transform: scale(1.20) translate3d(1.8%, -1.6%, 0) rotate(-.8deg); }
 }
 /* A faint star field, drawn rather than fetched. */
 body::after {
@@ -108,6 +120,13 @@ body::after {
     radial-gradient(1.3px 1.3px at 28% 78%, rgba(255,255,255,.5) 50%, transparent 51%),
     radial-gradient(1.1px 1.1px at 62% 88%, rgba(255,255,255,.45) 50%, transparent 51%);
   background-size: 780px 620px;
+  /* The stars drift the other way and much more slowly, which is what gives
+     the ground depth rather than just movement. */
+  animation: stars 180s linear infinite;
+}
+@keyframes stars {
+  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  to   { background-position: 780px 620px, 780px 620px, 780px 620px, 780px 620px, 780px 620px, 780px 620px; }
 }
 
 h1,h2,h3,h4 { margin: 0; color: var(--on-space); line-height: 1.04; font-weight: 700; letter-spacing: -.035em; }
@@ -120,7 +139,10 @@ img, svg { display: block; max-width: 100%; }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: 24px; }
-section { padding-block: clamp(66px, 9vw, 122px); position: relative; }
+/* overflow-clip-margin keeps the ghost word inside the section it belongs to.
+   It used to sit at a negative offset with nothing clipping it, so it climbed
+   over the rule above and into the previous section's band. */
+section { padding-block: clamp(66px, 9vw, 122px); position: relative; overflow: hidden; }
 .lede { font-size: clamp(18px, 2.1vw, 22px); line-height: 1.55; color: var(--body); }
 
 /* ── section heads ───────────────────────────────────────────────────────── */
@@ -228,7 +250,17 @@ nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
 @media (max-width: 560px) { .phone.c { display: none; } }
 
 /* ── stat band ───────────────────────────────────────────────────────────── */
-.band { background: rgba(255,255,255,.045); border-block: 1px solid var(--rule-space); }
+/* Glass, because it sits on the ground rather than on paper: it blurs the
+   aurora moving behind it instead of hiding it. */
+.band {
+  background: linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.03));
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  border-block: 1px solid var(--rule-space);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+}
+.stat { transition: background .3s ease; }
+.stat:hover { background: rgba(255,255,255,.05); }
 .stats { display: grid; grid-template-columns: repeat(2, 1fr); }
 @media (min-width: 880px) { .stats { grid-template-columns: repeat(4, 1fr); } }
 .stat { padding: clamp(24px, 3.4vw, 40px) clamp(14px, 2vw, 26px); border-right: 1px solid var(--rule-space); }
@@ -360,7 +392,7 @@ footer small { color: var(--on-space-soft); font-size: 13.5px; }
    decorative — the thing that makes the reference feel like a poster rather
    than a page. aria-hidden, and it never sits under body copy. */
 .ghost {
-  position: absolute; left: 50%; translate: -50% 0; top: clamp(-18px, -1vw, -6px);
+  position: absolute; left: 50%; translate: -50% 0; top: 0;
   z-index: 0; pointer-events: none; user-select: none; white-space: nowrap;
   font-weight: 800; letter-spacing: -.06em; line-height: .78;
   font-size: clamp(84px, 17vw, 260px);
