@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gigzen — Test Report, 15 August 2026</title>
-<meta name="description" content="A record of every test run against Buzz and Populace: what was verified, what was found, and what was not tested. Gigzen Private Limited.">
+<meta name="description" content="A record of every test run against Waggle and Populace: what was verified, what was found, and what was not tested. Gigzen Private Limited.">
 <style>
 @page { size: A4; margin: 0; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -105,7 +105,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <span class="tag">Gigzen Private Limited &middot; Bhubaneswar, Odisha, India<br>Engineering test record</span>
   </div>
 
-  <h1>Test Report — Buzz &amp; Populace</h1>
+  <h1>Test Report — Waggle &amp; Populace</h1>
   <p class="sub">Everything that was run against both products, what it found, and — set out just as
   plainly — what was never tested. Figures here are read from run artefacts and re-verified
   commands, not recalled. Where a number could not be sourced, it is marked as not measured
@@ -128,9 +128,13 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   </div>
 
   <p class="small">A note on the name: the app was called <em>Buzz Buzz</em> while every run in
-  this document was carried out, and was renamed to <strong>Buzz</strong> on 16 August 2026. The
-  product, the code and the figures are unchanged — only the name is. Run artefacts and commit
-  messages from before that date still say the old one.</p>
+  this document was carried out, was renamed to <strong>Buzz</strong> on 16 August 2026, and
+  again to <strong>Waggle</strong> on 27 August 2026 — at which point its package also changed
+  from <code>com.masayaako.driver</code> to <code>com.gigzen.waggle</code>. The product, the code
+  and the figures are unchanged; only the name is. Run artefacts, version rows and commit
+  messages from before each change still carry the name in use at the time, and are left that
+  way on purpose: a test report that rewrites what it called things is a test report you cannot
+  check.</p>
 
   <p>The single most useful result in this document is not the clean run. It is that a
   <strong>finished, signed, manually tested application could not create a working account</strong>,
@@ -140,7 +144,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   the run whose whole purpose was to confirm there was nothing left to find.</p>
 
   <h2>2 &middot; How the products were tested</h2>
-  <p>Buzz is a multi-user product: a social feed, group chat, presence on a map, and
+  <p>Waggle is a multi-user product: a social feed, group chat, presence on a map, and
   permission rules deciding who may read what. None of that can be proven by one developer with
   one account, however carefully they tap through every screen. So the primary method was to
   generate a population and let it use the app through its real API, as genuinely authenticated
@@ -275,7 +279,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <div class="callout">
     <h3>What actually limits this system: signup throughput</h3>
-    <p>A run of fifty agents found the real ceiling, and it is not in Buzz.
+    <p>A run of fifty agents found the real ceiling, and it is not in Waggle.
     <strong>Fourteen of fifty accounts could not be created</strong>, every one of them refused by
     Supabase Auth with <code>Request rate limit reached</code> — a free-tier quota on signups per
     hour, hit by creating fifty accounts in seconds.</p>
@@ -287,7 +291,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     rather than a wall, so a paid tier raises it. And it says nothing about how many people can
     <em>use</em> the app at once: the ceiling found here is on account creation, and the
     thirty-six that got through ran for ten minutes with no failures at all.</p>
-    <p class="small"><strong>The honest limit statement:</strong> Buzz has been shown to
+    <p class="small"><strong>The honest limit statement:</strong> Waggle has been shown to
     sustain 36 concurrent users cleanly. That is the highest tested, not a proven maximum — nothing
     yet says where its own ceiling is.</p>
   </div>
@@ -356,7 +360,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     so the migrations are not merely syntactically valid &mdash; a full workload runs on top of
     them.</p>
     <p>The attempt to repeat this run against the cloud project is recorded in &sect;3.8. It did
-    not finish, and the reason was not Buzz.</p>
+    not finish, and the reason was not Waggle.</p>
   </div>
 
   <h3>Run detail &middot; thirty-six concurrent users, ten minutes</h3>
@@ -369,7 +373,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <strong>36 accounts created, 14 refused</strong> by Supabase Auth with
   <code>Request rate limit reached</code> (p50 653&thinsp;ms, p95 1.3&thinsp;s across all fifty
   attempts). This is the signup ceiling described above — a free-tier quota on account creation,
-  not a property of Buzz. The run then began with the 36 accounts that existed.</p>
+  not a property of Waggle. The run then began with the 36 accounts that existed.</p>
 
   <table>
     <tr><th>Method</th><th>Calls</th><th>Failures</th><th>p50</th><th>p95</th></tr>
@@ -526,7 +530,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   </table>
   <p class="small">Both reported <code>preclean=0 &middot; run=0 &middot; postclean=0</code> — clean before,
   clean during, clean after. The sign-off run was the <strong>first <code>exit 0</code> Populace had
-  ever returned against Buzz</strong>.</p>
+  ever returned against Waggle</strong>.</p>
 
   <div class="callout warn">
     <h3>Defect six, found on the sign-off run</h3>
@@ -565,7 +569,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   <code>examples/rest-api/</code> so the result can be reproduced by anyone:</p>
 
   <table>
-    <tr><th></th><th>Buzz</th><th>The REST demo</th></tr>
+    <tr><th></th><th>Waggle</th><th>The REST demo</th></tr>
     <tr><td class="v">Transport</td><td>supabase-js client</td><td>plain <code>fetch</code></td></tr>
     <tr><td class="v">Identifiers</td><td>UUID strings</td><td>integers</td></tr>
     <tr><td class="v">Errors</td><td><code>{data, error}</code> tuples</td><td>HTTP status + <code>{error}</code></td></tr>
@@ -596,7 +600,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
   </div>
 
   <h3>3.6 &nbsp;Regression run after those changes</h3>
-  <p>The 2,116-call result above was measured on code that has since changed. Buzz was
+  <p>The 2,116-call result above was measured on code that has since changed. Waggle was
   therefore re-run in full against the modified engine: <strong>2,030 API calls, 0 failures</strong>,
   10 agents, 818.1 s, 13/13 methods, 10 accounts created and 10 removed, verdict
   <code>clean</code>. Fixing portability did not cost correctness on the original backend.</p>
@@ -632,7 +636,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     period <code>github.com</code> would not resolve at all.</p>
     <p>This is why the local comparison matters. Identical code, identical workload, thirty agents:
     zero failures for half an hour with no name lookups in the path, and a collapse inside eleven
-    minutes with them. <strong>Nothing in this section is evidence about Buzz.</strong></p>
+    minutes with them. <strong>Nothing in this section is evidence about Waggle.</strong></p>
   </div>
 
   <div class="callout warn">
@@ -653,7 +657,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>3.9 &middot; The 21 August runs — thirty to three hundred drivers</h2>
 
-  <p>Seven counted runs in one day against a local Buzz backend, from thirty simulated drivers to
+  <p>Seven counted runs in one day against a local Waggle backend, from thirty simulated drivers to
   three hundred, across thirty cities in seventeen writing systems.
   <strong>3,174,576 API calls and zero API failures.</strong> 740 accounts created, 740 removed,
   verified by querying the database afterwards rather than by trusting the tool's own report.</p>
@@ -681,7 +685,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     hundred sustained 272, a gain of <b>1.13&times;</b>.</p>
     <p>The extra work did not vanish, it became waiting: <code>reportLocation</code> moved from
     142&nbsp;ms to 606&nbsp;ms at the median across that range. Nothing failed and no percentile ran
-    away, so this is <b>saturation, not collapse</b> &mdash; where Buzz actually breaks is still
+    away, so this is <b>saturation, not collapse</b> &mdash; where Waggle actually breaks is still
     unfound.</p>
   </div>
 
@@ -892,7 +896,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     <tr><td class="v">Behaviour at scale</td><td class="na">Not tested</td>
       <td>The largest run was thirty-six concurrent users, and it was clean. That is the highest
       figure tested, <strong>not a measured maximum</strong> — the runs were stopped by a signup
-      quota, not by the app slowing down, so where Buzz actually breaks is still unknown.
+      quota, not by the app slowing down, so where Waggle actually breaks is still unknown.
       These remain correctness runs at one measurement each. Nothing here supports a claim about
       hundreds or thousands of users.</td></tr>
     <tr><td class="v">Populace against other backends</td><td class="na">Not tested</td>
@@ -913,7 +917,7 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
   <h2>9 &middot; Conclusion</h2>
   <p>Both products do what is claimed of them, within limits this document states rather than
-  hides. Buzz builds, type-checks, ships as a signed artefact, and survived a concurrent
+  hides. Waggle builds, type-checks, ships as a signed artefact, and survived a concurrent
   multi-user run against its live backend with no failures across 400 calls, and a thirty-six-user
   run of 7,485 calls with none either. Populace found six genuine defects in a finished
   application, passes 78 self-tests, and distinguishes a fault in your code from a fault in the
