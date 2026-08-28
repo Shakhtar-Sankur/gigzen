@@ -229,6 +229,30 @@ section{padding-block:clamp(74px,9vw,128px)}
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 @keyframes slide{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 
+/* Three rows.
+   One 43px strip left this section 435px tall against ~1300px for its
+   neighbours, so the page's standard 74px padding had nothing to sit around
+   and the languages read as stranded rather than placed. Three rows give the
+   section real body — and put most of the forty-three on screen at once, which
+   is the actual claim being made here.
+
+   All three travel the same way. What keeps them from reading as one solid
+   moving block is speed, not direction: three durations that are not multiples
+   of each other — 46/53/61 — so the rows drift out of phase and never line
+   back up. Equal durations would look like one block; opposite directions read
+   as a busier, more restless thing than this section wants to be. */
+.marq + .marq{margin-top:11px}
+.marq-in.mid{animation-duration:53s}
+.marq-in.slow{animation-duration:61s}
+
+/* The fade is per-row, so on a narrow screen three stacked masks cost three
+   composited layers. Cheap enough — they animate transform only — but the
+   middle row's mask is dropped below 560px where the rows nearly touch and the
+   overlapping fades muddy each other. */
+@media(max-width:560px){
+  .marq:nth-of-type(2){-webkit-mask-image:none;mask-image:none}
+}
+
 /* ── timeline ─────────────────────────────────────────────────────────── */
 .time{position:relative;padding-left:34px}
 .time::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:1px;
@@ -362,7 +386,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
             <figure><img src="shots/community.jpg" width="720" height="1520" loading="lazy"
               alt="The Waggle community feed."></figure>
             <figure><img src="shots/map.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle map, showing streets around Cuttack."></figure>
+              alt="The Waggle map, showing a day's driving recorded across Mumbai and matched to the roads, from Powai through Kurla to Bandra."></figure>
             <figure><img src="shots/messages.jpg" width="720" height="1520" loading="lazy"
               alt="The Waggle messages list."></figure>
           </div>
@@ -370,7 +394,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
             <span>8.2 MB download</span><span>43 languages</span>
             <span>Offline writes</span><span>Pre-launch build</span>
           </div>
-          <a class="go" href="https://shakhtar-sankur.github.io/buzz-buzz/" rel="noreferrer">
+          <a class="go" href="https://shakhtar-sankur.github.io/waggle/" rel="noreferrer">
             Visit Waggle
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -440,8 +464,17 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
           London. Waggle ships in forty-three languages — right-to-left included — and
           picks the currency from where you actually are.</p>
       </div>
+      <!-- Three rows, filled by script. aria-label sits on the first only: the
+           set is one list to a screen reader, and labelling all three would
+           announce "supported languages" three times for one thing. -->
       <div class="marq rv" aria-label="Supported languages">
         <div class="marq-in" id="marq"></div>
+      </div>
+      <div class="marq rv" aria-hidden="true">
+        <div class="marq-in mid" id="marq2"></div>
+      </div>
+      <div class="marq rv" aria-hidden="true">
+        <div class="marq-in slow" id="marq3"></div>
       </div>
     </div>
   </section>
@@ -580,7 +613,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   <div class="wrap foot">
     <small>© 2026 Gigzen Private Limited · Bhubaneswar, Odisha, India</small>
     <nav>
-      <a href="https://shakhtar-sankur.github.io/buzz-buzz/" rel="noreferrer">Waggle</a>
+      <a href="https://shakhtar-sankur.github.io/waggle/" rel="noreferrer">Waggle</a>
       <a href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">Populace</a>
       <a href="test-report.html">Test report</a>
       <a href="product-sheet.html">Product sheet</a>
@@ -601,11 +634,30 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     "Tiếng Việt","Português","Français","Deutsch","中文","日本語","한국어","العربية",
     "Nederlands","Italiano","Polski","Română","Čeština","Svenska","Dansk","Norsk","Suomi",
     "Ελληνικά","Türkçe","Русский","Українська","עברית","Kiswahili","ខ្មែរ","မြန်မာ","සිංහල","नेपाली"];
-  var m = document.getElementById("marq");
-  if (m) {
-    var html = LANGS.map(function(l){ return "<span>" + l + "</span>"; }).join("");
-    m.innerHTML = html + html;
-  }
+  /* Split across the three rows rather than repeating one list three times, so
+     the set shows most of the forty-three at once instead of the same handful
+     sliding past on every row. */
+  var pill = function(l){ return "<span>" + l + "</span>"; };
+  var per = Math.ceil(LANGS.length / 3);
+  var rows = [
+    document.getElementById("marq"),
+    document.getElementById("marq2"),
+    document.getElementById("marq3")
+  ];
+  rows.forEach(function (el, i) {
+    if (!el) return;
+    var slice = LANGS.slice(i * per, (i + 1) * per);
+    if (!slice.length) return;
+    /* The -50% keyframe assumes the row holds EXACTLY two copies of its list,
+       so the second copy is under the first at the moment it wraps. A third of
+       the languages can be narrower than the container on a wide screen, which
+       would show empty track — so the list is repeated until one copy is at
+       least as wide as the widest layout, and only then doubled. */
+    var copy = slice;
+    while (copy.length < 16) copy = copy.concat(slice);
+    var html = copy.map(pill).join("");
+    el.innerHTML = html + html;
+  });
 
   /* Reveal on scroll. One observer for the whole page, and each element is
      unobserved once it has appeared — a reveal that keeps firing is a reveal
