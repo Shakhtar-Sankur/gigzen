@@ -199,7 +199,11 @@ section{padding-block:clamp(74px,9vw,128px)}
 .product:hover .go svg{transform:translateX(6px)}
 
 /* phone strip inside the Waggle card */
-.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px}
+/* Six screens now rather than four, so three across and two down instead of a
+   single row — a 6-wide row makes each phone too narrow to read anything in,
+   and 4+2 leaves a ragged half-row. Two columns once the card gets narrow. */
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+@media(max-width:560px){.shots{grid-template-columns:repeat(2,1fr)}}
 .shots figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--edge);
   background:rgba(0,0,0,.25);transition:transform .4s cubic-bezier(.2,.7,.3,1)}
 .shots figure:hover{transform:translateY(-6px) scale(1.03)}
@@ -355,7 +359,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
 
       <div class="stats">
         <div class="stat rv"><b data-count="43">43</b><span>languages, right-to-left included</span></div>
-        <div class="stat rv"><b data-count="27">27</b><span>currencies, set from where you are</span></div>
+        <div class="stat rv"><b data-count="61">61</b><span>currencies, set from where you are</span></div>
         <div class="stat rv"><b data-count="72">72</b><span>countries covered</span></div>
         <div class="stat rv"><b data-count="20" data-suffix="+">20+</b><span>gig platforms recognised</span></div>
       </div>
@@ -382,13 +386,17 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
             feed — built for a mid-range phone on a prepaid plan.</p>
           <div class="shots">
             <figure><img src="shots/home.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle home screen, showing today's distance, active time and earnings in rupees."></figure>
-            <figure><img src="shots/community.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle community feed."></figure>
+              alt="The Waggle home screen: today's distance, active time and earnings side by side, above a daily goal ring."></figure>
             <figure><img src="shots/map.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle map, showing a day's driving recorded across Mumbai and matched to the roads, from Powai through Kurla to Bandra."></figure>
+              alt="The Waggle map, showing a day's driving recorded across Mumbai and matched to the roads, from Andheri through Powai and Kurla to Bandra, with distance, time and pace beneath it."></figure>
+            <figure><img src="shots/friends.jpg" width="720" height="1520" loading="lazy"
+              alt="The Waggle friends map: four connected drivers pinned across Mumbai with the platform each is working and how far away they are, the one who stopped sharing shown dimmed."></figure>
+            <figure><img src="shots/community.jpg" width="720" height="1520" loading="lazy"
+              alt="The Waggle community feed, where drivers post road conditions to each other."></figure>
             <figure><img src="shots/messages.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle messages list."></figure>
+              alt="The Waggle messages list, showing direct chats and a group of drivers working the same shift."></figure>
+            <figure><img src="shots/profile.jpg" width="720" height="1520" loading="lazy"
+              alt="The Waggle profile screen, showing the platform picker with Indian gig apps and a vehicle maintenance tracker."></figure>
           </div>
           <div class="facts">
             <span>8.2 MB download</span><span>43 languages</span>
