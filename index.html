@@ -117,7 +117,37 @@ header.stuck{border-bottom-color:var(--edge);background:rgba(11,10,31,.82)}
   background:var(--indigo-lit);transition:right .3s cubic-bezier(.2,.7,.3,1)}
 .nav-links a:hover{color:var(--text)}
 .nav-links a:hover::after{right:0}
-@media(max-width:820px){.nav-links{display:none}}
+/* ── the small-screen menu ────────────────────────────────────────────
+   The links used to be display:none here with no replacement, which left the
+   page with no navigation at all on a phone. They now fold into a panel behind
+   a burger: same links, same order, reachable. */
+.burger{display:none;margin-left:auto;width:42px;height:38px;align-items:center;
+  justify-content:center;cursor:pointer;color:var(--text);
+  background:var(--glass);border:1px solid var(--edge);border-radius:12px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:border-color .25s,background .25s}
+.burger:hover{border-color:var(--edge-lit);background:var(--glass-2)}
+.burger svg{width:20px;height:20px;display:block}
+@media(max-width:820px){
+  .burger{display:inline-flex}
+  .nav-links{
+    display:none;position:absolute;left:0;right:0;top:100%;
+    flex-direction:column;align-items:stretch;gap:0;
+    padding:8px 20px 16px;
+    background:rgba(11,10,31,.96);
+    backdrop-filter:blur(18px) saturate(150%);
+    -webkit-backdrop-filter:blur(18px) saturate(150%);
+    border-bottom:1px solid var(--edge);
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:14px 2px;font-size:16px;border-bottom:1px solid var(--edge)}
+  .nav-links a:last-child{border-bottom:0}
+  /* The hover underline is a pointer affordance and reads as a stray line in a
+     stacked list. */
+  .nav-links a::after{display:none}
+}
+/* The panel is positioned against the nav row. */
+.nav{position:relative}
 
 /* ── buttons ──────────────────────────────────────────────────────────── */
 .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:999px;
@@ -331,7 +361,17 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
       </svg>
       Gigzen
     </a>
-    <div class="nav-links">
+    <!-- The links were display:none below 820px with nothing in their place,
+         so on a phone this page had no navigation at all — every section
+         unreachable except by scrolling the whole thing. -->
+    <button class="burger" id="burger" type="button" aria-label="Menu"
+            aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="nav-links" id="nav-links">
       <a href="#products">Products</a>
       <a href="#mission">Mission</a>
       <a href="#promises">Promises</a>
@@ -634,6 +674,37 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
 (function(){
   "use strict";
   var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ── the small-screen menu ──
+     Closes on any link, because every one of these either jumps to an anchor on
+     this page or leaves it — in both cases a panel left standing over the
+     content is the wrong thing to look at next. */
+  var burger = document.getElementById("burger");
+  var navLinks = document.getElementById("nav-links");
+  if (burger && navLinks) {
+    burger.addEventListener("click", function () {
+      var open = navLinks.classList.toggle("open");
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    navLinks.addEventListener("click", function (e) {
+      if (e.target.tagName !== "A") return;
+      navLinks.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    });
+    /* Also on Escape, and when the viewport grows back past the breakpoint —
+       otherwise the panel stays in the DOM as .open and reappears the next time
+       the window is narrowed. */
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      navLinks.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    });
+    window.matchMedia("(min-width: 821px)").addEventListener("change", function (m) {
+      if (!m.matches) return;
+      navLinks.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    });
+  }
 
   /* The language list is the claim. Written once and duplicated, because a
      marquee needs two copies to loop without a seam. */
