@@ -238,6 +238,14 @@ section{padding-block:clamp(74px,9vw,128px)}
   background:rgba(0,0,0,.25);transition:transform .4s cubic-bezier(.2,.7,.3,1)}
 .shots figure:hover{transform:translateY(-6px) scale(1.03)}
 .shots img{aspect-ratio:720/1520;object-fit:cover;object-position:top}
+/* Desktop software, photographed on a desktop. Three phone-shaped frames would
+   crop a 1440-wide window down to a stripe of its own sidebar. The first shot
+   runs full width because it is the one that shows the tool working — the rest
+   is supporting evidence. */
+.shots.wide{grid-template-columns:repeat(2,1fr)}
+.shots.wide img{aspect-ratio:1440/744}
+.shots.wide figure:first-child{grid-column:1/-1}
+@media(max-width:560px){.shots.wide{grid-template-columns:1fr}}
 
 /* ── generic 3-up ─────────────────────────────────────────────────────── */
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -457,8 +465,16 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
             A command line for engineers, and a Windows application for everyone else. It
             reports what broke, why, and what to change, and refuses to call a run clean
             when it could not make every call.</p>
+          <div class="shots wide">
+            <figure><img src="shots/populace-live.jpg" width="1440" height="744" loading="lazy"
+              alt="Populace Studio mid-run: 8,320 API calls at 49 a second against a test app, forty simulated people pinned on a world map in Mumbai and Manila, and a panel naming the one thing failing — 405 rejections from a row-level security policy called post_likes_insert."></figure>
+            <figure><img src="shots/populace-run.jpg" width="1440" height="744" loading="lazy"
+              alt="Setting up a run in Populace Studio: presets for a smoke test, a normal afternoon and everyone at once, and a panel confirming the chosen config points at a test environment and covers 12 of 13 contract methods."></figure>
+            <figure><img src="shots/populace-report.jpg" width="1440" height="744" loading="lazy"
+              alt="A finished Populace report: the verdict problems-found, 262 of 5,454 calls failed, all thirty simulated people removed afterwards, and latency for every method with its median and 95th percentile."></figure>
+          </div>
           <div class="facts">
-            <span>97 self-tests</span><span>Zero dependencies</span>
+            <span>101 self-tests</span><span>Zero dependencies</span>
             <span>Desktop app &amp; CLI</span><span>npm: @gigzen/populace</span>
           </div>
           <a class="go" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">
