@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delete Your Waggle Account — Gigzen Private Limited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta name="description" content="How to delete your Waggle account and data, what is removed, and what is kept. Gigzen Private Limited.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M33.19%202%20L60.1%2014.82%20L48.54%2020.68%20L33.66%2013.4%20L16.25%2023.06%20L15.14%2023.85%20L15.14%2040.15%20L33.19%2047.91%20L49.02%2039.84%20L49.34%2038.73%20L48.54%2038.25%20L30.34%2033.66%20L30.5%2030.97%20L44.43%2024.01%20L61.05%2029.86%20L61.05%2046.64%20L33.5%2062%20L2.95%2046.64%20L2.95%2017.51%20L33.03%202.16%20Z%22%20fill%3D%22%230A0A0C%22%2F%3E%3C%2Fsvg%3E">
+</head>
+<body>
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   Gigzen — account deletion
+   ══════════════════════════════════════════════════════════════════════════
+   Same language as the company site: white surfaces on a deep violet ground.
+   The document itself is one long white sheet, because a policy is a thing
+   people have to actually read and a legal page is the last place to make
+   somebody work for it.
+
+   The wording is untouched. Only the surface it sits on changed.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after { box-sizing: border-box; }
+
+:root {
+  --space:   #150E33;
+  --space-2: #1D1247;
+  --space-3: #100A28;
+  --paper:   #FFFFFF;
+  --paper-2: #F6F5FC;
+  --paper-3: #EEEBFA;
+  --ink:     #140C33;
+  --body:    #474463;
+  --muted:   #6A6689;
+  --rule:    #E6E2F5;
+  --on-space:      #EDEAFB;
+  --on-space-soft: #B9B2E4;
+  --rule-space:    rgba(255,255,255,.14);
+
+  --violet:      #5B21B6;
+  --cyan:        #0E7C74;
+  --violet-lift: #C4B5FD;
+  --amber-lift:  #FFB067;
+
+  --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --wrap: 1180px;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0; color: var(--on-space); background: var(--space);
+  font-family: var(--sans); font-size: 17px; line-height: 1.68;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(48% 38% at 12% 6%,  rgba(124,58,237,.42) 0%, transparent 66%),
+    radial-gradient(42% 34% at 88% 12%, rgba(99,102,241,.34) 0%, transparent 64%),
+    radial-gradient(46% 40% at 78% 88%, rgba(255,138,42,.20) 0%, transparent 66%),
+    linear-gradient(180deg, var(--space-2) 0%, var(--space) 42%, var(--space-3) 100%);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background-image:
+    radial-gradient(1.4px 1.4px at 18% 22%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 72% 14%, rgba(255,255,255,.6) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 44% 62%, rgba(255,255,255,.5) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 86% 54%, rgba(255,255,255,.55) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 28% 78%, rgba(255,255,255,.5) 50%, transparent 51%);
+  background-size: 780px 620px;
+}
+
+h1,h2,h3 { margin: 0; line-height: 1.08; font-weight: 700; letter-spacing: -.035em; }
+p { margin: 0; }
+a { color: inherit; }
+svg { display: block; }
+
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: 24px; }
+
+/* ── nav ─────────────────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 90;
+  background: color-mix(in srgb, var(--space) 78%, transparent);
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  border-bottom: 1px solid transparent; transition: border-color .3s;
+}
+nav.stuck { border-bottom-color: var(--rule-space); }
+nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
+.mark { width: 22px; height: 22px; color: var(--on-space); flex: none; }
+.wordmark { font-weight: 700; letter-spacing: .16em; color: var(--on-space); }
+.navlinks { display: flex; gap: 26px; }
+.navlinks a { font-size: 14.5px; color: var(--on-space-soft); text-decoration: none; transition: color .2s; }
+.navlinks a:hover { color: #fff; }
+@media (max-width: 860px) { .navlinks { display: none; } }
+
+/* ── the document sheet ──────────────────────────────────────────────────── */
+.doc { padding-block: clamp(40px, 6vw, 76px) clamp(60px, 8vw, 104px); }
+.doc-stage { width: 100%; max-width: 940px; margin-inline: auto; padding-inline: 24px; }
+
+.doc-hero {
+  background: var(--paper); color: var(--body);
+  border: 1px solid rgba(255,255,255,.4); border-radius: 26px;
+  padding: clamp(28px, 4.4vw, 56px);
+  box-shadow: 0 30px 70px -36px rgba(6,2,26,.62);
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--violet);
+}
+.doc-hero h1 {
+  margin-top: 16px; color: var(--ink);
+  font-size: clamp(34px, 5.4vw, 62px); letter-spacing: -.045em; text-transform: lowercase;
+}
+.updated {
+  display: inline-block; margin-top: 14px; font-family: var(--mono);
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.lede { margin-top: 18px; font-size: clamp(17px, 2vw, 20px); line-height: 1.55; color: var(--body); }
+
+.doc-figs { margin-top: 28px; display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 620px) { .doc-figs { grid-template-columns: 1fr; } }
+.doc-figs > div {
+  background: var(--paper-2); border: 1px solid var(--rule); border-radius: 16px; padding: 18px;
+}
+.doc-figs b { display: block; font-size: clamp(26px, 3.4vw, 36px); font-weight: 700;
+              letter-spacing: -.04em; line-height: 1; color: var(--violet); }
+.doc-figs span { display: block; margin-top: 8px; font-size: 13.5px; color: var(--muted); }
+
+.doc-note {
+  margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--rule);
+  font-size: 15.5px; color: var(--muted);
+}
+
+/* Each clause is its own white sheet, so a long policy reads as a stack of
+   things rather than one unbroken wall. */
+.doc section {
+  margin-top: 18px; background: var(--paper); color: var(--body);
+  border: 1px solid rgba(255,255,255,.4); border-radius: 22px;
+  padding: clamp(24px, 3.2vw, 40px);
+  box-shadow: 0 24px 56px -36px rgba(6,2,26,.55);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease;
+}
+.doc section:hover { transform: translateY(-3px); box-shadow: 0 32px 66px -34px rgba(6,2,26,.6); }
+@media (prefers-reduced-motion: reduce) { .doc section:hover { transform: none; } }
+
+.doc h2 {
+  display: flex; align-items: baseline; gap: 14px; color: var(--ink);
+  font-size: clamp(21px, 2.6vw, 28px); letter-spacing: -.03em;
+}
+.n {
+  font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: .1em;
+  color: var(--violet); flex: none;
+}
+.doc section p { margin-top: 14px; }
+.doc section p + p { margin-top: 12px; }
+.doc section strong, .doc section b { color: var(--ink); font-weight: 600; }
+.doc section a { color: var(--violet); text-underline-offset: 3px; }
+
+.doc ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+.doc li { position: relative; padding-left: 18px; }
+.doc li::before {
+  content: ""; position: absolute; left: 0; top: .68em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--violet-lift);
+}
+
+.lbl {
+  display: inline-block; font-family: var(--mono); font-size: 11px; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--violet);
+  background: var(--paper-3); border-radius: 999px; padding: 4px 11px; margin-bottom: 10px;
+}
+.fine { font-size: 14.5px; color: var(--muted); }
+
+.callout {
+  margin-top: 18px; background: var(--paper-2); border: 1px solid var(--rule);
+  border-left: 3px solid var(--violet); border-radius: 14px; padding: 18px 20px;
+  font-size: 15.5px;
+}
+
+.tbl { margin-top: 16px; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+/* Scoped to .tbl: the footer also uses class="row", for a two-column layout,
+   and styling that as a table cell put a white fill behind the white wordmark
+   -- 1.09:1, which is invisible. */
+.tbl .row { display: grid; grid-template-columns: 1fr 1.6fr; gap: 0; border-bottom: 1px solid var(--rule); }
+.tbl .row:last-child { border-bottom: 0; }
+.tbl .row > * { padding: 13px 16px; font-size: 15px; }
+.tbl .row > *:first-child { background: var(--paper-2); font-weight: 600; color: var(--ink); }
+@media (max-width: 620px) { .tbl .row { grid-template-columns: 1fr; } .tbl .row > *:first-child { border-bottom: 1px solid var(--rule); } }
+
+/* The footer sits on the violet ground, so its text takes the lifted tones
+   rather than the on-paper ones the clauses use. */
+footer .row { display: grid; gap: 22px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { footer .row { grid-template-columns: 1fr 1fr; } }
+footer .fine { color: var(--on-space-soft); }
+footer .fine strong { color: var(--on-space); }
+footer .fine a { color: var(--violet-lift); }
+footer .wordmark, footer .mark { color: var(--on-space); }
+
+.contact-card {
+  margin-top: 18px; background: var(--paper); color: var(--body);
+  border: 1px solid rgba(255,255,255,.4); border-radius: 22px;
+  padding: clamp(24px, 3.2vw, 40px); box-shadow: 0 24px 56px -36px rgba(6,2,26,.55);
+}
+.contact-card a { color: var(--violet); }
+
+.doc-end {
+  margin-top: 30px; text-align: center; font-size: 14.5px; color: var(--on-space-soft);
+}
+.doc-end a { color: var(--violet-lift); }
+
+footer { padding-block: 32px; border-top: 1px solid var(--rule-space); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;
+               font-size: 14px; color: var(--on-space-soft); }
+footer a { color: var(--on-space-soft); text-decoration: none; }
+footer a:hover { color: #fff; }
+
+:where(a, button, [tabindex]):focus-visible { outline: 2px solid var(--violet-lift); outline-offset: 3px; border-radius: 6px; }
+
+</style>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Gigzen — home">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z" fill="currentColor"/></svg>
+      <span class="wordmark" style="font-size:15px">Gigzen</span>
+    </a>
+    <div class="navlinks">
+      <a href="index.html#products">waggle</a>
+      <a href="index.html#products">populace</a>
+      <a href="index.html#promises">promises</a>
+      <a href="index.html#company">company</a>
+      <a href="index.html#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="doc">
+  <div class="doc-stage">
+    <div class="doc-hero">
+      <span class="eyebrow">Waggle &middot; Gigzen Private Limited</span>
+      <h1>delete your account</h1>
+      <span class="updated">Last updated: 5 September 2026</span>
+      <p class="lede">How to delete your Waggle account and everything attached
+      to it, what gets removed, and what does not.</p>
+
+      <div class="doc-figs">
+        <div><b>3</b><span>taps, inside the app</span></div>
+        <div><b>20</b><span>tables cleared</span></div>
+        <div><b>0</b><span>forms to fill in</span></div>
+      </div>
+
+      <p class="doc-note">This page exists because Google Play requires a web
+      address for deletion requests. The app can already do it on its own — you
+      do not need to contact anyone.</p>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="n">01</span> Delete it yourself, in the app</h2>
+    <p>This is the fastest route and it takes effect immediately.</p>
+    <ol>
+      <li>Open <strong>Waggle</strong> and sign in.</li>
+      <li>Go to <strong>Profile</strong> (the last tab).</li>
+      <li>Scroll to the bottom and tap <strong>Delete Account</strong>.</li>
+      <li>Confirm when asked. The app signs you out and the account is gone.</li>
+    </ol>
+    <p>There is no waiting period and no review. The confirmation step is there
+    because the deletion cannot be undone.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">02</span> If you cannot open the app</h2>
+    <p>If you have lost the device or cannot sign in, email
+    <a href="mailto:sankur.kundu.tw@gmail.com">sankur.kundu.tw@gmail.com</a> from
+    an address you control, with the phone number the account uses. We will
+    verify the request and delete the account within 30 days.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">03</span> What is deleted</h2>
+    <p>Deleting the account removes your record and everything that references
+    it, in full:</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Data</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td>Your profile, name and phone number</td><td>Deleted</td></tr>
+          <tr><td>Your recorded trips and GPS history</td><td>Deleted</td></tr>
+          <tr><td>Your settings — rate, daily goal, vehicle, language</td><td>Deleted</td></tr>
+          <tr><td>Your posts, comments, likes and stories</td><td>Deleted</td></tr>
+          <tr><td>Photos and voice notes you uploaded</td><td>Deleted</td></tr>
+          <tr><td>Your chat messages</td><td>Deleted, including from other people's chats</td></tr>
+          <tr><td>Your connections and group memberships</td><td>Deleted</td></tr>
+          <tr><td>Your block list, and blocks others placed on you</td><td>Deleted</td></tr>
+          <tr><td>Notification and device tokens</td><td>Deleted</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">04</span> What is kept, and why</h2>
+    <p>Two things survive deletion, and it is better to say so than to imply a
+    clean sweep:</p>
+    <ul>
+      <li><strong>Reports other people filed about your content</strong> are
+      kept, with your identifier removed so they no longer point at you. A
+      safety report that vanishes when the reported account is deleted is a
+      report system that can be defeated by deleting the account.</li>
+      <li><strong>Encrypted infrastructure backups</strong> taken before the
+      deletion still contain a copy until they age out of the normal backup
+      rotation and are overwritten. They are not accessible to the app and are
+      never used to restore a deleted account.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">05</span> Deleting some data without deleting the account</h2>
+    <p>You do not have to delete the whole account to remove things:</p>
+    <ul>
+      <li><strong>A post</strong> — open it in Community and tap the bin icon on
+      your own post. It is removed for everyone.</li>
+      <li><strong>A message</strong> — press the bin on your own message in a
+      chat. It is removed for everyone in that chat.</li>
+      <li><strong>Location sharing</strong> — turn off <em>Share stats with
+      community</em> in Profile &rarr; Settings. You come off the shared map
+      immediately.</li>
+      <li><strong>Trip history</strong> — email the address above and ask for
+      your recorded trips to be cleared without touching the rest.</li>
+    </ul>
+  </section>
+
+  <div class="doc-end">
+    <p style="font-size:13px">Gigzen Private Limited &middot; Waggle account deletion &middot;
+    Last updated 5 September 2026 &middot; <a href="index.html" style="color:var(--violet-lift);text-decoration:none">Back to gigzen</a></p>
+  </div>
+</main>
+
+<footer style="margin-top:clamp(70px,10vh,110px)">
+  <div class="wrap row">
+    <div>
+      <span class="brand" style="gap:9px">
+        <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" style="height:20px"><path d="M33.19 2 L60.1 14.82 L48.54 20.68 L33.66 13.4 L16.25 23.06 L15.14 23.85 L15.14 40.15 L33.19 47.91 L49.02 39.84 L49.34 38.73 L48.54 38.25 L30.34 33.66 L30.5 30.97 L44.43 24.01 L61.05 29.86 L61.05 46.64 L33.5 62 L2.95 46.64 L2.95 17.51 L33.03 2.16 Z" fill="currentColor"/></svg>
+        <span class="wordmark" style="font-size:17px">Gigzen</span>
+      </span>
+      <p class="fine" style="margin-top:14px"><strong>Gigzen Private Limited</strong><br>
+      Bhubaneswar, Odisha, India</p>
+    </div>
+    <div>
+      <p class="fine">
+        <a href="mailto:sankur.kundu.tw@gmail.com" style="text-decoration:none">sankur.kundu.tw@gmail.com</a><br><br>
+        Waggle is in testing and not yet publicly available.<br>
+        Populace is on npm as @gigzen/populace.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="i18n/runtime.js" defer></script>
+<script src="nav.js" defer></script>
+<script>
+(function () {
+  var nav = document.getElementById("nav");
+  if (!nav) return;
+  function onScroll() { nav.classList.toggle("stuck", window.scrollY > 6); }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
