@@ -149,11 +149,11 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
         <li><b>One adapter is the whole integration.</b> Thirteen small methods, two of them required. The engine knows how to be a person and nothing about your product.</li>
         <li><b>Real users, front door only.</b> Real accounts, your API, your permission rules applying. No admin keys, no direct database writes.</li>
         <li><b>Honest coverage.</b> An empty method does not count, so a fresh scaffold reports 2/13 and refuses to run rather than passing while testing nothing.</li>
-        <li><b>Refuses production three ways.</b> Environment must declare itself, a denylist is matched against every nested string, and an empty denylist warns loudly. All exit non-zero.</li>
+        <li><b>Refuses production three ways.</b> Environment must declare itself, every string in the target block is reduced to a hostname and matched against your denylist including subdomains, and an empty denylist warns loudly. All exit non-zero.</li>
       </ul>
       <div class="specs">
         <b>13</b>-method contract · <b>0</b> runtime dependencies · <b>3</b> production guards ·
-        <b>20/20</b> self-tests with no backend at all<br>
+        <b>119/119</b> self-tests with no backend at all<br>
         Node 18+ · per-endpoint p50/p95/p99 · JSON report for CI plus a self-contained HTML page ·
         exits non-zero when problems are found
       </div>
