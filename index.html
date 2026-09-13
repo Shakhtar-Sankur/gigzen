@@ -5,360 +5,278 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gigzen — software for the people who keep cities moving</title>
 <meta name="description" content="Gigzen builds Waggle, a free Android app that shows delivery riders what a day on the road really earns, and Populace, a tool that tests apps with a crowd of simulated users. Bhubaneswar, India.">
-<meta name="theme-color" content="#0B0A1F">
-
+<meta name="theme-color" content="#1A168F">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234F46E5'/><path fill='%23FFFFFF' d='M33.19 10 L54 20.4 L44.6 25.2 L33.66 19.6 L20.2 27 L20.2 38.5 L33.19 44.4 L44.5 38.6 L30.34 34.5 L30.5 30.9 L44.43 25.4 L54 29.8 L54 42.6 L33.5 54 L10 42.6 L10 22.5 Z'/></svg>">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
 
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
-   Gigzen — indigo, glass, and motion.
+   Gigzen — colour bands, one pink word, real pictures.
 
-   One hue. Everything on this page is a value of #4F46E5 or a neutral:
-   there is no second accent, no warm tint, no "brand orange" left over from
-   anywhere. The variation comes from LIGHTNESS and TRANSPARENCY rather than
-   from adding colours, which is what keeps a single-hue page from reading as
-   flat.
+   Modelled on the Lilo template the company chose: deep royal-indigo bands
+   alternating with white, bold rounded display type with a single hot-pink
+   word per heading, big numbered steps, and glossy shapes where the template
+   uses 3D artwork. The shapes are drawn in CSS, so nothing on the page is an
+   invented product image; the photographs are licensed stock (see
+   img/CREDITS.md) and the product pictures are real screenshots.
 
-   Every surface is glass over a moving ground. The aurora underneath is four
-   blurred radial blobs on long, offset transform loops — GPU-only, no layout,
-   no repaint. Cards are translucent so the motion shows through them faintly
-   instead of being hidden behind opaque panels; that is the whole reason the
-   page feels alive while sitting still.
-
-   All motion is opt-out. Everything below respects prefers-reduced-motion,
-   including the aurora and the counters — a page that ignores that setting is
-   not "full of animations", it is inaccessible.
+   Contrast was measured, not eyeballed. Pink carries TEXT only in two forms:
+   --pink-ink on white (4.9:1) and --pink at display size on the indigo band,
+   where large text needs 3:1. Buttons use --pink-ink with white (4.9:1).
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root{
-  --ink:#0B0A1F;            /* the ground */
-  --ink-2:#12102E;
-  --indigo:#4F46E5;         /* the one hue */
-  --indigo-lit:#818CF8;
-  --indigo-deep:#3730A3;
-  --text:#EEEEFB;
-  --muted:#A7A6C8;
-  --dim:#7E7DA4;
+  --band:#1A168F;       /* the royal indigo ground */
+  --band-2:#2520B8;
+  --band-deep:#100C5E;
+  --brand:#4F46E5;
+  --pink:#FF4FAE;       /* decoration, and display text on the band */
+  --pink-ink:#C8156F;   /* pink as text on white, and button fills */
+  --ink:#110E57;        /* headings on white */
+  --body:#45436B;
+  --muted:#66648E;
+  --paper:#FFFFFF;
+  --mist:#F4F3FC;
+  --line:#E3E1F4;
+  --on-band:#E6E5FF;    /* body text on the band */
 
-  /* Glass, defined once. Every panel on the page is one of these three. */
-  --glass:rgba(255,255,255,.045);
-  --glass-2:rgba(255,255,255,.07);
-  --edge:rgba(255,255,255,.10);
-  --edge-lit:rgba(129,140,248,.38);
-
-  --sans:'Inter Tight',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-  --wrap:1140px;
-  --r:20px;
+  --display:'Epilogue',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --wrap:1180px;
 }
 
-*{box-sizing:border-box}
+*,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{
-  margin:0;background:var(--ink);color:var(--text);
-  font-family:var(--sans);font-size:17px;line-height:1.62;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-a{color:inherit}
-/* height:auto is not optional here. The images carry width/height attributes
-   (which is right — it reserves the box and stops the page jumping as they
-   load), but with max-width:100% and no height:auto the browser keeps the
-   ATTRIBUTE height. Each 720x1520 screenshot rendered 1520px tall, which made
-   one product card 1965px and left most of the section as empty card. */
+body{margin:0;background:var(--paper);color:var(--body);font-family:var(--sans);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;height:auto;display:block}
-.wrap{width:min(100% - 40px,var(--wrap));margin-inline:auto}
-
-/* ── the moving ground ────────────────────────────────────────────────
-   position:fixed and pointer-events:none, so it never enters the layout
-   or intercepts a click. Each blob animates transform only. */
-.aurora{position:fixed;inset:-20vmax;z-index:0;pointer-events:none;filter:blur(90px);opacity:.55}
-.aurora i{position:absolute;display:block;border-radius:50%;mix-blend-mode:screen}
-.aurora i:nth-child(1){width:52vmax;height:52vmax;left:-6vmax;top:-8vmax;
-  background:radial-gradient(circle,#4F46E5 0%,transparent 66%);animation:drift1 26s ease-in-out infinite}
-.aurora i:nth-child(2){width:44vmax;height:44vmax;right:-8vmax;top:6vmax;
-  background:radial-gradient(circle,#6366F1 0%,transparent 68%);animation:drift2 31s ease-in-out infinite}
-.aurora i:nth-child(3){width:48vmax;height:48vmax;left:14vmax;bottom:-14vmax;
-  background:radial-gradient(circle,#3730A3 0%,transparent 70%);animation:drift3 37s ease-in-out infinite}
-.aurora i:nth-child(4){width:34vmax;height:34vmax;right:10vmax;bottom:2vmax;
-  background:radial-gradient(circle,#818CF8 0%,transparent 66%);animation:drift2 29s ease-in-out infinite reverse}
-@keyframes drift1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(7vmax,5vmax,0) scale(1.14)}}
-@keyframes drift2{0%,100%{transform:translate3d(0,0,0) scale(1.06)}50%{transform:translate3d(-8vmax,7vmax,0) scale(.92)}}
-@keyframes drift3{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6vmax,-6vmax,0) scale(1.1)}}
-
-/* A faint grid so the glass has something to refract. */
-.grid-veil{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
-  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
-  background-size:66px 66px;
-  -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 20%,transparent 78%);
-          mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 20%,transparent 78%)}
-main,header,footer{position:relative;z-index:1}
-
-/* ── nav ──────────────────────────────────────────────────────────────── */
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);color:var(--ink);margin:0;letter-spacing:-.025em;line-height:1.06}
+h1{font-size:clamp(42px,5.6vw,76px);font-weight:800}
+h2{font-size:clamp(34px,4.6vw,58px);font-weight:800}
+h3{font-size:clamp(20px,2vw,24px);font-weight:700;line-height:1.22;letter-spacing:-.012em}
+p{margin:0}
+.wrap{width:min(100% - 44px,var(--wrap));margin-inline:auto}
+.pk{color:var(--pink-ink)}
+.band .pk,.hero .pk{color:var(--pink)}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:16px;top:16px;z-index:99;background:#fff;color:#111;padding:10px 16px;border-radius:10px}
-header{position:sticky;top:0;z-index:40;
-  background:rgba(11,10,31,.55);backdrop-filter:blur(18px) saturate(150%);
-  -webkit-backdrop-filter:blur(18px) saturate(150%);
-  border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
-header.stuck{border-bottom-color:var(--edge);background:rgba(11,10,31,.82)}
-.nav{display:flex;align-items:center;gap:26px;padding:15px 0}
-.brand{display:inline-flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.02em;
-  font-size:19px;text-decoration:none}
-.brand svg{width:26px;height:26px;flex:none}
-.nav-links{margin-left:auto;display:flex;gap:26px;align-items:center}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500;
-  position:relative;padding:4px 0;transition:color .2s}
-.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
-  background:var(--indigo-lit);transition:right .3s cubic-bezier(.2,.7,.3,1)}
-.nav-links a:hover{color:var(--text)}
-.nav-links a:hover::after{right:0}
-/* ── the small-screen menu ────────────────────────────────────────────
-   The links used to be display:none here with no replacement, which left the
-   page with no navigation at all on a phone. They now fold into a panel behind
-   a burger: same links, same order, reachable. */
-.burger{display:none;margin-left:auto;width:42px;height:38px;align-items:center;
-  justify-content:center;cursor:pointer;color:var(--text);
-  background:var(--glass);border:1px solid var(--edge);border-radius:12px;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  transition:border-color .25s,background .25s}
-.burger:hover{border-color:var(--edge-lit);background:var(--glass-2)}
-.burger svg{width:20px;height:20px;display:block}
-@media(max-width:820px){
+.skip:focus{left:16px;top:16px;z-index:99;background:#fff;color:var(--ink);padding:10px 16px;border-radius:10px}
+
+/* overflow-x:clip, not hidden: the glossy shapes are allowed to hang past a
+   section's edge visually, but must never widen the page on a phone. clip
+   doesn't create a scroll container, so the sticky header keeps working. */
+section{padding-block:clamp(76px,10vw,128px);position:relative;overflow-x:clip}
+.band{background:var(--band);color:var(--on-band)}
+.band h2,.band h3{color:#fff}
+.mist{background:var(--mist)}
+.head{max-width:760px;margin:0 auto clamp(40px,5vw,64px);text-align:center}
+.head p{margin-top:18px;font-size:clamp(17px,1.6vw,19px)}
+.eyebrow{display:inline-block;margin-bottom:14px;font-size:13px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--pink-ink)}
+/* #FF4FAE measures 4.49:1 on the band: fine for display words, just short of
+   4.5 for 13px labels. This lighter pink measures 5.22:1. */
+.band .eyebrow{color:#FF6CBC}
+
+/* ── buttons ─────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 28px;border-radius:999px;
+  font:700 16px/1 var(--sans);text-decoration:none;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
+.btn-pink{background:var(--pink-ink);color:#fff;box-shadow:0 10px 26px -10px rgba(200,21,111,.7)}
+.btn-pink:hover{transform:translateY(-2px);box-shadow:0 16px 32px -12px rgba(200,21,111,.8)}
+.btn-line{border:2px solid rgba(255,255,255,.55);color:#fff}
+.btn-line:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.btn-ink{border:2px solid var(--ink);color:var(--ink)}
+.btn-ink:hover{background:var(--ink);color:#fff}
+.go{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--pink-ink);text-decoration:none}
+.go svg{width:18px;height:18px;transition:transform .2s}
+.go:hover svg{transform:translateX(4px)}
+
+/* ── the glossy shapes (the template's 3D art, drawn in CSS) ──────────── */
+.orb{position:absolute;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 210deg,#FF4FAE,#8B5CF6,#38BDF8,#A78BFA,#FF78C4,#FF4FAE);
+  -webkit-mask:radial-gradient(circle,transparent 46%,#000 47%);
+          mask:radial-gradient(circle,transparent 46%,#000 47%);
+  filter:saturate(1.15) drop-shadow(0 20px 40px rgba(20,10,90,.35));
+  animation:turn 24s linear infinite}
+.orb::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.75),transparent 28%)}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none;
+  background:radial-gradient(circle,#FF4FAE,transparent 62%)}
+@keyframes turn{to{transform:rotate(360deg)}}
+
+@keyframes float{50%{transform:translateY(-12px)}}
+
+/* ── nav ─────────────────────────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:50;background:var(--band);transition:box-shadow .3s}
+header.stuck{box-shadow:0 10px 30px -18px rgba(0,0,0,.6)}
+.nav{display:flex;align-items:center;gap:28px;padding:18px 0}
+.brand{display:inline-flex;align-items:center;gap:11px;color:#fff;text-decoration:none;
+  font:800 22px/1 var(--display);letter-spacing:-.02em}
+.brand svg{width:30px;height:30px}
+.nav-links{margin-left:auto;display:flex;align-items:center;gap:26px}
+.nav-links a{color:var(--on-band);text-decoration:none;font-size:15px;font-weight:500}
+.nav-links a:hover{color:#fff}
+.nav-links .btn{padding:11px 20px;font-size:14.5px}
+/* .nav-links a outranks .btn-pink, and was painting the button text lavender
+   (4.49:1). White on the pink fill is 5.54:1. */
+.nav-links .btn-pink{color:#fff}
+.burger{display:none;margin-left:auto;width:44px;height:44px;border-radius:12px;cursor:pointer;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;
+  align-items:center;justify-content:center}
+.burger svg{width:22px;height:22px}
+@media(max-width:900px){
   .burger{display:inline-flex}
-  .nav-links{
-    display:none;position:absolute;left:0;right:0;top:100%;
-    flex-direction:column;align-items:stretch;gap:0;
-    padding:8px 20px 16px;
-    background:rgba(11,10,31,.96);
-    backdrop-filter:blur(18px) saturate(150%);
-    -webkit-backdrop-filter:blur(18px) saturate(150%);
-    border-bottom:1px solid var(--edge);
-  }
+  .nav-links{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;
+    align-items:stretch;gap:0;padding:8px 22px 20px;background:var(--band);
+    box-shadow:0 20px 30px -20px rgba(0,0,0,.6)}
   .nav-links.open{display:flex}
-  .nav-links a{padding:14px 2px;font-size:16px;border-bottom:1px solid var(--edge)}
-  .nav-links a:last-child{border-bottom:0}
-  /* The hover underline is a pointer affordance and reads as a stray line in a
-     stacked list. */
-  .nav-links a::after{display:none}
+  .nav-links a{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:17px}
+  .nav-links .btn{margin-top:14px;justify-content:center;border-bottom:0}
 }
-/* The panel is positioned against the nav row. */
-.nav{position:relative}
 
-/* ── buttons ──────────────────────────────────────────────────────────── */
-.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:999px;
-  font-weight:600;font-size:15px;text-decoration:none;border:1px solid transparent;
-  transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s,background .25s,border-color .25s;
-  will-change:transform}
-.btn-primary{background:linear-gradient(135deg,#6366F1,#4F46E5);color:#fff;
-  box-shadow:0 10px 30px rgba(79,70,229,.42)}
-.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(79,70,229,.55)}
-.btn-ghost{background:var(--glass);border-color:var(--edge);color:var(--text);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.btn-ghost:hover{transform:translateY(-3px);border-color:var(--edge-lit);background:var(--glass-2)}
+/* ── hero ────────────────────────────────────────────────────────────── */
+.hero{background:var(--band);color:var(--on-band);padding:clamp(40px,6vw,84px) 0 0;overflow:hidden}
+.hero h1{color:#fff}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,70px);align-items:center}
+.loc{font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--on-band);opacity:.85;margin-bottom:18px}
+.lede{margin-top:24px;font-size:clamp(18px,1.7vw,20px);max-width:540px;color:var(--on-band)}
+.cta{margin-top:34px;display:flex;flex-wrap:wrap;gap:14px}
+.hero-art{position:relative;min-height:520px}
+.hero-photo{position:absolute;right:0;top:0;width:84%;height:100%;object-fit:cover;
+  border-radius:260px 260px 28px 28px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+/* The ring sits BEHIND the photograph as part of the background: drawn
+   first, lower in the stack, and large enough to show round the photo's
+   left and bottom edges. No text on it. */
+.hero-art .hero-ring{width:340px;height:340px;left:-30px;bottom:-40px;z-index:0}
+.hero-photo{z-index:1}
+.chip{z-index:2}
+.hero-art .blob{width:340px;height:340px;right:-80px;top:-60px}
+.chip{position:absolute;display:inline-flex;align-items:center;gap:9px;padding:11px 16px;
+  border-radius:16px;background:rgba(255,255,255,.95);color:var(--ink);font-weight:700;font-size:14.5px;
+  box-shadow:0 18px 36px -18px rgba(0,0,0,.55);animation:float 6s ease-in-out infinite}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--pink-ink);display:block}
+.chip.c1{left:4%;top:16%}
+.chip.c2{right:-2%;bottom:18%;animation-delay:-3s}
+.stats{margin-top:clamp(56px,7vw,90px);display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid rgba(255,255,255,.14)}
+.stat{padding:30px 10px 34px}
+.stat b{display:block;font:800 clamp(38px,4.4vw,54px)/1 var(--display);color:#fff;letter-spacing:-.03em}
+.stat b::after{content:"";display:block;width:34px;height:4px;border-radius:4px;background:var(--pink);margin-top:14px}
+.stat span{display:block;margin-top:12px;font-size:15px;color:var(--on-band)}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-art{min-height:420px;margin-top:10px}
+  .hero-photo{width:92%}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
 
-/* ── shared type ──────────────────────────────────────────────────────── */
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);
-  font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--indigo-lit)}
-.eyebrow::before{content:"";width:26px;height:1px;background:var(--indigo-lit);opacity:.7}
-h1,h2,h3{letter-spacing:-.035em;line-height:1.06;margin:0;font-weight:800}
-h1{font-size:clamp(42px,6.6vw,82px)}
-h2{font-size:clamp(30px,4.2vw,52px)}
-h3{font-size:20px;letter-spacing:-.02em;line-height:1.3;font-weight:700}
-.lede{color:var(--muted);font-size:clamp(16.5px,1.5vw,19px);max-width:60ch}
-p{margin:0 0 14px}
-section{padding-block:clamp(74px,9vw,128px)}
-.head{max-width:64ch;margin-bottom:clamp(38px,5vw,60px)}
-.head h2{margin-top:18px}
-.head .lede{margin-top:20px}
-
-/* ── glass card, the one surface ──────────────────────────────────────── */
-.card{position:relative;background:var(--glass);border:1px solid var(--edge);
-  border-radius:var(--r);padding:30px;backdrop-filter:blur(22px) saturate(140%);
-  -webkit-backdrop-filter:blur(22px) saturate(140%);overflow:hidden;
-  transition:transform .4s cubic-bezier(.2,.7,.3,1),border-color .4s,background .4s}
-/* A light that follows the pointer. Driven by two CSS variables the script
-   sets on pointermove, so the effect costs one custom-property write and no
-   layout at all. */
-.card::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .4s;
-  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
-             rgba(129,140,248,.16),transparent 62%);pointer-events:none}
-.card:hover{transform:translateY(-5px);border-color:var(--edge-lit);background:var(--glass-2)}
-.card:hover::before{opacity:1}
-
-/* ── hero ─────────────────────────────────────────────────────────────── */
-.hero{padding-block:clamp(72px,11vw,150px) clamp(56px,7vw,96px)}
-.hero .loc{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.05em}
-.hero h1{margin-top:22px}
-.hero h1 span{background:linear-gradient(102deg,#fff 12%,#A5B4FC 48%,#6366F1 88%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  background-size:220% 100%;animation:sheen 9s ease-in-out infinite}
-@keyframes sheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.hero .lede{margin-top:26px}
-.hero .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
-
-/* stats strip */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:clamp(48px,6vw,76px)}
-@media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{padding:24px 22px;border-radius:16px;background:var(--glass);border:1px solid var(--edge);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.stat b{display:block;font-size:clamp(30px,3.6vw,44px);font-weight:800;letter-spacing:-.04em;
-  line-height:1;font-variant-numeric:tabular-nums;
-  background:linear-gradient(140deg,#fff,#A5B4FC);-webkit-background-clip:text;
-  background-clip:text;color:transparent}
-.stat span{display:block;margin-top:10px;font-size:13.5px;color:var(--muted);line-height:1.45}
-
-/* ── products ─────────────────────────────────────────────────────────── */
-.products{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+/* ── products ────────────────────────────────────────────────────────── */
+.products{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.product{position:relative;background:var(--mist);border-radius:30px;padding:clamp(24px,3vw,38px);
+  overflow:hidden;display:flex;flex-direction:column}
+.kind{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pink-ink)}
+.product h3{font-size:clamp(30px,3.2vw,40px);font-weight:800;margin-top:8px}
+.product > p{margin-top:12px}
+.stage{position:relative;margin:28px 0 24px;border-radius:22px;
+  background:linear-gradient(140deg,var(--band) 0%,var(--band-2) 60%,#6D3FD9 100%);
+  padding:28px 18px 0;overflow:hidden;min-height:330px}
+.stage .orb{width:170px;height:170px;right:-40px;top:-40px;opacity:.9}
+.phones{position:relative;display:flex;justify-content:center;align-items:flex-end;gap:12px}
+.phones img{width:31%;border-radius:18px 18px 0 0;border:5px solid #0B0930;border-bottom:0;
+  box-shadow:0 -6px 30px -10px rgba(0,0,0,.5)}
+.phones img:nth-child(2){width:34%;margin-bottom:0}
+.phones img:nth-child(1),.phones img:nth-child(3){transform:translateY(22px)}
+.windows{position:relative;display:grid;gap:12px;padding-bottom:18px}
+.windows img{border-radius:12px;box-shadow:0 20px 40px -22px rgba(0,0,0,.7)}
+.windows .pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.facts span{padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);
+  font-size:14px;font-weight:500;color:var(--ink)}
+.product .go{margin-top:auto}
 @media(max-width:900px){.products{grid-template-columns:1fr}}
-.product{display:flex;flex-direction:column;padding:34px}
-.kind{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--dim)}
-.product h3{font-size:30px;margin:14px 0 0;letter-spacing:-.03em}
-.product p{color:var(--muted);margin-top:14px;font-size:16px}
-.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.facts span{font-family:var(--mono);font-size:11.5px;padding:6px 11px;border-radius:999px;
-  background:rgba(129,140,248,.10);border:1px solid rgba(129,140,248,.22);color:#C7CBF5}
-.go{margin-top:auto;padding-top:26px;display:inline-flex;align-items:center;gap:9px;
-  color:var(--indigo-lit);font-weight:600;font-size:15px;text-decoration:none}
-.go svg{width:17px;height:17px;transition:transform .3s cubic-bezier(.2,.7,.3,1)}
-.product:hover .go svg{transform:translateX(6px)}
 
-/* phone strip inside the Waggle card */
-/* Six screens now rather than four, so three across and two down instead of a
-   single row — a 6-wide row makes each phone too narrow to read anything in,
-   and 4+2 leaves a ragged half-row. Two columns once the card gets narrow. */
-.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
-@media(max-width:560px){.shots{grid-template-columns:repeat(2,1fr)}}
-.shots figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--edge);
-  background:rgba(0,0,0,.25);transition:transform .4s cubic-bezier(.2,.7,.3,1)}
-.shots figure:hover{transform:translateY(-6px) scale(1.03)}
-.shots img{aspect-ratio:720/1520;object-fit:cover;object-position:top}
-/* Desktop software, photographed on a desktop. Three phone-shaped frames would
-   crop a 1440-wide window down to a stripe of its own sidebar. The first shot
-   runs full width because it is the one that shows the tool working — the rest
-   is supporting evidence. */
-.shots.wide{grid-template-columns:repeat(2,1fr)}
-.shots.wide img{aspect-ratio:1440/744}
-.shots.wide figure:first-child{grid-column:1/-1}
-@media(max-width:560px){.shots.wide{grid-template-columns:1fr}}
+/* ── how we work: picture left, big pink numbers right ───────────────── */
+.split{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(34px,6vw,90px);align-items:center}
+.split-art{position:relative}
+.split-art img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:28px 180px 28px 28px}
+.split-art .orb{width:180px;height:180px;right:-40px;bottom:-40px}
+.steps{list-style:none;margin:36px 0 0;padding:0;display:grid;gap:30px}
+.steps li{display:grid;grid-template-columns:72px 1fr;gap:18px;align-items:start}
+.steps .n{font:800 64px/.9 var(--display);color:var(--pink)}
+.steps h3{margin-bottom:6px}
+@media(max-width:900px){.split{grid-template-columns:1fr}.split-art{max-width:460px}}
 
-/* ── generic 3-up ─────────────────────────────────────────────────────── */
-.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media(max-width:900px){.trio{grid-template-columns:1fr}}
-.trio h3{margin-bottom:12px}
-.trio p{color:var(--muted);font-size:15.5px;margin:0}
+/* ── languages ───────────────────────────────────────────────────────── */
+.langs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:1000px;margin:0 auto}
+.langs span{padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;
+  font-size:15px;font-weight:500;color:var(--ink)}
+.langs span:nth-child(5n+2){border-color:rgba(200,21,111,.35);color:var(--pink-ink)}
 
-/* ── promises ─────────────────────────────────────────────────────────── */
-.promise .num{font-family:var(--mono);font-size:12px;color:var(--indigo-lit);letter-spacing:.14em}
-.promise h3{margin:14px 0 12px}
-.promise .mech{margin-top:16px;padding-top:16px;border-top:1px solid var(--edge);
-  font-size:14.5px;color:var(--dim)}
-.promise .mech b{color:var(--indigo-lit);font-weight:600}
+/* ── promises: icon grid ─────────────────────────────────────────────── */
+.icons{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,40px)}
+.icon-card{text-align:center;padding:10px 12px}
+.icon-card svg{width:76px;height:76px;margin:0 auto 20px;display:block}
+.icon-card p{margin-top:10px}
+.icon-card .mech{margin-top:14px;font-size:15px;color:var(--muted)}
+.icon-card .mech b{color:var(--ink)}
+@media(max-width:820px){.icons{grid-template-columns:1fr}}
 
-/* ── language marquee ─────────────────────────────────────────────────── */
-.marq{position:relative;overflow:hidden;margin-top:38px;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
-          mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
-.marq-in{display:flex;gap:11px;width:max-content;animation:slide 46s linear infinite}
-.marq:hover .marq-in{animation-play-state:paused}
-.marq-in span{white-space:nowrap;font-size:14.5px;padding:9px 17px;border-radius:999px;
-  background:var(--glass);border:1px solid var(--edge);color:var(--muted);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-@keyframes slide{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+/* ── history ─────────────────────────────────────────────────────────── */
+.time{max-width:820px;margin:0 auto;position:relative;padding-left:34px}
+.time::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:2px;
+  background:linear-gradient(var(--pink-ink),var(--brand))}
+.ev{position:relative;padding:0 0 30px}
+.ev::before{content:"";position:absolute;left:-32px;top:6px;width:16px;height:16px;border-radius:50%;
+  background:#fff;border:4px solid var(--pink-ink)}
+.ev time{display:block;font:700 15px/1.2 var(--sans);color:var(--pink-ink);letter-spacing:.02em}
+.ev p{margin-top:6px;color:var(--body)}
+.ev code{font-size:.92em;background:#fff;border:1px solid var(--line);padding:1px 6px;border-radius:6px}
 
-/* Three rows.
-   One 43px strip left this section 435px tall against ~1300px for its
-   neighbours, so the page's standard 74px padding had nothing to sit around
-   and the languages read as stranded rather than placed. Three rows give the
-   section real body — and put most of the forty-three on screen at once, which
-   is the actual claim being made here.
+/* ── company ─────────────────────────────────────────────────────────── */
+.people{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:980px;margin:0 auto}
+.person{display:flex;gap:20px;align-items:flex-start;padding:28px;border-radius:26px;
+  border:1px solid var(--line);background:#fff}
+.av{flex:none;width:68px;height:68px;border-radius:50%;display:grid;place-items:center;
+  font:800 22px/1 var(--display);color:#fff;background:linear-gradient(135deg,var(--brand),var(--pink-ink))}
+.role{font-size:14.5px;font-weight:700;color:var(--pink-ink);margin:4px 0 10px}
+@media(max-width:820px){.people{grid-template-columns:1fr}}
 
-   All three travel the same way. What keeps them from reading as one solid
-   moving block is speed, not direction: three durations that are not multiples
-   of each other — 46/53/61 — so the rows drift out of phase and never line
-   back up. Equal durations would look like one block; opposite directions read
-   as a busier, more restless thing than this section wants to be. */
-.marq + .marq{margin-top:11px}
-.marq-in.mid{animation-duration:53s}
-.marq-in.slow{animation-duration:61s}
+/* ── contact ─────────────────────────────────────────────────────────── */
+.contact{overflow:hidden}
+.contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.contact p.lede{max-width:520px}
+.mail{display:inline-block;margin-top:22px;font-weight:700;color:#fff;font-size:18px;
+  text-decoration:underline;text-decoration-color:var(--pink);text-underline-offset:6px}
+.contact-art{position:relative;height:340px}
 
-/* The fade is per-row, so on a narrow screen three stacked masks cost three
-   composited layers. Cheap enough — they animate transform only — but the
-   middle row's mask is dropped below 560px where the rows nearly touch and the
-   overlapping fades muddy each other. */
-@media(max-width:560px){
-  .marq:nth-of-type(2){-webkit-mask-image:none;mask-image:none}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}.contact-art{height:240px}
 }
 
-/* ── timeline ─────────────────────────────────────────────────────────── */
-.time{position:relative;padding-left:34px}
-.time::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:1px;
-  background:linear-gradient(180deg,transparent,var(--edge-lit) 12%,var(--edge-lit) 88%,transparent)}
-.ev{position:relative;padding-bottom:34px}
-.ev:last-child{padding-bottom:0}
-.ev::before{content:"";position:absolute;left:-30px;top:8px;width:11px;height:11px;
-  border-radius:50%;background:var(--ink);border:2px solid var(--indigo-lit);
-  box-shadow:0 0 0 4px rgba(79,70,229,.16)}
-.ev time{font-family:var(--mono);font-size:12.5px;color:var(--indigo-lit);letter-spacing:.05em}
-.ev p{color:var(--muted);margin:9px 0 0;font-size:15.5px;max-width:70ch}
+/* ── footer ──────────────────────────────────────────────────────────── */
+footer{background:var(--band-deep);color:var(--on-band);padding:56px 0 34px}
+.foot{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:30px}
+.foot h4{margin:0 0 12px;font:700 15px/1 var(--sans);color:#fff}
+.foot a{display:block;color:var(--on-band);text-decoration:none;padding:4px 0;font-size:15px}
+.foot a:hover{color:#fff}
+.foot small{display:block;margin-top:14px;font-size:14px;opacity:.85;max-width:300px}
+.legal{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;opacity:.8}
+@media(max-width:820px){.foot{grid-template-columns:1fr 1fr}}
 
-/* ── people ───────────────────────────────────────────────────────────── */
-.people{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px}
-@media(max-width:760px){.people{grid-template-columns:1fr}}
-.person{display:flex;gap:18px;align-items:flex-start}
-.av{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
-  font-weight:700;font-size:17px;letter-spacing:-.02em;color:#fff;
-  background:linear-gradient(140deg,#6366F1,#3730A3);border:1px solid var(--edge-lit)}
-.person h3{font-size:18px}
-.person .role{font-size:13.5px;color:var(--indigo-lit);margin-top:3px}
-.person p{color:var(--muted);font-size:15px;margin-top:10px}
-
-/* ── contact ──────────────────────────────────────────────────────────── */
-.contact{text-align:center;padding:clamp(44px,6vw,72px) 30px}
-.contact h2{margin-bottom:18px}
-.contact .lede{margin:0 auto}
-.mailto{display:inline-block;margin-top:26px;font-family:var(--mono);font-size:16px;
-  color:var(--indigo-lit);text-decoration:none;padding-bottom:3px;
-  border-bottom:1px solid rgba(129,140,248,.42);transition:border-color .25s}
-.mailto:hover{border-bottom-color:var(--indigo-lit)}
-.contact .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
-
-/* ── footer ───────────────────────────────────────────────────────────── */
-footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
-.foot{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
-.foot small{color:var(--dim);font-size:13.5px}
-.foot nav{display:flex;flex-wrap:wrap;gap:20px}
-.foot nav a{color:var(--muted);font-size:13.5px;text-decoration:none;transition:color .2s}
-.foot nav a:hover{color:var(--indigo-lit)}
-
-/* ── scroll reveal ────────────────────────────────────────────────────── */
-.rv{opacity:0;transform:translateY(22px);
-  transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
-.rv.in{opacity:1;transform:none}
-
-/* ── the opt-out ──────────────────────────────────────────────────────────
-   Everything above is decoration. If the reader has asked for less motion,
-   the aurora stops, the marquee stops, the sheen stops, the counters print
-   their final value, and every reveal is simply visible. */
-@media(prefers-reduced-motion:reduce){
+/* ── reveal ──────────────────────────────────────────────────────────── */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .aurora i,.marq-in,.hero h1 span{animation:none!important}
-  .rv{opacity:1!important;transform:none!important;transition:none!important}
-  .btn,.card,.shots figure,.go svg{transition:none!important}
-  .btn:hover,.card:hover,.shots figure:hover{transform:none!important}
+  .orb,.chip{animation:none}
+  .js .rv{opacity:1;transform:none;transition:none}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-
-<div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-<div class="grid-veil" aria-hidden="true"></div>
 
 <header id="top">
   <div class="wrap nav">
@@ -369,40 +287,45 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
       </svg>
       Gigzen
     </a>
-    <!-- The links were display:none below 820px with nothing in their place,
-         so on a phone this page had no navigation at all — every section
-         unreachable except by scrolling the whole thing. -->
-    <button class="burger" id="burger" type="button" aria-label="Menu"
-            aria-expanded="false" aria-controls="nav-links">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <div class="nav-links" id="nav-links">
+    <nav class="nav-links" id="nav-links">
       <a href="#products">Products</a>
       <a href="#mission">How we work</a>
       <a href="#promises">Promises</a>
       <a href="#company">Company</a>
       <a href="test-report.html">Test report</a>
-      <a href="#contact">Contact</a>
-    </div>
+      <a class="btn btn-pink" href="#contact">Contact us</a>
+    </nav>
   </div>
 </header>
 
 <main id="main">
 
-  <!-- ── hero ─────────────────────────────────────────────────────────── -->
+  <!-- ── hero ───────────────────────────────────────────────────────── -->
   <section class="hero">
     <div class="wrap">
-      <p class="loc rv">Bhubaneswar, Odisha · India</p>
-      <h1 class="rv">Software for the people<br><span>who keep cities moving.</span></h1>
-      <p class="lede rv">Waggle shows delivery riders what a day on the road really earns.
-        Populace tests apps with a crowd of simulated users, so the bugs that need two
-        people are found before real people find them.</p>
-      <div class="cta rv">
-        <a class="btn btn-primary" href="waggle.html">See Waggle</a>
-        <a class="btn btn-ghost" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">See Populace</a>
+      <div class="hero-grid">
+        <div>
+          <p class="loc rv">Bhubaneswar, Odisha · India</p>
+          <h1 class="rv">Software for the people who keep cities <span class="pk">moving.</span></h1>
+          <p class="lede rv">Waggle shows delivery riders what a day on the road really earns.
+            Populace tests apps with a crowd of simulated users, so the bugs that need two
+            people are found before real people find them.</p>
+          <div class="cta rv">
+            <a class="btn btn-pink" href="waggle.html">See Waggle</a>
+            <a class="btn btn-line" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">See Populace</a>
+          </div>
+        </div>
+        <div class="hero-art rv" aria-hidden="false">
+          <div class="blob" aria-hidden="true"></div>
+          <div class="orb hero-ring" aria-hidden="true"></div>
+          <img class="hero-photo" src="img/mumbai-night.jpg" width="1600" height="2133"
+               alt="Chhatrapati Shivaji Terminus in Mumbai at night, with light trails from passing traffic.">
+          <span class="chip c1"><i></i>43 languages</span>
+          <span class="chip c2"><i></i>Free for riders</span>
+        </div>
       </div>
 
       <div class="stats">
@@ -414,215 +337,196 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </section>
 
-  <!-- ── products ─────────────────────────────────────────────────────── -->
+  <!-- ── products ───────────────────────────────────────────────────── -->
   <section id="products">
     <div class="wrap">
-      <div class="head">
-        <span class="eyebrow rv">Products</span>
-        <h2 class="rv">Two products.<br>One problem.</h2>
-        <p class="lede rv">Gig workers run their day across apps that don't talk to each
-          other. Waggle gives them one place for it. Populace checks it holds up when many
-          of them use it at once.</p>
+      <div class="head rv">
+        <span class="eyebrow">Products</span>
+        <h2>Two products.<br>One <span class="pk">problem.</span></h2>
+        <p>Gig workers run their day across apps that don't talk to each other. Waggle gives
+          them one place for it. Populace checks it holds up when many of them use it at once.</p>
       </div>
 
       <div class="products">
-        <article class="card product rv">
+        <article class="product rv">
           <span class="kind">Product 01 · Android app</span>
           <h3>Waggle</h3>
           <p>A free app for delivery riders. It counts the distance you actually drive, puts
             the riders you know on a map, and gives your streets a feed and group chats.
             Built for a mid-range phone on a prepaid plan.</p>
-          <div class="shots">
-            <figure><img src="shots/home.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle home screen: today's distance, active time and earnings side by side, above a daily goal ring."></figure>
-            <figure><img src="shots/map.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle map, showing a day's driving recorded across Mumbai and matched to the roads, from Andheri through Powai and Kurla to Bandra, with distance, time and pace beneath it."></figure>
-            <figure><img src="shots/friends.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle friends map: three connected drivers pinned across Mumbai with the platform each is working, how far they have driven today and how far away they are, the one last seen six minutes ago shown dimmed."></figure>
-            <figure><img src="shots/community.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle community feed, where drivers post road conditions to each other."></figure>
-            <figure><img src="shots/messages.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle messages list, showing direct chats and a group of drivers working the same shift."></figure>
-            <figure><img src="shots/profile.jpg" width="720" height="1520" loading="lazy"
-              alt="The Waggle profile screen, showing the platform picker with Indian gig apps and a vehicle maintenance tracker."></figure>
+          <div class="stage">
+            <div class="orb" aria-hidden="true"></div>
+            <div class="phones">
+              <img src="shots/map.jpg" width="720" height="1520" loading="lazy"
+                alt="The Waggle map, showing a day's driving recorded across Mumbai and matched to the roads, from Andheri through Powai and Kurla to Bandra, with distance, time and pace beneath it.">
+              <img src="shots/home.jpg" width="720" height="1520" loading="lazy"
+                alt="The Waggle home screen: today's distance, active time and earnings side by side, above a daily goal ring.">
+              <img src="shots/friends.jpg" width="720" height="1520" loading="lazy"
+                alt="The Waggle friends map: three connected drivers pinned across Mumbai with the platform each is working, how far they have driven today and how far away they are, the one last seen six minutes ago shown dimmed.">
+            </div>
           </div>
           <div class="facts">
             <span>8.2 MB download</span><span>43 languages</span>
             <span>Works offline</span><span>In closed testing</span>
           </div>
-          <a class="go" href="waggle.html">
-            See Waggle
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a class="go" href="waggle.html">See Waggle
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></a>
         </article>
 
-        <article class="card product rv">
+        <article class="product rv">
           <span class="kind">Product 02 · Developer tool</span>
           <h3>Populace</h3>
           <p>Fills your app with simulated people who sign up, move, post and message through
             your real API, all at once. Then it tells you what broke and why. Free and open
             source, as a Windows app or a command line.</p>
-          <div class="shots wide">
-            <figure><img src="shots/populace-live.jpg" width="1440" height="744" loading="lazy"
-              alt="Populace Studio mid-run: 1,471 API calls at 48 a second against a test app, forty simulated people pinned on a world map in Mumbai and Manila, and a panel naming the one thing failing — 69 rejections from a row-level security policy called post_likes_insert."></figure>
-            <figure><img src="shots/populace-run.jpg" width="1440" height="744" loading="lazy"
-              alt="Setting up a run in Populace Studio: presets for a smoke test, a normal afternoon and everyone at once, forty people for six minutes, and a panel confirming the target is a test environment."></figure>
-            <figure><img src="shots/populace-report.jpg" width="1440" height="744" loading="lazy"
-              alt="A finished Populace report: the verdict problems-found, 1,024 of 21,074 calls failed, all forty simulated people removed afterwards, and latency for every method with its median and 95th percentile."></figure>
+          <div class="stage">
+            <div class="orb" aria-hidden="true"></div>
+            <div class="windows">
+              <img src="shots/populace-live.jpg" width="1440" height="744" loading="lazy"
+                alt="Populace Studio mid-run: 1,471 API calls at 48 a second against a test app, forty simulated people pinned on a world map in Mumbai and Manila, and a panel naming the one thing failing — 69 rejections from a row-level security policy called post_likes_insert.">
+              <div class="pair">
+                <img src="shots/populace-run.jpg" width="1440" height="744" loading="lazy"
+                  alt="Setting up a run in Populace Studio: presets for a smoke test, a normal afternoon and everyone at once, forty people for six minutes, and a panel confirming the target is a test environment.">
+                <img src="shots/populace-report.jpg" width="1440" height="744" loading="lazy"
+                  alt="A finished Populace report: the verdict problems-found, 1,024 of 21,074 calls failed, all forty simulated people removed afterwards, and latency for every method with its median and 95th percentile.">
+              </div>
+            </div>
           </div>
           <div class="facts">
             <span>121 self-tests</span><span>Zero dependencies</span>
             <span>Windows app &amp; CLI</span><span>Free, open source</span>
           </div>
-          <a class="go" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">
-            See Populace
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a class="go" href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">See Populace
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></a>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ── mission ──────────────────────────────────────────────────────── -->
-  <section id="mission">
-    <div class="wrap">
-      <div class="head">
+  <!-- ── how we work ────────────────────────────────────────────────── -->
+  <section id="mission" class="band">
+    <div class="wrap split">
+      <div class="split-art rv">
+        <img src="img/rider-phone.jpg" width="1600" height="1067" loading="lazy"
+             alt="A delivery rider sitting on his motorcycle, smiling as he checks his phone.">
+        <div class="orb" aria-hidden="true"></div>
+      </div>
+      <div>
         <span class="eyebrow rv">How we work</span>
-        <h2 class="rv">Built for riders.<br>Tested like it matters.</h2>
-      </div>
-      <div class="trio">
-        <article class="card rv">
-          <h3>Who we build for</h3>
-          <p>Riders, drivers and couriers, often on several platforms at once, with a
-            mid-range phone and a prepaid plan. So Waggle is small, speaks 43 languages and
-            keeps working when the signal drops.</p>
-        </article>
-        <article class="card rv">
-          <h3>How we test</h3>
-          <p>Bugs that need two people never show up when one person tests. So we built
-            Populace. Its first run found three defects in our own app in three and a half
-            minutes, one of which broke every new signup. It found two in itself, too.</p>
-        </article>
-        <article class="card rv">
-          <h3>What we publish</h3>
-          <p>Every test run, including the ones that found problems, with its limits
-            written down. When one of our figures turns out wrong, we correct it in public.</p>
-        </article>
+        <h2 class="rv">Built for riders. Tested like it <span class="pk">matters.</span></h2>
+        <ol class="steps">
+          <li class="rv"><span class="n">1</span><div>
+            <h3>Who we build for</h3>
+            <p>Riders, drivers and couriers, often on several platforms at once, with a
+              mid-range phone and a prepaid plan. So Waggle is small, speaks 43 languages and
+              keeps working when the signal drops.</p></div></li>
+          <li class="rv"><span class="n">2</span><div>
+            <h3>How we test</h3>
+            <p>Bugs that need two people never show up when one person tests. So we built
+              Populace. Its first run found three defects in our own app in three and a half
+              minutes, one of which broke every new signup. It found two in itself, too.</p></div></li>
+          <li class="rv"><span class="n">3</span><div>
+            <h3>What we publish</h3>
+            <p>Every test run, including the ones that found problems, with its limits written
+              down. When one of our figures turns out wrong, we correct it in public.</p></div></li>
+        </ol>
       </div>
     </div>
   </section>
 
-  <!-- ── global ───────────────────────────────────────────────────────── -->
+  <!-- ── languages ──────────────────────────────────────────────────── -->
   <section id="global">
     <div class="wrap">
-      <div class="head">
-        <span class="eyebrow rv">Global</span>
-        <h2 class="rv">Wherever the work is</h2>
-        <p class="lede rv">A rider in Delhi should get the same app as a rider in London.
-          Waggle speaks 43 languages, right-to-left included, and picks the currency from
-          where you are.</p>
+      <div class="head rv">
+        <span class="eyebrow">Global</span>
+        <h2>Wherever the <span class="pk">work</span> is</h2>
+        <p>A rider in Delhi should get the same app as a rider in London. Waggle speaks 43
+          languages, right-to-left included, and picks the currency from where you are.</p>
       </div>
-      <!-- Three rows, filled by script. aria-label sits on the first only: the
-           set is one list to a screen reader, and labelling all three would
-           announce "supported languages" three times for one thing. -->
-      <div class="marq rv" aria-label="Supported languages">
-        <div class="marq-in" id="marq"></div>
-      </div>
-      <div class="marq rv" aria-hidden="true">
-        <div class="marq-in mid" id="marq2"></div>
-      </div>
-      <div class="marq rv" aria-hidden="true">
-        <div class="marq-in slow" id="marq3"></div>
-      </div>
+      <div class="langs rv" id="langs" aria-label="Languages Waggle is available in"></div>
     </div>
   </section>
 
-  <!-- ── promises ─────────────────────────────────────────────────────── -->
-  <section id="promises">
+  <!-- ── promises ───────────────────────────────────────────────────── -->
+  <section id="promises" class="mist">
     <div class="wrap">
-      <div class="head">
-        <span class="eyebrow rv">Promises</span>
-        <h2 class="rv">What we stand behind</h2>
-        <p class="lede rv">Three promises, each backed by how the software is built rather than
-          by a policy page.</p>
+      <div class="head rv">
+        <span class="eyebrow">Promises</span>
+        <h2>What we stand <span class="pk">behind</span></h2>
+        <p>Three promises, each backed by how the software is built rather than by a policy page.</p>
       </div>
-      <div class="trio">
-        <article class="card promise rv">
-          <span class="num">01</span>
+      <div class="icons">
+        <div class="icon-card rv">
+          <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="36" fill="#E9E7FF"/><path d="M24 36h32v22a4 4 0 0 1-4 4H28a4 4 0 0 1-4-4z" fill="#4F46E5"/><rect x="20" y="28" width="40" height="10" rx="3" fill="#1A168F"/><path d="M40 28v34" stroke="#FF4FAE" stroke-width="5"/><path d="M40 28c-4-8-14-10-14-3 0 4 8 3 14 3zm0 0c4-8 14-10 14-3 0 4-8 3-14 3z" fill="#FF4FAE"/></svg>
           <h3>Free for riders</h3>
           <p>Waggle costs a rider nothing. No ads, no trial, no paid tier.</p>
           <p class="mech"><b>Why it stays free:</b> we plan to earn from fleets and businesses,
             not from the people doing the driving.</p>
-        </article>
-        <article class="card promise rv">
-          <span class="num">02</span>
+        </div>
+        <div class="icon-card rv">
+          <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="36" fill="#E9E7FF"/><path d="M40 16l20 8v14c0 13-9 22-20 26-11-4-20-13-20-26V24z" fill="#1A168F"/><path d="M40 16l20 8v14c0 13-9 22-20 26z" fill="#4F46E5"/><path d="m31 40 6 6 12-13" fill="none" stroke="#FF4FAE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h3>Privacy the database enforces</h3>
           <p>One rider can't read another's data, even if the app asks.</p>
-          <p class="mech"><b>How:</b> the access rules live in the database itself, so a bug
-            in the app can't widen them.</p>
-        </article>
-        <article class="card promise rv">
-          <span class="num">03</span>
+          <p class="mech"><b>How:</b> the access rules live in the database itself, so a bug in
+            the app can't widen them.</p>
+        </div>
+        <div class="icon-card rv">
+          <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="36" fill="#E9E7FF"/><rect x="22" y="16" width="36" height="48" rx="5" fill="#1A168F"/><rect x="28" y="26" width="24" height="4" rx="2" fill="#fff"/><rect x="28" y="35" width="18" height="4" rx="2" fill="#fff" opacity=".7"/><rect x="28" y="44" width="21" height="4" rx="2" fill="#fff" opacity=".7"/><circle cx="54" cy="56" r="11" fill="#FF4FAE"/><path d="m49 56 4 4 6-7" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h3>We publish what failed</h3>
           <p>Every test run is public, including the ones that found defects in our own work.</p>
           <p class="mech"><b>How:</b> the test report is corrected with dated notes. It is never
             quietly rewritten.</p>
-        </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ── history ──────────────────────────────────────────────────────── -->
+  <!-- ── history ────────────────────────────────────────────────────── -->
   <section id="milestones">
     <div class="wrap">
-      <div class="head">
-        <span class="eyebrow rv">History</span>
-        <h2 class="rv">So far</h2>
-        <p class="lede rv">A short history, because it is a short history.</p>
+      <div class="head rv">
+        <span class="eyebrow">History</span>
+        <h2>So <span class="pk">far</span></h2>
+        <p>A short history, because it is a short history.</p>
       </div>
       <div class="time">
         <div class="ev rv"><time>April 2026</time>
-          <p>Gigzen Private Limited is incorporated in Bhubaneswar, Odisha, with two
-            directors.</p></div>
+          <p>Gigzen Private Limited is incorporated in Bhubaneswar, Odisha, with two directors.</p></div>
         <div class="ev rv"><time>July 2026</time>
-          <p>Populace becomes its own product. Its engine is rewritten to know nothing about
-            any particular app, so any team can use it.</p></div>
+          <p>Populace becomes its own product. Its engine is rewritten to know nothing about any
+            particular app, so any team can use it.</p></div>
         <div class="ev rv"><time>9 August 2026</time>
-          <p>Populace's first run against a live backend. Six simulated drivers, three and a
-            half minutes: three defects in our app, two in Populace itself.</p></div>
+          <p>Populace's first run against a live backend. Six simulated drivers, three and a half
+            minutes: three defects in our app, two in Populace itself.</p></div>
         <div class="ev rv"><time>21 August 2026</time>
-          <p>Seven runs on a local backend, up to 300 simulated drivers at once. 3.17 million
-            API calls, zero failures, and all 740 accounts removed afterwards.</p></div>
+          <p>Seven runs on a local backend, up to 300 simulated drivers at once. 3.17 million API
+            calls, zero failures, and all 740 accounts removed afterwards.</p></div>
         <div class="ev rv"><time>23 August 2026</time>
           <p>Populace Studio ships for Windows, and the engine lands on npm as
             <code>@gigzen/populace</code>.</p></div>
         <div class="ev rv"><time>27 August 2026</time>
-          <p>The driver app becomes <strong>Waggle</strong>, and grows from 16 languages
-            to 43.</p></div>
+          <p>The driver app becomes <strong>Waggle</strong>, and grows from 16 languages to 43.</p></div>
         <div class="ev rv"><time>13 September 2026</time>
-          <p>Populace runs against a hosted backend for the first time: eight simulated
-            people, 895 API calls, no failures.</p></div>
+          <p>Populace runs against a hosted backend for the first time: eight simulated people,
+            895 API calls, no failures.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ── company ──────────────────────────────────────────────────────── -->
-  <section id="company">
+  <!-- ── company ────────────────────────────────────────────────────── -->
+  <section id="company" class="mist">
     <div class="wrap">
-      <div class="head">
-        <span class="eyebrow rv">Company</span>
-        <h2 class="rv">Small, on purpose.</h2>
-        <p class="lede rv">Gigzen Private Limited is a software company in Bhubaneswar. We ship
-          few things, build our own tools, and say plainly what our software does and doesn't
-          do yet.</p>
-        <p class="lede rv">There are no product divisions. One of us runs the business, the
-          other runs engineering, across everything we make.</p>
+      <div class="head rv">
+        <span class="eyebrow">Company</span>
+        <h2>Small, on <span class="pk">purpose.</span></h2>
+        <p>Gigzen Private Limited is a software company in Bhubaneswar. We ship few things, build
+          our own tools, and say plainly what our software does and doesn't do yet.</p>
+        <p>There are no product divisions. One of us runs the business, the other runs
+          engineering, across everything we make.</p>
       </div>
       <div class="people">
-        <article class="card person rv">
-          <div class="av">SD</div>
+        <article class="person rv">
+          <div class="av" aria-hidden="true">SD</div>
           <div>
             <h3>Snehasis Despande</h3>
             <div class="role">Founder &amp; Head of Business</div>
@@ -630,8 +534,8 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
               them, across the whole company.</p>
           </div>
         </article>
-        <article class="card person rv">
-          <div class="av">SK</div>
+        <article class="person rv">
+          <div class="av" aria-hidden="true">SK</div>
           <div>
             <h3>Sankur Kundu</h3>
             <div class="role">Co-founder &amp; Head of Engineering</div>
@@ -643,205 +547,128 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </section>
 
-  <!-- ── contact ──────────────────────────────────────────────────────── -->
-  <section id="contact">
-    <div class="wrap">
-      <div class="card contact rv">
-        <h2>Work with us.</h2>
-        <p class="lede">Building something many people use at once, or want help testing it
+  <!-- ── contact ────────────────────────────────────────────────────── -->
+  <section id="contact" class="band contact">
+    <div class="wrap contact-grid">
+      <div>
+        <span class="eyebrow rv">Contact</span>
+        <h2 class="rv">Work with <span class="pk">us.</span></h2>
+        <p class="lede rv">Building something many people use at once, or want help testing it
           with Populace? Tell us about it.</p>
-        <a class="mailto" href="mailto:sankur.kundu.tw@gmail.com">sankur.kundu.tw@gmail.com</a>
-        <div class="cta">
-          <a class="btn btn-primary" href="mailto:sankur.kundu.tw@gmail.com">Get in touch</a>
-          <a class="btn btn-ghost" href="product-sheet.html">Product sheet</a>
+        <div class="cta rv">
+          <a class="btn btn-pink" href="mailto:sankur.kundu.tw@gmail.com">Get in touch</a>
+          <a class="btn btn-line" href="product-sheet.html">Product sheet</a>
         </div>
+        <a class="mail rv" href="mailto:sankur.kundu.tw@gmail.com">sankur.kundu.tw@gmail.com</a>
+      </div>
+      <div class="contact-art" aria-hidden="true">
+        <div class="blob" style="width:360px;height:360px;left:20%;top:0"></div>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <small>© 2026 Gigzen Private Limited · Bhubaneswar, Odisha, India</small>
-    <nav>
-      <a href="waggle.html">Waggle</a>
-      <a href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">Populace</a>
-      <a href="test-report.html">Test report</a>
-      <a href="product-sheet.html">Product sheet</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-      <a href="delete-account.html">Delete account</a>
-    </nav>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#4F46E5"/><path fill="#fff" d="M33.19 10 L54 20.4 L44.6 25.2 L33.66 19.6 L20.2 27 L20.2 38.5 L33.19 44.4 L44.5 38.6 L30.34 34.5 L30.5 30.9 L44.43 25.4 L54 29.8 L54 42.6 L33.5 54 L10 42.6 L10 22.5 Z"/></svg>
+          Gigzen
+        </a>
+        <small>Gigzen Private Limited<br>Bhubaneswar, Odisha, India</small>
+      </div>
+      <div>
+        <h4>Products</h4>
+        <a href="waggle.html">Waggle</a>
+        <a href="https://shakhtar-sankur.github.io/populace/" rel="noreferrer">Populace</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="test-report.html">Test report</a>
+        <a href="product-sheet.html">Product sheet</a>
+        <a href="mailto:sankur.kundu.tw@gmail.com">Contact</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="delete-account.html">Delete account</a>
+      </div>
+    </div>
+    <p class="legal">© 2026 Gigzen Private Limited · Photographs from Pexels. The people pictured are not Waggle users.</p>
   </div>
 </footer>
 
 <script>
-(function(){
+(function () {
   "use strict";
-  var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.documentElement.classList.add("js");
+  var calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ── the small-screen menu ──
-     Closes on any link, because every one of these either jumps to an anchor on
-     this page or leaves it — in both cases a panel left standing over the
-     content is the wrong thing to look at next. */
-  var burger = document.getElementById("burger");
-  var navLinks = document.getElementById("nav-links");
-  if (burger && navLinks) {
-    burger.addEventListener("click", function () {
-      var open = navLinks.classList.toggle("open");
-      burger.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    navLinks.addEventListener("click", function (e) {
-      if (e.target.tagName !== "A") return;
-      navLinks.classList.remove("open");
-      burger.setAttribute("aria-expanded", "false");
-    });
-    /* Also on Escape, and when the viewport grows back past the breakpoint —
-       otherwise the panel stays in the DOM as .open and reappears the next time
-       the window is narrowed. */
-    document.addEventListener("keydown", function (e) {
-      if (e.key !== "Escape") return;
-      navLinks.classList.remove("open");
-      burger.setAttribute("aria-expanded", "false");
-    });
-    window.matchMedia("(min-width: 821px)").addEventListener("change", function (m) {
-      if (!m.matches) return;
-      navLinks.classList.remove("open");
-      burger.setAttribute("aria-expanded", "false");
-    });
-  }
+  /* Menu: closes on any link, on Escape, and when the window widens past the
+     breakpoint, so an open panel can't reappear later. */
+  var burger = document.getElementById("burger"), links = document.getElementById("nav-links");
+  function close() { links.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); }
+  burger.addEventListener("click", function () {
+    burger.setAttribute("aria-expanded", links.classList.toggle("open") ? "true" : "false");
+  });
+  links.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  matchMedia("(min-width: 901px)").addEventListener("change", function (m) { if (m.matches) close(); });
 
-  /* The language list is the claim. Written once and duplicated, because a
-     marquee needs two copies to loop without a seam. */
+  /* Shadow under the bar once the page has moved. */
+  var header = document.querySelector("header");
+  addEventListener("scroll", function () { header.classList.toggle("stuck", scrollY > 8); }, { passive: true });
+
+  /* The languages, all 43. The list is the claim. */
   var LANGS = ["English","Filipino","Español","हिन्दी","বাংলা","தமிழ்","తెలుగు","मराठी",
     "ಕನ್ನಡ","മലയാളം","ગુજરાતી","ਪੰਜਾਬੀ","اردو","Bahasa Indonesia","Bahasa Melayu","ไทย",
     "Tiếng Việt","Português","Français","Deutsch","中文","日本語","한국어","العربية",
     "Nederlands","Italiano","Polski","Română","Čeština","Svenska","Dansk","Norsk","Suomi",
     "Ελληνικά","Türkçe","Русский","Українська","עברית","Kiswahili","ខ្មែរ","မြန်မာ","සිංහල","नेपाली"];
-  /* Split across the three rows rather than repeating one list three times, so
-     the set shows most of the forty-three at once instead of the same handful
-     sliding past on every row. */
-  var pill = function(l){ return "<span>" + l + "</span>"; };
-  var per = Math.ceil(LANGS.length / 3);
-  var rows = [
-    document.getElementById("marq"),
-    document.getElementById("marq2"),
-    document.getElementById("marq3")
-  ];
-  rows.forEach(function (el, i) {
-    if (!el) return;
-    var slice = LANGS.slice(i * per, (i + 1) * per);
-    if (!slice.length) return;
-    /* The -50% keyframe assumes the row holds EXACTLY two copies of its list,
-       so the second copy is under the first at the moment it wraps. A third of
-       the languages can be narrower than the container on a wide screen, which
-       would show empty track — so the list is repeated until one copy is at
-       least as wide as the widest layout, and only then doubled. */
-    var copy = slice;
-    while (copy.length < 16) copy = copy.concat(slice);
-    var html = copy.map(pill).join("");
-    el.innerHTML = html + html;
-  });
+  var box = document.getElementById("langs");
+  box.innerHTML = LANGS.map(function (l) { return "<span>" + l + "</span>"; }).join("");
 
-  /* Reveal on scroll. One observer for the whole page, and each element is
-     unobserved once it has appeared — a reveal that keeps firing is a reveal
-     that keeps costing. */
-  var rv = document.querySelectorAll(".rv");
+  /* Reveal. Anything already on screen shows at once, and everything shows after
+     1.5 seconds regardless — a page that needs an observer to become readable is
+     a blank page when the observer doesn't fire. */
+  var rv = [].slice.call(document.querySelectorAll(".rv"));
   if (calm || !("IntersectionObserver" in window)) {
-    rv.forEach(function(el){ el.classList.add("in"); });
+    rv.forEach(function (el) { el.classList.add("in"); });
   } else {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
         if (!e.isIntersecting) return;
-        var el = e.target;
-        /* Stagger siblings so a row of cards arrives as a sequence rather
-           than a block. Capped, so a long list never waits a second. */
-        var sibs = Array.prototype.slice.call(el.parentNode.children);
-        var i = Math.min(sibs.indexOf(el), 5);
-        el.style.transitionDelay = (i * 70) + "ms";
-        el.classList.add("in");
-        io.unobserve(el);
+        var sibs = [].slice.call(e.target.parentNode.children);
+        e.target.style.transitionDelay = Math.min(sibs.indexOf(e.target), 5) * 70 + "ms";
+        e.target.classList.add("in");
+        io.unobserve(e.target);
       });
-    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.12 });
-    rv.forEach(function(el){ io.observe(el); });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    rv.forEach(function (el) { io.observe(el); });
+    setTimeout(function () { rv.forEach(function (el) { el.classList.add("in"); }); }, 1500);
   }
 
-  /* Counters. They run once, when the strip is first seen. */
-  var counters = document.querySelectorAll("[data-count]");
-  function run(el){
-    var target = parseInt(el.getAttribute("data-count"), 10);
-    var suffix = el.getAttribute("data-suffix") || "";
-    if (calm || !target) { el.textContent = target + suffix; return; }
-    var t0 = null, dur = 1100;
-    function step(ts){
+  /* Counters, once, when the strip first appears. */
+  var counters = [].slice.call(document.querySelectorAll("[data-count]"));
+  function count(el) {
+    var target = +el.getAttribute("data-count");
+    if (calm) { el.textContent = target; return; }
+    var t0 = null;
+    requestAnimationFrame(function step(ts) {
       if (t0 === null) t0 = ts;
-      var p = Math.min((ts - t0) / dur, 1);
-      /* ease-out cubic: fast first, settles rather than stops */
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + suffix;
+      var p = Math.min((ts - t0) / 1100, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
       if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+    });
   }
   if ("IntersectionObserver" in window) {
-    var co = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if (e.isIntersecting) { run(e.target); co.unobserve(e.target); }
-      });
+    var co = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { count(e.target); co.unobserve(e.target); } });
     }, { threshold: 0.5 });
-    counters.forEach(function(el){ co.observe(el); });
-  } else {
-    counters.forEach(run);
+    counters.forEach(function (el) { co.observe(el); });
   }
-
-  /* The pointer light on each card. Two custom properties, no layout. */
-  if (!calm) {
-    document.querySelectorAll(".card").forEach(function(card){
-      card.addEventListener("pointermove", function(ev){
-        var r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", (ev.clientX - r.left) + "px");
-        card.style.setProperty("--my", (ev.clientY - r.top) + "px");
-      });
-    });
-  }
-
-  /* A safety net under the reveals.
-   *
-   * An IntersectionObserver only fires for elements the viewport actually
-   * passes over. Land straight on /#company, or jump with an instant scroll,
-   * and everything skipped stays at opacity 0 — permanently. Content that is
-   * invisible forever is a worse bug than content that never animated, and it
-   * is invisible to the author too, because it only happens on the paths they
-   * do not test.
-   *
-   * So: anything at or above the bottom of the viewport gets revealed
-   * regardless of whether the observer saw it. Runs with the scroll handler,
-   * which is already rAF-throttled, plus once on load and once on hashchange.
-   */
-  function sweep(){
-    var vh = window.innerHeight;
-    document.querySelectorAll(".rv:not(.in)").forEach(function(el){
-      if (el.getBoundingClientRect().top < vh) el.classList.add("in");
-    });
-  }
-
-  /* The header takes an edge once the page has moved. rAF-throttled, because
-     a scroll handler that writes on every event is the classic way to make a
-     smooth page stutter. */
-  var header = document.querySelector("header"), ticking = false;
-  function onScroll(){
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      header.classList.toggle("stuck", window.scrollY > 12);
-      sweep();
-      ticking = false;
-    });
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("hashchange", function(){ setTimeout(sweep, 60); });
-  window.addEventListener("load", sweep);
-  onScroll();
 })();
 </script>
 </body>
