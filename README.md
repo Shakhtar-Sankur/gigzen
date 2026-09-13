@@ -20,5 +20,5 @@ Hosted with GitHub Pages from the `main` branch, root folder.
 
 | Product | Site | Repository |
 |---|---|---|
-| Waggle | https://shakhtar-sankur.github.io/waggle/ | [waggle](https://github.com/Shakhtar-Sankur/waggle) |
+| Waggle | https://shakhtar-sankur.github.io/gigzen/waggle.html | [waggle](https://github.com/Shakhtar-Sankur/waggle) |
 | Populace | https://shakhtar-sankur.github.io/populace/ | [populace](https://github.com/Shakhtar-Sankur/populace) |
