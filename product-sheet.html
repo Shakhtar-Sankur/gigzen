@@ -113,56 +113,54 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
   </div>
 
   <h1>Two products.<br>One of them proved the other.</h1>
-  <p class="sub">We build software for people who work — and the tooling to prove it holds up before
-  anyone depends on it. One product serves gig drivers across 92 countries. The other is the
-  testing platform we had to build to test the first, and it found five bugs in it that a full
-  manual pass had missed.</p>
+  <p class="sub">Waggle is an app for gig drivers, built for 92 countries. Populace is the testing
+  tool we built to check it. Its first run found three defects in Waggle that a full manual test
+  had missed, and two in Populace itself.</p>
 
   <div class="products">
     <div class="prod">
       <p class="kicker">Product 01 · Android, consumer</p>
       <h2>Waggle</h2>
-      <p class="one">A professional and social home for gig workers. A Swiggy rider, an Uber driver
-      and an Amazon Flex courier are often the same person — no platform connects those identities.</p>
+      <p class="one">A free app for gig drivers. A Swiggy rider, an Uber driver and an Amazon Flex
+      courier are often the same person, and no platform sees their whole day.</p>
       <ul>
-        <li><b>Earnings that follow the road.</b> Money accrues from distance genuinely travelled, so a stationary phone earns nothing and traffic cannot inflate the number.</li>
-        <li><b>A map with people on it.</b> Live positions, search any street on earth. Sharing is off until the driver turns it on.</li>
-        <li><b>Works underground.</b> Posts and messages written with no signal queue on the device and send on reconnect.</li>
-        <li><b>Privacy enforced by the database.</b> Phone numbers are unreadable to other users — not hidden in the UI — and a migration assertion fails if that stops being true.</li>
+        <li><b>Earnings that follow the road.</b> Pay grows only with distance travelled, so a phone sitting in traffic earns nothing.</li>
+        <li><b>A map with people on it.</b> Friends' live positions and street search. Sharing stays off until the driver turns it on.</li>
+        <li><b>Works with no signal.</b> Posts and messages are saved on the phone and sent on reconnect.</li>
+        <li><b>Privacy the database enforces.</b> Other users can't read a driver's phone number, because the database refuses, not because the screen hides it.</li>
       </ul>
       <div class="specs">
         <b>43</b> languages, right-to-left included · <b>70</b> currencies ·
         <b>92</b> countries · <b>33</b> gig platforms<br>
-        React · TypeScript · Capacitor · PostgreSQL — <b>24</b> tables under <b>54</b>
-        row-level-security policies · <b>8.2 MB</b> download · Android 7.0+
+        React · TypeScript · Capacitor · PostgreSQL with row-level security on every table ·
+        <b>8.2 MB</b> download · Android 7.0+
       </div>
-      <p class="stat-line"><span class="pill">Not yet on Google Play</span> &nbsp; Free for workers, permanently.</p>
+      <p class="stat-line"><span class="pill">In closed testing</span> &nbsp; Free for drivers. No ads.</p>
     </div>
 
     <div class="prod">
       <p class="kicker">Product 02 · Developer tool</p>
       <h2>Populace</h2>
-      <p class="one">A simulated population that uses your app through its real API, so you can test
-      what needs more than one person — presence, live sync, fan-out, and every permission rule you
-      wrote.</p>
+      <p class="one">Simulated people use your app through its real API, all at once, so you can test
+      what needs more than one person: feeds, live updates, and every permission rule you wrote.</p>
       <ul>
-        <li><b>One adapter is the whole integration.</b> Thirteen small methods, two of them required. The engine knows how to be a person and nothing about your product.</li>
-        <li><b>Real users, front door only.</b> Real accounts, your API, your permission rules applying. No admin keys, no direct database writes.</li>
-        <li><b>Honest coverage.</b> An empty method does not count, so a fresh scaffold reports 2/13 and refuses to run rather than passing while testing nothing.</li>
-        <li><b>Refuses production three ways.</b> Environment must declare itself, every string in the target block is reduced to a hostname and matched against your denylist including subdomains, and an empty denylist warns loudly. All exit non-zero.</li>
+        <li><b>One adapter file.</b> Thirteen small methods, two of them required. The engine knows how to be a person, and nothing about your product.</li>
+        <li><b>Front door only.</b> Real accounts through your API, with your permission rules applying. No admin keys, no direct database writes.</li>
+        <li><b>Honest coverage.</b> Coverage counts methods a run actually called. An empty method never counts.</li>
+        <li><b>Refuses production three ways.</b> The environment must declare itself, production hosts are refused however the URL is written, and an empty production list is flagged.</li>
       </ul>
       <div class="specs">
-        <b>13</b>-method contract · <b>0</b> runtime dependencies · <b>3</b> production guards ·
-        <b>121/121</b> self-tests with no backend at all<br>
-        Node 18+ · per-endpoint p50/p95/p99 · JSON report for CI plus a self-contained HTML page ·
-        exits non-zero when problems are found
+        <b>13</b>-method contract · <b>0</b> runtime dependencies · <b>3</b> production checks ·
+        <b>121</b> self-tests, no backend needed<br>
+        Node 18+ · median and 95th-percentile latency per method · JSON for CI plus a
+        self-contained HTML report · exits non-zero on any problem
       </div>
       <p class="stat-line"><span class="pill">Proven — taking pilot users</span> &nbsp; AGPL-3.0, source public.</p>
     </div>
   </div>
 
-  <p class="runs-intro">Two runs, three and a half minutes apart. The first is what Populace
-  does for you. The second is what it certifies.</p>
+  <p class="runs-intro">Two runs, twelve days apart. The first shows what Populace finds. The
+  second shows what a fixed app holds up to.</p>
 
   <div class="runs">
 
@@ -178,13 +176,11 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
         <div><div class="v warn">1</div><div class="l">BLOCKED ALL SIGNUPS</div></div>
       </div>
       <p class="run-body"><b>Against a finished, signed app that had just passed a full manual test
-      of every screen.</b> Signup silently created no profile row for any new user &mdash; a privacy
-      fix had made a column unreadable and the write needed to read it. Likes bounced one tap in
-      four. Profile edits failed the same way. Two further faults were in Populace's own reference
-      adapter, one of them an unchecked error.</p>
-      <p class="run-note"><b>What this proves about Populace:</b> it finds real defects in software
-      that is already considered done, names the cause in one line, and <b>exits non-zero</b> &mdash;
-      so the build stays failed until each one is rectified.</p>
+      of every screen.</b> Signup created no profile for any new user, because the write needed a
+      column the app is deliberately not allowed to read. One like in four failed. Profile edits
+      failed the same way. The other two defects were in Populace's own adapter.</p>
+      <p class="run-note"><b>What this shows:</b> Populace finds real defects in software already
+      considered done, names each cause in one line, and <b>exits non-zero</b> until they're fixed.</p>
     </div>
 
     <div class="run run-good">
@@ -198,24 +194,21 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
         <div><div class="v">932,455</div><div class="l">API CALLS</div></div>
         <div><div class="v">13 / 13</div><div class="l">METHODS COVERED</div></div>
       </div>
-      <p class="run-body"><b>Two hundred simulated drivers across twenty cities in eleven countries,
-      using the backend at the same time for an hour.</b> 2,271&nbsp;km driven, 81,672 posts,
-      172,660 likes, 69,064 comments, 76,034 messages, 5,389 group joins. Two hundred accounts
-      created through the real signup path and two hundred deleted through the real deletion path
-      &mdash; nothing left behind.</p>
-      <p class="run-note"><b>What this proves about Waggle:</b> the shipped build holds up under
-      genuine concurrent multi-user traffic with its own permission rules applying &mdash; not under
-      one person tapping through screens.</p>
+      <p class="run-body"><b>Two hundred simulated drivers in twenty cities across eleven countries,
+      all on the backend at once for an hour.</b> 2,271&nbsp;km driven, 81,672 posts, 172,660 likes,
+      69,064 comments, 76,034 messages and 5,389 group joins. All 200 accounts created through real
+      signup and deleted through real deletion, with nothing left behind.</p>
+      <p class="run-note"><b>What this shows:</b> Waggle's permission rules hold up with many real
+      accounts active at once, not just one person tapping through screens.</p>
     </div>
 
   </div>
 
-  <p class="runs-caveat">A later run drove <b>300 drivers through 1,401,435 calls with zero API
-  failures</b>, but one call never reached the server &mdash; a socket exhausted on the test machine
-  &mdash; so it is recorded as inconclusive rather than clean. Three hundred is where throughput
-  stops scaling, <b>not where Waggle breaks</b>, which is still unfound. These latencies are loopback
-  and contain no network: the same calls cost about 175&nbsp;ms against a hosted project. Populace
-  drives two unrelated backends, but both are still ours.</p>
+  <p class="runs-caveat">A later run put <b>300 drivers through 1,401,435 calls with zero API
+  failures</b>. One call never left the test machine, so it's recorded as inconclusive, not clean.
+  Three hundred is where throughput stops growing, <b>not where Waggle breaks</b>, which is still
+  unfound. Both runs used a local backend, so they prove correctness, not network speed. Populace
+  has also been run against Gitea, an app we didn't write.</p>
 
   <div class="foot">
     <div>
@@ -223,7 +216,7 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
       sankur.kundu.tw@gmail.com
     </div>
     <div>
-      <b>Snehasis Despande</b> — Founder &amp; Director, Business<br>
+      <b>Snehasis Despande</b> — Founder &amp; Head of Business<br>
       Gigzen Private Limited, Bhubaneswar, Odisha, India
     </div>
     <div>
