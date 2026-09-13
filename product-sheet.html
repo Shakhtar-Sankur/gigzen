@@ -101,6 +101,40 @@ h1 { font-size: 19pt; font-weight: 800; letter-spacing: -0.025em; line-height: 1
 .wordmark { color: #140C33; -webkit-text-fill-color: #140C33; background: none;
   font-weight: 700; letter-spacing: -.01em; }
 .mark { color: #140C33; }
+
+/* ── on a phone or tablet ─────────────────────────────────────────────────
+   The sheet is an A4 page (210mm, 794px) built to be printed, which made it
+   scroll sideways on anything narrower. Screen-only, so the printed page is
+   exactly what it was: below 820px the page flows to the screen width, the
+   type comes up to a readable size, and the two-column blocks stack. */
+@media screen and (max-width: 820px) {
+  html, body { width: auto; height: auto; }
+  body { font-size: 15px; }
+  .page { height: auto; padding: 22px 18px 28px; }
+  .mast { flex-wrap: wrap; gap: 10px; }
+  .mast svg { width: 28px; height: 28px; }
+  .wordmark { font-size: 22px; }
+  .mast .tag { margin-left: 0; text-align: left; width: 100%; font-size: 13px; }
+  h1 { font-size: 30px; margin-top: 18px; }
+  .sub { font-size: 16px; margin-top: 10px; }
+  .products, .runs { grid-template-columns: 1fr; gap: 22px; margin-top: 22px; }
+  .prod .kicker { font-size: 12px; }
+  .prod h2 { font-size: 24px; }
+  .prod .one { font-size: 16px; }
+  .prod li { font-size: 15px; padding-left: 16px; margin-bottom: 6px; }
+  .prod li::before { width: 7px; height: 7px; top: 8px; }
+  .specs, .stat-line, .runs-intro { font-size: 13.5px; }
+  .pill { font-size: 12px; padding: 3px 8px; }
+  .run { padding: 18px; border-radius: 12px; }
+  .run-head .k, .run-head .d { font-size: 12px; }
+  .verdict { font-size: 17px; padding: 10px 12px; }
+  .figs .v { font-size: 22px; }
+  .figs .l { font-size: 11px; }
+  .run-body, .run-note { font-size: 14.5px; }
+  .runs-caveat { font-size: 13.5px; margin-top: 14px; }
+  .foot { flex-direction: column; gap: 12px; font-size: 13.5px; margin-top: 26px; }
+  .foot div:last-child { margin-left: 0; text-align: left; }
+}
 </style>
 </head>
 <body>

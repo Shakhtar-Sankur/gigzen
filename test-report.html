@@ -93,6 +93,13 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
 
 .foot { margin-top: auto; padding-top: 3.4mm; border-top: .25mm solid #D9DEE2;
         display: flex; justify-content: space-between; font-size: 6.8pt; color: #6B7883; gap: 6mm; }
+
+/* A few tables are wider than a small phone. Below 600px each one scrolls
+   inside its own box instead of pushing the whole page sideways. Screen only,
+   so the printed report is unchanged. */
+@media screen and (max-width: 600px) {
+  table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
 </style>
 </head>
 <body>
