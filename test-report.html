@@ -198,6 +198,17 @@ li::before { content: ""; position: absolute; left: 0; top: 1.6mm; width: 1.4mm;
     target, which reported 13/13 after five minutes. Coverage now counts what ran.
   </p>
 
+  <!-- A fifth dated line. It changes no figure, and says so, because a version
+       bump with no line would leave a reader wondering what the new engine
+       measured differently. -->
+  <p class="small" style="border-left:3px solid #4F46E5; padding-left:14px; margin:22px 0">
+    <b>As of 16 September 2026.</b> Engine <b>1.3.4</b>, <b>121 checks</b>.
+    <b>Nothing on this page changes.</b> 1.3.4 renames the reference adapter from
+    <code>buzzbuzz</code> to <code>waggle</code> and does nothing else: the checks, how coverage
+    is counted and every run below are unaffected, and so is a Studio build that bundles it.
+    The runs themselves keep the adapter name they really used.
+  </p>
+
   <h2>1 &middot; Headline</h2>
   <div class="grid">
     <div class="kpi"><b>300</b><span>concurrent users, sustained</span></div>
