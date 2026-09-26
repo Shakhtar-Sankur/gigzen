@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Waggle — every kilometre counts</title>
-<meta name="description" content="A free Android app for delivery riders. It counts the distance you actually drive, puts the riders you know on a map, and connects you with the people working your streets. 43 languages. A Gigzen product.">
-<meta name="author" content="Gigzen Private Limited">
+<title>Waggle — one delivery, three apps</title>
+<meta name="description" content="Waggle for customers, Waggle Business for shops and Waggle Gig for riders: order from nearby shops or send a parcel across town, carried by a verified rider who keeps the whole fare. Built in Bhubaneswar. A Gigzen product, in closed testing.">
+<meta name="author" content="Gigzen">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%234F46E5'/><path d='M11 15 C 12.5 30, 15 35, 17.5 35 C 20 35, 22.5 26, 24 22 C 25.5 26, 28 35, 30.5 35 C 33 34, 35 28, 36 18' fill='none' stroke='white' stroke-width='4.6' stroke-linecap='round'/><circle cx='36.4' cy='15' r='4.1' fill='white'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -203,6 +203,29 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
 .js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .rv{opacity:1;transform:none;transition:none}}
+
+/* ── six screens, two rows ─────────────────────────────────────────── */
+.shots6{margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(34px,4vw,56px) clamp(18px,3vw,40px)}
+@media(max-width:860px){.shots6{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.shots6{grid-template-columns:1fr;max-width:420px;margin-inline:auto}}
+.app-name{display:block;margin:22px 0 -14px;font:700 12.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.black .app-name{color:#A8A8A8}
+/* ── coming next ───────────────────────────────────────────────────── */
+.next3{margin-top:60px;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.18);text-align:left}
+.next3 div{padding:30px 24px 6px;border-right:1px solid rgba(255,255,255,.18)}
+.next3 div:last-child{border-right:0}
+.next3 h3{font-size:18px;margin-bottom:10px}
+.next3 p{font-size:15.5px}
+.next3 .state{display:inline-block;margin-top:14px;font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,.5);padding:7px 10px}
+@media(max-width:860px){.next3{grid-template-columns:1fr}.next3 div{border-right:0;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:24px}}
+/* ── three downloads ───────────────────────────────────────────────── */
+.apps3{margin-top:30px;display:grid;gap:18px}
+.appdl{background:#fff;border:1px solid var(--line);padding:22px 22px 18px}
+.appdl h3{font-size:20px}
+.appdl .for{margin-top:6px;font-size:15px}
+.appdl .meta{margin-top:14px}
+.appdl .btn{margin-top:16px}
+.appdl .hash{margin-top:14px}
 </style>
 </head>
 <body>
@@ -219,8 +242,8 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
     </button>
     <nav class="links" id="links">
       <a href="#why">About</a>
-      <a href="#what">Features</a>
-      <a href="#earnings">Earnings</a>
+      <a href="#apps">The apps</a>
+      <a href="#safety">Safety</a>
       <a href="#download">Download</a>
     </nav>
   </div>
@@ -231,14 +254,14 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
   <!-- ── hero ───────────────────────────────────────────────────────── -->
   <section class="hero" role="img" aria-label="A delivery rider on a scooter in a busy street.">
     <div class="wrap"><div class="hero-copy">
-      <h1 class="rv">Every kilometre counts.</h1>
-      <p class="rv">A free app for delivery riders. It counts the distance you actually drive, puts
-        the riders you know on a map, and connects you with the people working your streets.</p>
+      <h1 class="rv">One delivery. Three apps.</h1>
+      <p class="rv">Order from the shops around you, or send a parcel across town. The shop hands it to a
+        verified rider, and the rider keeps the whole fare. Built in Bhubaneswar.</p>
       <div class="row rv">
-        <a class="btn btn-white" href="#download">Download for Android</a>
-        <a class="btn btn-ghost" href="#what">See what it does</a>
+        <a class="btn btn-white" href="#download">Get the apps</a>
+        <a class="btn btn-ghost" href="#apps">See how it works</a>
       </div>
-      <small class="rv">Version 1.4 · Android 7.0 and later · 8.2&nbsp;MB · Free, no ads</small>
+      <small class="rv">In closed testing · Android 7.0 and later · Not on Google Play yet</small>
     </div></div>
   </section>
 
@@ -247,114 +270,109 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
     <div class="wrap">
       <div class="center narrow">
         <h2 class="rv">Why Waggle</h2>
-        <p class="lead rv">A Swiggy rider and an Uber driver are often the same person. Many riders
-          work two or three apps in a day. Each one sees only its own slice: its own earnings, its
-          own hours, its own map. Nobody sees the whole day, least of all the person working it.</p>
+        <p class="lead rv">A neighbourhood shop, the person ordering from it, and the rider carrying the
+          order each see only their own piece of a delivery. Waggle puts all three on one network: every
+          step is shared live, checked with a code, and paid in the open.</p>
       </div>
       <div class="facts4">
-        <div class="rv"><h3>The problem</h3><p>Apps that don't talk to each other, a weekly total you
-          can't check, and nobody to ask about the road ahead.</p></div>
-        <div class="rv"><h3>What Waggle adds</h3><p>One place that counts your distance, shows the
-          people you know on a map, and carries road reports from riders who just came through.</p></div>
-        <div class="rv"><h3>What it costs</h3><p><b>Nothing.</b> No ads, no trial, no subscription.</p></div>
-        <div class="rv"><h3>Where it stands</h3><p>In closed testing on Android 7.0 and later. Not on
-          Google Play yet, so you install it directly from this page.</p></div>
+        <div class="rv"><h3>Waggle</h3><p>For customers. Order from nearby shops, alone or as a group, now or
+          later, and follow the rider to your door. Or send a parcel with Waggle Send.</p></div>
+        <div class="rv"><h3>Waggle Business</h3><p>For shops. Take orders, turn each one into a delivery in a tap,
+          watch the rider on a map, and keep GST invoices and payments in one place.</p></div>
+        <div class="rv"><h3>Waggle Gig</h3><p>For riders. Offers nearby with the fare up front, spoken
+          directions to the shop and the door, and earnings by the hour. The whole fare is yours.</p></div>
+        <div class="rv"><h3>Waggle Send</h3><p>Parcels across town: documents, keys, a lunch left at home. Bike-size,
+          up to 10&nbsp;kg. You see the price first and pay the rider directly.</p></div>
       </div>
-      <p class="runnote rv">Tested with <a href="https://shakhtar-sankur.github.io/populace/">Populace</a>,
-        our tool for simulating many users at once. Its first run found three defects that a full
-        manual test had missed. The largest hosted run since put 36 simulated riders through 7,485
-        API calls with no failures. That checks correctness, not load.
-        <a href="test-report.html">Read the full test record</a>, including what wasn't tested.</p>
+      <p class="runnote rv">Checked with our own tests: 150 attacks on the database rules, all blocked, and
+        42 steps clicked through all three apps live, from a new rider's verification to the rating at the
+        end of a delivery.</p>
     </div>
   </section>
 
-  <!-- ── what it does ───────────────────────────────────────────────── -->
-  <section id="what" class="black">
+  <!-- ── the apps ───────────────────────────────────────────────────── -->
+  <section id="apps" class="black">
     <div class="wrap">
-      <h2 class="center rv">What it does</h2>
-      <div class="shots3">
+      <h2 class="center rv">One order, start to finish</h2>
+      <div class="shots6">
         <div class="shot rv">
-          <div class="frame"><img src="shots/home.jpg" width="720" height="1520" loading="lazy"
-            alt="The Waggle home screen: today's distance, active time and earnings side by side, above a daily goal ring."></div>
-          <h3>Money that follows the road</h3>
-          <p>Earnings grow with the distance you actually cover. Sitting in traffic doesn't count,
-            because a phone that isn't moving earns nothing. You set your own rate, the total resets
-            at midnight, and you can see how it was worked out.</p>
+          <div class="frame"><img src="shots/waggle-gig-home.jpg" width="780" height="1646" loading="lazy" alt="Waggle Gig: the rider online, today's earnings, and a delivery offer with its countdown."></div>
+          <span class="app-name">Waggle Gig</span>
+          <h3>Offers you can see coming</h3>
+          <p>The fare, how far the pickup is and the trip, with 45 seconds to take it. The fare is the rider's, all of it.</p>
         </div>
         <div class="shot rv">
-          <div class="frame"><img src="shots/friends.jpg" width="720" height="1520" loading="lazy"
-            alt="The Waggle friends map: three connected drivers pinned across Mumbai with the platform each is working, how far they have driven today and how far away they are, the one last seen six minutes ago shown dimmed."></div>
-          <h3>A map with people on it</h3>
-          <p>See the riders you know move in real time, and search for any street or shop. Sharing
-            your location is off until you turn it on, and only friends you've added can see you.</p>
+          <div class="frame"><img src="shots/waggle-gig-nav.jpg" width="780" height="1646" loading="lazy" alt="Waggle Gig: the job in hand, with turn-by-turn directions to the shop on a map."></div>
+          <span class="app-name">Waggle Gig</span>
+          <h3>Turn-by-turn, spoken</h3>
+          <p>Directions to the shop and then the door, read aloud, rerouting after a missed turn and keeping the rider on the road.</p>
         </div>
         <div class="shot rv">
-          <div class="frame"><img src="shots/community.jpg" width="720" height="1520" loading="lazy"
-            alt="The Waggle community feed."></div>
-          <h3>The people working your streets</h3>
-          <p>Flooding, surges, closures and queues, posted by the riders who just came through them.
-            Posts, photos, reels and group chats, and you can delete a message for yourself or for
-            everyone.</p>
+          <div class="frame"><img src="shots/waggle-biz-live.jpg" width="780" height="1646" loading="lazy" alt="Waggle Business: today's deliveries, riders to pay, and the live map of a rider coming to the shop."></div>
+          <span class="app-name">Waggle Business</span>
+          <h3>The shop sees its rider</h3>
+          <p>Orders become deliveries in one tap, each with a 4-digit handover code, and a live map of the rider on the way.</p>
+        </div>
+        <div class="shot rv">
+          <div class="frame"><img src="shots/waggle-customer-track.jpg" width="780" height="1646" loading="lazy" alt="Waggle: the rider on the way with a four-minute countdown, the delivery code, and the route on a map."></div>
+          <span class="app-name">Waggle</span>
+          <h3>Tracking to the minute</h3>
+          <p>Follow the rider on the road with a countdown. The delivery code is for the door, never for a call.</p>
+        </div>
+        <div class="shot rv">
+          <div class="frame"><img src="shots/waggle-send.jpg" width="780" height="1646" loading="lazy" alt="Waggle Send: the pickup and delivery codes, and paying the rider by UPI."></div>
+          <span class="app-name">Waggle Send</span>
+          <h3>Send a parcel</h3>
+          <p>Both codes on your phone, the rider's verified UPI ID to pay at pickup, and a tracking link to share with the person receiving it.</p>
+        </div>
+        <div class="shot rv">
+          <div class="frame"><img src="shots/waggle-rate.jpg" width="780" height="1646" loading="lazy" alt="Waggle: rating the rider five stars after delivery."></div>
+          <span class="app-name">Waggle</span>
+          <h3>Every delivery is rated</h3>
+          <p>Customers, senders and shops rate the rider. The rider sees an average, never who rated; Gigzen follows up on low ones.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── built for a real shift ─────────────────────────────────────── -->
-  <section id="earnings">
+  <!-- ── safety ─────────────────────────────────────────────────────── -->
+  <section id="safety">
     <div class="wrap split">
       <div>
-        <h2 class="rv">A delivery shift isn't a good network</h2>
-        <p class="lead rv">Waggle is built for a real shift: patchy signal, a mid-range phone, and a
-          prepaid plan.</p>
-        <p class="rv" style="margin-top:32px"><a class="btn btn-black" href="#download">Download for Android</a></p>
+        <h2 class="rv">Trust, checked at every step</h2>
+        <p class="lead rv">A stranger comes to your door and a shop hands over what it sold. Waggle is built so
+          both can be sure of who they're dealing with.</p>
+        <p class="rv" style="margin-top:32px"><a class="btn btn-black" href="#download">Get the apps</a></p>
       </div>
       <ol class="numbered">
-        <li class="rv"><span class="n">01</span><div><h3>Works offline</h3>
-          <p>Posts and messages you write with no signal are saved and sent when you're back online.
-            Nothing is silently lost.</p></div></li>
-        <li class="rv"><span class="n">02</span><div><h3>Your location is yours</h3>
-          <p>Off by default and visible only to friends you've added. Turn it off and sharing stops
-            straight away.</p></div></li>
-        <li class="rv"><span class="n">03</span><div><h3>Tested by a simulated crowd</h3>
-          <p>Before release, <a href="https://shakhtar-sankur.github.io/populace/">Populace</a> sent
-            crowds of simulated riders through the app at once, to catch the bugs one tester can't.
-            <a href="test-report.html">Read the test report</a>.</p></div></li>
-        <li class="rv"><span class="n">04</span><div><h3>Deleting your account deletes it</h3>
-          <p>Delete your account from inside the app, and your data is removed, not hidden.</p></div></li>
+        <li class="rv"><span class="n">01</span><div><h3>Everyone is verified</h3>
+          <p>Riders send an ID, a selfie and, on a motorbike, their driving licence and RC. Shops send PAN,
+            their licences and a photo of the shop. A person at Gigzen checks each one before the first delivery.</p></div></li>
+        <li class="rv"><span class="n">02</span><div><h3>A code at both ends</h3>
+          <p>The shop gives the rider a pickup code; the customer gives a delivery code only at the door. A parcel
+            is photographed when it's picked up.</p></div></li>
+        <li class="rv"><span class="n">03</span><div><h3>Only what each person needs</h3>
+          <p>A rider sees the full address and phone numbers only while carrying the order. A shop sees only its
+            own riders on its map, and only while they carry its orders.</p></div></li>
+        <li class="rv"><span class="n">04</span><div><h3>Pay that's out in the open</h3>
+          <p>The rider keeps the whole fare. Shops pay riders straight to their UPI and record it, and a rider can
+            flag a payment that never arrived.</p></div></li>
       </ol>
     </div>
   </section>
 
-  <!-- ── languages ──────────────────────────────────────────────────── -->
-  <section id="reach" class="black">
+  <!-- ── next ───────────────────────────────────────────────────────── -->
+  <section id="next" class="black">
     <div class="wrap center">
-      <h2 class="rv">Built for wherever the work is</h2>
-      <p class="lead narrow rv">Language and currency come from where you are. Right-to-left languages
-        work properly, not as an afterthought.</p>
-      <div class="stats">
-        <div class="rv"><b>43</b><span>languages</span></div>
-        <div class="rv"><b>70</b><span>currencies</span></div>
-        <div class="rv"><b>92</b><span>countries</span></div>
-        <div class="rv"><b>0</b><span>ads</span></div>
-      </div>
-      <p class="langs rv" id="langs" aria-label="Languages Waggle is available in"></p>
-    </div>
-  </section>
-
-  <!-- ── calculator ─────────────────────────────────────────────────── -->
-  <section id="calc">
-    <div class="wrap center">
-      <h2 class="rv">What a day pays</h2>
-      <p class="lead narrow rv">Drag the distance. It's the same sum the app does, with nothing rounded up.</p>
-      <div class="calc rv">
-        <span class="calc-money" id="money">&#8377;0</span>
-        <span class="calc-sub" id="breakdown">0 km &middot; &#8377;10 per km</span>
-        <label for="km">Distance covered today</label>
-        <input type="range" id="km" min="0" max="120" step="1" value="34" aria-describedby="breakdown">
-        <div class="scale" aria-hidden="true"><span>0 km</span><span>60 km</span><span>120 km</span></div>
-        <p class="calc-note"><b>Sitting still pays nothing.</b> Only distance moves the number. This uses
-          the app's starting rate for India. You set your own rate in Settings.</p>
+      <h2 class="rv">What's coming</h2>
+      <p class="lead narrow rv">Built and tested, and waiting on the last pieces before they're switched on.</p>
+      <div class="next3">
+        <div class="rv"><h3>Sign in with a code</h3><p>Your mobile number and a 6-digit code by SMS, no
+          password to remember.</p><span class="state">Built · switching on soon</span></div>
+        <div class="rv"><h3>Pay online</h3><p>UPI, cards and netbanking, with the shop's share sent straight to its
+          bank.</p><span class="state">Built · after company registration</span></div>
+        <div class="rv"><h3>Waggle Drive</h3><p>Rides, on the same network of verified riders.</p>
+          <span class="state">Planned</span></div>
       </div>
     </div>
   </section>
@@ -364,25 +382,43 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
     <div class="dl-grid">
       <div class="dl-photo" role="img" aria-label="A delivery rider sitting on his motorcycle, smiling as he checks his phone."></div>
       <div class="dl-body">
-        <h2 class="rv">Install it on your phone</h2>
-        <p class="lead rv">Waggle is in closed testing and isn't on Google Play yet. You can install
-          this build directly.</p>
-        <p class="rv" style="margin-top:28px"><a class="btn btn-black" href="Waggle-1.4.3.apk" download>Download Waggle 1.4.3</a></p>
-        <div class="meta rv">
-          <span>Version<b>1.4.3</b></span><span>Build<b>15</b></span>
-          <span>Size<b>8.2 MB</b></span><span>Requires<b>Android 7.0+</b></span>
+        <h2 class="rv">Install them on your phone</h2>
+        <p class="lead rv">The three apps are in closed testing and aren't on Google Play yet. You can install
+          these builds directly.</p>
+        <div class="apps3">
+        <div class="appdl rv">
+          <h3>Waggle</h3>
+          <p class="for">For customers. Order from nearby shops, send parcels, track the rider.</p>
+          <div class="meta"><span>Version<b>1.1.0</b></span><span>Build<b>5</b></span><span>Size<b>8.3 MB</b></span><span>Requires<b>Android 7.0+</b></span></div>
+          <a class="btn btn-black" href="Waggle-1.1.0.apk" download>Download Waggle 1.1.0</a>
+          <p class="hash">SHA-256 · d6acf20c1c146c5fe15984a8769dafbd5c91ce24c33ff3ac0b35bf2fa33dac93</p>
         </div>
-        <div class="notice rv"><b>This installs from outside Google Play.</b> Android will warn you first,
-          and that's correct. Only continue if you downloaded the file from this page.</div>
+        <div class="appdl rv">
+          <h3>Waggle Business</h3>
+          <p class="for">For shops. Orders, deliveries, the live map, invoices.</p>
+          <div class="meta"><span>Version<b>1.2.0</b></span><span>Build<b>6</b></span><span>Size<b>8.3 MB</b></span><span>Requires<b>Android 7.0+</b></span></div>
+          <a class="btn btn-black" href="WaggleBusiness-1.2.0.apk" download>Download Waggle Business 1.2.0</a>
+          <p class="hash">SHA-256 · 0658a84eb8a4fb09dc2df2f43e5cb7e17a68c5e172ab352eb3e7e81f9fdd7c2a</p>
+        </div>
+        <div class="appdl rv">
+          <h3>Waggle Gig</h3>
+          <p class="for">For riders. It replaces the earlier Waggle 1.4 rider app and installs over it.</p>
+          <div class="meta"><span>Version<b>1.6.2</b></span><span>Build<b>20</b></span><span>Size<b>8.4 MB</b></span><span>Requires<b>Android 7.0+</b></span></div>
+          <a class="btn btn-black" href="WaggleGig-1.6.2.apk" download>Download Waggle Gig 1.6.2</a>
+          <p class="hash">SHA-256 · 0e8af4813bb545e71a16910cb19c4326b1623d0beb16a21fa125cd7f78605e62</p>
+        </div>
+        </div>
+        <div class="notice rv"><b>These install from outside Google Play.</b> Android will warn you first, and
+          that's correct. Only continue if you downloaded the file from this page. If you tried an earlier test
+          build of Waggle or Waggle Business, uninstall it first.</div>
         <ol class="steps rv">
           <li>Download the file on your Android phone.</li>
           <li>Open it. Android asks whether your browser may install apps. Allow it for the browser only.</li>
-          <li>Install, then turn that permission off again. Waggle doesn't need it.</li>
+          <li>Install, then turn that permission off again. The apps don't need it.</li>
         </ol>
-        <p class="hash rv">SHA-256 · 495a76a9426af3ae062541ef309fd9d03852b3ee1f74a82789d26526ba81dada<br>
-          If you got the file anywhere else, check this matches before installing.</p>
-        <p class="fine rv">Signed by Gigzen Private Limited. Waggle asks for your location only when you
-          start tracking, and for your camera or photos only when you attach one.</p>
+        <p class="fine rv">All three are signed with Gigzen's release key. If you got a file anywhere else, check
+          its SHA-256 matches before installing. The apps ask for your location, camera or photos only when a
+          feature needs them.</p>
       </div>
     </div>
   </section>
@@ -396,8 +432,8 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
           <svg class="wmark" viewBox="8.4 10.4 32.6 27.4" aria-hidden="true"><path d="M11 15 C 12.5 30, 15 35, 17.5 35 C 20 35, 22.5 26, 24 22 C 25.5 26, 28 35, 30.5 35 C 33 34, 35 28, 36 18" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round"/><circle cx="36.4" cy="15" r="4.1" fill="#fff"/></svg>
           WAGGLE
         </a>
-        <p>Full name · Gigzen Waggle. A product of Gigzen Private Limited, Bhubaneswar, Odisha, India.
-          In closed testing, not yet on Google Play.</p>
+        <p>Waggle, Waggle Business and Waggle Gig. Products of Gigzen, Bhubaneswar, Odisha, India
+          (company registration in progress). In closed testing, not yet on Google Play.</p>
       </div>
       <nav aria-label="Footer">
         <a href="index.html">Gigzen</a>
@@ -408,7 +444,7 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
         <a href="terms.html">Terms</a>
       </nav>
     </div>
-    <p class="legal">© 2026 Gigzen Private Limited · Photographs from Pexels. The people pictured are not Waggle users.</p>
+    <p class="legal">© 2026 Gigzen · Photographs from Pexels. The people pictured are not Waggle users.</p>
   </div>
 </footer>
 
@@ -434,13 +470,6 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
   function paint() { bar.classList.toggle("solid", scrollY > hero.offsetHeight - 80); }
   addEventListener("scroll", paint, { passive: true }); paint();
 
-  /* The languages, all 43. */
-  var LANGS = ["English","Filipino","Español","हिन्दी","বাংলা","தமிழ்","తెలుగు","मराठी",
-    "ಕನ್ನಡ","മലയാളം","ગુજરાતી","ਪੰਜਾਬੀ","اردو","Bahasa Indonesia","Bahasa Melayu","ไทย",
-    "Tiếng Việt","Português","Français","Deutsch","中文","日本語","한국어","العربية",
-    "Nederlands","Italiano","Polski","Română","Čeština","Svenska","Dansk","Norsk","Suomi",
-    "Ελληνικά","Türkçe","Русский","Українська","עברית","Kiswahili","ខ្មែរ","မြန်မာ","සිංහල","नेपाली"];
-  document.getElementById("langs").innerHTML = LANGS.map(function (l) { return "<span>" + l + "</span>"; }).join("");
 
   /* Reveal, with a 1.5s fallback so the page is never blank. */
   var rv = [].slice.call(document.querySelectorAll(".rv"));
@@ -454,13 +483,6 @@ footer{background:#000;color:var(--on-black);padding:64px 0 36px}
     setTimeout(function () { rv.forEach(function (el) { el.classList.add("in"); }); }, 1500);
   }
 
-  /* The earnings calculator. The app's starting rate for India; the rider sets
-     their own in Settings, which is what the note beneath it says. */
-  var km = document.getElementById("km"), money = document.getElementById("money"),
-      breakdown = document.getElementById("breakdown"), RATE = 10,
-      fmt = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-  function draw() { var d = +km.value; money.textContent = fmt.format(d * RATE); breakdown.textContent = d + " km · " + fmt.format(RATE) + " per km"; }
-  km.addEventListener("input", draw); draw();
 })();
 </script>
 </body>
