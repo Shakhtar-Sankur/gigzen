@@ -1,4 +1,4 @@
-# Gigzen Private Limited — website
+# Gigzen — website
 
 Static site. No build step, no dependencies.
 
